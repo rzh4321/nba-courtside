@@ -1,8 +1,9 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata } from 'next';
+import {ColorModeScript} from '@/components/chakra';
+import theme from '@/theme';
+import ChakraProvider from '@/components/ChakraProvider';
+import NavBar from '@/components/NavBar';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      {/* ChakraProvider to provide Chakra UI context to the children */}
+      <ChakraProvider> 
+        <NavBar />
+        {children}
+      </ChakraProvider> 
+      </body>
     </html>
   )
 }
