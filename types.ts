@@ -1,197 +1,95 @@
-export type IScoreboard = {
-    _internal: {
-      pubDateTime: string
-      igorPath: string
-      routeName: string
-      routeValue: string
-      xslt: string
-      xsltForceRecompile: string
-      xsltInCache: string
-      xsltCompileTimeMillis: string
-      xsltTransformTimeMillis: string
-      consolidatedDomKey: string
-      endToEndTimeMillis: string
-    }
-    numGames: number
+export type ScoreboardResponse = {
+  meta: {
+    version: number
+    request: string
+    time: string
+    code: number
+  }
+  scoreboard: {
+    gameDate: string
+    leagueId: string
+    leagueName: string
     games: Array<{
-      seasonStageId: number
-      seasonYear: string
-      leagueName: string
       gameId: string
-      arena: {
-        name: string
-        isDomestic: boolean
-        city: string
-        stateAbbr: string
-        country: string
-      }
-      isGameActivated: boolean
-      statusNum: number
-      extendedStatusNum: number
-      startTimeEastern: string
-      startTimeUTC: string
-      endTimeUTC: string
-      startDateEastern: string
-      homeStartDate: string
-      homeStartTime: string
-      visitorStartDate: string
-      visitorStartTime: string
-      gameUrlCode: string
-      clock: string
-      isBuzzerBeater: boolean
-      isPreviewArticleAvail: boolean
-      isRecapArticleAvail: boolean
-      nugget: {
-        text: string
-      }
-      attendance: string
-      tickets: {
-        mobileApp: string
-        desktopWeb: string
-        mobileWeb: string
-        leagGameInfo: string
-        leagTix: string
-      }
-      hasGameBookPdf: boolean
-      isStartTimeTBD: boolean
-      isNeutralVenue: boolean
-      gameDuration: {
-        hours: string
-        minutes: string
-      }
-      tags: Array<string>
-      playoffs: {
-        roundNum: string
-        confName: string
-        seriesId: string
-        seriesSummaryText: string
-        isSeriesCompleted: boolean
-        gameNumInSeries: string
-        isIfNecessary: boolean
-        vTeam: {
-          seedNum: string
-          seriesWin: string
-          isSeriesWinner: boolean
-        }
-        homeTeam: {
-          seedNum: string
-          seriesWin: string
-          isSeriesWinner: boolean
-        }
-      }
-      period: {
-        current: number
-        type: number
-        maxRegular: number
-        isHalftime: boolean
-        isEndOfPeriod: boolean
+      gameCode: string
+      gameStatus: number
+      gameStatusText: string
+      period: number
+      gameClock: string
+      gameTimeUTC: string
+      gameEt: string
+      regulationPeriods: number
+      ifNecessary: boolean
+      seriesGameNumber: string
+      seriesText: string
+      homeTeam: {
+        teamId: number
+        teamName: string
+        teamCity: string
+        teamTricode: string
+        wins: number
+        losses: number
+        score: number
+        seed: any
+        inBonus?: string
+        timeoutsRemaining: number
+        periods: Array<{
+          period: number
+          periodType: string
+          score: number
+        }>
       }
       awayTeam: {
-        teamId: string
-        teamtriCode: string
-        win: string
-        loss: string
-        seriesWin: string
-        seriesLoss: string
-        score: string
-        linescore: Array<{
-          score: string
+        teamId: number
+        teamName: string
+        teamCity: string
+        teamTricode: string
+        wins: number
+        losses: number
+        score: number
+        seed: any
+        inBonus?: string
+        timeoutsRemaining: number
+        periods: Array<{
+          period: number
+          periodType: string
+          score: number
         }>
       }
-      homeTeam: {
-        teamId: string
-        teamtriCode: string
-        win: string
-        loss: string
-        seriesWin: string
-        seriesLoss: string
-        score: string
-        linescore: Array<{
-          score: string
-        }>
-      }
-      watch: {
-        broadcast: {
-          broadcasters: {
-            national: Array<{
-              shortName: string
-              longName: string
-            }>
-            canadian: Array<{
-              shortName: string
-              longName: string
-            }>
-            vTeam: Array<any>
-            hTeam: Array<any>
-            spanish_hTeam: Array<any>
-            spanish_vTeam: Array<any>
-            spanish_national: Array<any>
-          }
-          video: {
-            regionalBlackoutCodes: string
-            canPurchase: boolean
-            isLeaguePass: boolean
-            isNationalBlackout: boolean
-            isTNTOT: boolean
-            isVR: boolean
-            tntotIsOnAir: boolean
-            isNextVR: boolean
-            isNBAOnTNTVR: boolean
-            isMagicLeap: boolean
-            isOculusVenues: boolean
-            streams: Array<{
-              streamType: string
-              isOnAir: boolean
-              doesArchiveExist: boolean
-              isArchiveAvailToWatch: boolean
-              streamId: string
-              duration: number
-            }>
-            deepLink: Array<{
-              broadcaster: string
-              regionalMarketCodes: string
-              iosApp: string
-              androidApp: string
-              desktopWeb: string
-              mobileWeb: string
-            }>
-          }
-          audio: {
-            national: {
-              streams: Array<{
-                language: string
-                isOnAir: boolean
-                streamId: string
-              }>
-              broadcasters: Array<any>
-            }
-            vTeam: {
-              streams: Array<{
-                language: string
-                isOnAir: boolean
-                streamId: string
-              }>
-              broadcasters: Array<{
-                shortName: string
-                longName: string
-              }>
-            }
-            hTeam: {
-              streams: Array<{
-                language: string
-                isOnAir: boolean
-                streamId: string
-              }>
-              broadcasters: Array<{
-                shortName: string
-                longName: string
-              }>
-            }
-          }
+      gameLeaders: {
+        homeLeaders: {
+          personId: number
+          name: string
+          jerseyNum: string
+          position: string
+          teamTricode: string
+          playerSlug?: string
+          points: number
+          rebounds: number
+          assists: number
         }
+        awayLeaders: {
+          personId: number
+          name: string
+          jerseyNum: string
+          position: string
+          teamTricode: string
+          playerSlug?: string
+          points: number
+          rebounds: number
+          assists: number
+        }
+      }
+      pbOdds: {
+        team: any
+        odds: number
+        suspended: number
       }
     }>
   }
+}
+
+export type LiveGame = ScoreboardResponse['scoreboard']['games'][number]
   
   export type IBoxscore = {
     meta: Meta

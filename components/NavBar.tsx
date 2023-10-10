@@ -1,7 +1,9 @@
 'use client'
 
-import { Box, Text, Flex, IconButton, useColorMode } from '@chakra-ui/react';
+import { Box, Text, Flex, IconButton, useColorMode, HStack } from '@chakra-ui/react';
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
+import Image from 'next/image';
+import { Link } from '@chakra-ui/next-js';
 
 
 export type NavBarProps = {};
@@ -24,9 +26,11 @@ const NavBar = () => {
             alignItems={'center'}
             height={'100%'}
         >
-            <Text fontSize={24} fontWeight={'semibold'}>
-            NBA Box Score
-            </Text>
+            <Link href={'/'}>
+              <Text fontSize={24} fontWeight={'semibold'}>
+              NBA Box Score
+              </Text>
+            </Link>
             <IconButton         // toggle color mode
             icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             aria-label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} theme`}

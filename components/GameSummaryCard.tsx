@@ -8,12 +8,12 @@ import {
   Stack,
   useColorMode
 } from '@chakra-ui/react'
-import type { IScoreboard } from '@/types';
+import type { ScoreboardResponse } from '@/types';
 import Image from 'next/image'
 import Link from 'next/link'
 
 type TeamDetailsProps = {
-  team: IScoreboard['games'][number]['homeTeam']
+  team: ScoreboardResponse['scoreboard']['games'][0]['homeTeam']
   reverse?: boolean
 }
 
@@ -46,7 +46,7 @@ const TeamDetails = ({ team, reverse = false } : TeamDetailsProps) => {
 }
 
 export type GameSummaryCardProps = {
-  game: IScoreboard['games'][number]
+  game: ScoreboardResponse['scoreboard']['games'][0]
 }
 
 export const GameSummaryCard = ({ game } : GameSummaryCardProps) => {
@@ -59,7 +59,7 @@ export const GameSummaryCard = ({ game } : GameSummaryCardProps) => {
       bg={colorMode === 'light' ? 'gray.300' : 'gray.700'}
     >
       <VStack spacing={4} padding={4}>
-        <Text align={'center'}>{game.startTimeEastern}</Text>
+        <Text align={'center'}>{game.gameTimeUTC}</Text>
         <Flex justifyContent={'space-between'} width={'full'}>
           <TeamDetails team={game.homeTeam} />
           <TeamDetails team={game.awayTeam} reverse />
@@ -69,7 +69,7 @@ export const GameSummaryCard = ({ game } : GameSummaryCardProps) => {
         borderBottomRadius={'md'}
         bg={colorMode === 'light' ? 'gray.100' : 'gray.900'}
         border={'2px'}
-        borderColor={'gray.300'}
+        borderColor={colorMode === 'light' ? 'gray.300' : 'gray.700'}
         padding={2}
       >
         <HStack spacing={4}>
