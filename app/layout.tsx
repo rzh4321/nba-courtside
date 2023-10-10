@@ -18,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+         {/* ColorModeScript to provide the initial color mode */}
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} /> 
       {/* ChakraProvider to provide Chakra UI context to the children */}
       <ChakraProvider> 
         <NavBar />

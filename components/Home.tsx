@@ -9,19 +9,6 @@ import useSWR from 'swr';
 
 
 const Home = () => {
-  // const [selectedDate, setSelectedDate] = useState(new Date())
-  // const [data, setData] = useState<ScoreboardResponse>();
-  // useEffect(() => {
-  //   const retrieveScoreboard = async() => {
-  //       const res = await fetch('/api/scoreboard');
-  //       const data = await res.json();
-  //       console.log('SCOREBOARD: ', data);
-  //       setData(data);
-  //       return data;
-  //   }
-  //   retrieveScoreboard();
-  // }, []);
-
   const { data } = useSWR('/api/scoreboard', async () => {
     const res = await fetch('/api/scoreboard');
     return await res.json();

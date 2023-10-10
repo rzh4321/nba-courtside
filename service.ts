@@ -5,19 +5,19 @@ const boxscoreUrl = (gameId: string) =>
   `${host}/static/json/liveData/boxscore/boxscore_${gameId}.json`
 
 export const getLeagueSchedule = async () => {
-  const res = await fetch(scheduleUrl);
+  const res = await fetch(scheduleUrl, { cache: 'no-store' });
   const data = await res.json();
   return data;
 }
 
 export const getScoreboard = async () => {
-  const res = await fetch(scoreboardUrl);
+  const res = await fetch(scoreboardUrl, { cache: 'no-store' });
   const data = await res.json();
   return data;
 }
 
 export const getBoxscore = async (gameId: string) => {
-  const res = await fetch(boxscoreUrl(gameId));
+  const res = await fetch(boxscoreUrl(gameId), { cache: 'no-store' });
   const data = await res.json();
   return data;
 }

@@ -6,86 +6,137 @@ import {
   Tr,
   Th,
   Td,
-  useColorMode,
-  useBreakpoint,
   VStack,
   Text,
+  useColorModeValue
 } from '@chakra-ui/react'
-import type { IBoxscore } from '@/types';
+import type { BoxscoreResponse } from '@/types';
 
-const mobileHeaders = ['name', 'reb', 'ast', 'pts']
-const headers = ['name', 'min', 'fg', '3pt', 'ft', 'reb', 'ast', 'pts', '+/-']
+import { useIsGameLive } from '@/hooks/useIsGameLive';
+
+// useColorModeValue first param is color in light mode, second param is in dark mode
+const useBg = () => useColorModeValue('white', 'gray.600')
+const useSecondaryColor = () => useColorModeValue('gray.600', 'gray.400')
+const useBorderColor = () => useColorModeValue('gray.200', 'gray.700')
 
 export type BoxscoreProps = {
-  teamName: string;
-  playerStats: IBoxscore['game']['awayTeam']['players'];
+  gameId: string;
+  team: BoxscoreResponse['game']['homeTeam'];
 }
 
-export const BoxscoreTable = ({ teamName, playerStats } : BoxscoreProps) => {
-  const { colorMode } = useColorMode()
-  const breakpoint = useBreakpoint('md');
+export const BoxscoreTable = ({ gameId, team } : BoxscoreProps) => {
+
+  // get color values from the current color mode
+  const bg = useBg()
+  const secondaryColor = useSecondaryColor()
+  const borderColor = useBorderColor()
+
+  // check if game is live
+  const isLive = useIsGameLive(gameId)
 
   function formatMinutes(minutes: string) {
     const match = minutes.match(/[0-9]+/)
     return match ? (match[0] === '00' ? '—' : match[0]) : '—'
   }
 
-  function formatName(firstName: string, lastName: string) {
-    return `${firstName[0]} ${lastName}`
-  }
+    function formatPlusMinus(plusMinus: number) {
+      if (plusMinus > 0) {
+        return `+${plusMinus}`
+      }
+      return plusMinus
+    }
+
+  // function formatPercentage(decimal : number) {{
+  //     // Calculate the percentage
+  //     let percentage = decimal * 100;
+      
+  //     // Round the percentage down to the nearest whole number
+  //     percentage = Math.floor(percentage);
+      
+  //     // Return the percentage as a string with a percent sign
+  //     return `${percentage}%`;
+  //   }
+  // }
+
 
   return (
-    <VStack spacing={2} align={'flex-start'}>
-      <Text fontWeight={'semibold'}>{teamName}</Text>
-    <Box
-      bg={colorMode === 'light' ? 'gray.300' : 'gray.900'}
-      borderRadius={'md'}
-      width={'full'}
-    >
-      <Table size={'sm'} variant={'simple'}>
-        <Thead>
-        <Tr>
-              {(breakpoint === 'base' ? mobileHeaders : headers).map(
-                (header) => (
-                  <Th key={header} isNumeric={header !== 'name'}>
-                    {header}
-                  </Th>
-                )
-              )}
+    <Box w={'full'}>
+      <VStack w={'full'} spacing={2} align={'start'}>
+        <Text fontWeight={'semibold'} letterSpacing={'widest'}>
+          {team.teamName.toUpperCase()}
+        </Text>
+        <Table
+          w={'full'}
+          variant={'simple'}
+          bg={bg}
+          size={'sm'}
+          rounded={'md'}
+          fontFamily={'mono'}
+        >
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                Min
+              </Th>
+              <Th isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                FG
+              </Th>
+              <Th isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                3PT
+              </Th>
+              <Th isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                FT
+              </Th>
+              <Th isNumeric>Reb</Th>
+              <Th isNumeric>Ast</Th>
+              <Th isNumeric>Pts</Th>
+              <Th isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                +/-
+              </Th>
             </Tr>
-        </Thead>
-        <Tbody>
-          {playerStats.map((player, index) => (
-            <Tr
-              key={player.personId}
-              borderBottom={index === 4 ? '8px' : undefined}
-              borderColor={colorMode === 'light' ? 'gray.100' : 'gray.700'}
-            >
-              <Td>{formatName(player.firstName, player.familyName)}</Td>
-
-               { breakpoint !== 'base' &&
-               (<><Td isNumeric>{formatMinutes(player.statistics.minutesCalculated)}</Td>
-                <Td isNumeric>
-                  {player.statistics.fieldGoalsMade}-{player.statistics.fieldGoalsAttempted}
+          </Thead>
+          <Tbody>
+            {team.players.map((player, i) => (
+              <Tr
+                key={player.personId}
+                borderBottom={i === 4 ? '4px' : '1px'}
+                borderColor={borderColor}
+              >
+                <Td display={{ base: 'none', xl: 'table-cell' }}>
+                  {player.firstName} {player.familyName}{' '}
+                  {isLive && player.oncourt === '1' && '○'}
                 </Td>
-                <Td isNumeric>
-                  {player.statistics.threePointersMade}-{player.statistics.threePointersAttempted}
+                <Td display={{ base: 'table-cell', xl: 'none' }}>
+                  {player.firstName[0]} {player.familyName}{' '}
+                  {isLive && player.oncourt === '1' && '○'}
                 </Td>
-                <Td isNumeric>
-                  {player.statistics.freeThrowsMade}-{player.statistics.freeThrowsAttempted}
-                </Td></>)
-                }
-
-              <Td isNumeric>{player.statistics.reboundsTotal}</Td>
-              <Td isNumeric>{player.statistics.assists}</Td>
-              <Td isNumeric>{player.statistics.points}</Td>
-
-              {breakpoint !== 'base' && <Td isNumeric>{player.statistics.plusMinusPoints}</Td>}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+                <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                  {formatMinutes(player.statistics.minutesCalculated)}
+                </Td>
+                <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                  {player.statistics.fieldGoalsMade}-
+                  {player.statistics.fieldGoalsAttempted}{' '}
+                </Td>
+                <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                  {player.statistics.threePointersMade}-
+                  {player.statistics.threePointersAttempted}{' '}
+                </Td>
+                <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                  {player.statistics.freeThrowsMade}-
+                  {player.statistics.freeThrowsAttempted}{' '}
+                </Td>
+                <Td isNumeric>{player.statistics.reboundsTotal}</Td>
+                <Td isNumeric>{player.statistics.assists}</Td>
+                <Td isNumeric>{player.statistics.points}</Td>
+                <Td isNumeric display={{ base: 'none', xl: 'table-cell' }}>
+                  {formatPlusMinus(player.statistics.plusMinusPoints)}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </VStack>
     </Box>
-    </VStack>
   )
 }

@@ -91,19 +91,14 @@ export type ScoreboardResponse = {
 
 export type LiveGame = ScoreboardResponse['scoreboard']['games'][number]
   
-  export type IBoxscore = {
-    meta: Meta
-    game: Game
-  }
-  
-  export type Meta = {
+export type BoxscoreResponse = {
+  meta: {
     version: number
     code: number
     request: string
     time: string
   }
-  
-  export type Game = {
+  game: {
     gameId: string
     gameTimeLocal: string
     gameTimeUTC: string
@@ -119,300 +114,427 @@ export type LiveGame = ScoreboardResponse['scoreboard']['games'][number]
     gameClock: string
     attendance: number
     sellout: string
-    arena: Arena
-    officials: Official[]
-    homeTeam: HomeTeam
-    awayTeam: AwayTeam
+    arena: {
+      arenaId: number
+      arenaName: string
+      arenaCity: string
+      arenaState: string
+      arenaCountry: string
+      arenaTimezone: string
+    }
+    officials: Array<{
+      personId: number
+      name: string
+      nameI: string
+      firstName: string
+      familyName: string
+      jerseyNum: string
+      assignment: string
+    }>
+    homeTeam: {
+      teamId: number
+      teamName: string
+      teamCity: string
+      teamTricode: string
+      score: number
+      inBonus: string
+      timeoutsRemaining: number
+      periods: Array<{
+        period: number
+        periodType: string
+        score: number
+      }>
+      players: Array<{
+        status: string
+        order: number
+        personId: number
+        jerseyNum: string
+        position?: string
+        starter: string
+        oncourt: string
+        played: string
+        statistics: {
+          assists: number
+          blocks: number
+          blocksReceived: number
+          fieldGoalsAttempted: number
+          fieldGoalsMade: number
+          fieldGoalsPercentage: number
+          foulsOffensive: number
+          foulsDrawn: number
+          foulsPersonal: number
+          foulsTechnical: number
+          freeThrowsAttempted: number
+          freeThrowsMade: number
+          freeThrowsPercentage: number
+          minus: number
+          minutes: string
+          minutesCalculated: string
+          plus: number
+          plusMinusPoints: number
+          points: number
+          pointsFastBreak: number
+          pointsInThePaint: number
+          pointsSecondChance: number
+          reboundsDefensive: number
+          reboundsOffensive: number
+          reboundsTotal: number
+          steals: number
+          threePointersAttempted: number
+          threePointersMade: number
+          threePointersPercentage: number
+          turnovers: number
+          twoPointersAttempted: number
+          twoPointersMade: number
+          twoPointersPercentage: number
+        }
+        name: string
+        nameI: string
+        firstName: string
+        familyName: string
+        notPlayingReason?: string
+        notPlayingDescription?: string
+      }>
+      statistics: {
+        assists: number
+        assistsTurnoverRatio: number
+        benchPoints: number
+        biggestLead: number
+        biggestLeadScore: string
+        biggestScoringRun: number
+        biggestScoringRunScore: string
+        blocks: number
+        blocksReceived: number
+        fastBreakPointsAttempted: number
+        fastBreakPointsMade: number
+        fastBreakPointsPercentage: number
+        fieldGoalsAttempted: number
+        fieldGoalsEffectiveAdjusted: number
+        fieldGoalsMade: number
+        fieldGoalsPercentage: number
+        foulsOffensive: number
+        foulsDrawn: number
+        foulsPersonal: number
+        foulsTeam: number
+        foulsTechnical: number
+        foulsTeamTechnical: number
+        freeThrowsAttempted: number
+        freeThrowsMade: number
+        freeThrowsPercentage: number
+        leadChanges: number
+        minutes: string
+        minutesCalculated: string
+        points: number
+        pointsAgainst: number
+        pointsFastBreak: number
+        pointsFromTurnovers: number
+        pointsInThePaint: number
+        pointsInThePaintAttempted: number
+        pointsInThePaintMade: number
+        pointsInThePaintPercentage: number
+        pointsSecondChance: number
+        reboundsDefensive: number
+        reboundsOffensive: number
+        reboundsPersonal: number
+        reboundsTeam: number
+        reboundsTeamDefensive: number
+        reboundsTeamOffensive: number
+        reboundsTotal: number
+        secondChancePointsAttempted: number
+        secondChancePointsMade: number
+        secondChancePointsPercentage: number
+        steals: number
+        threePointersAttempted: number
+        threePointersMade: number
+        threePointersPercentage: number
+        timeLeading: string
+        timesTied: number
+        trueShootingAttempts: number
+        trueShootingPercentage: number
+        turnovers: number
+        turnoversTeam: number
+        turnoversTotal: number
+        twoPointersAttempted: number
+        twoPointersMade: number
+        twoPointersPercentage: number
+      }
+    }
+    awayTeam: {
+      teamId: number
+      teamName: string
+      teamCity: string
+      teamTricode: string
+      score: number
+      inBonus: string
+      timeoutsRemaining: number
+      periods: Array<{
+        period: number
+        periodType: string
+        score: number
+      }>
+      players: Array<{
+        status: string
+        order: number
+        personId: number
+        jerseyNum: string
+        position?: string
+        starter: string
+        oncourt: string
+        played: string
+        statistics: {
+          assists: number
+          blocks: number
+          blocksReceived: number
+          fieldGoalsAttempted: number
+          fieldGoalsMade: number
+          fieldGoalsPercentage: number
+          foulsOffensive: number
+          foulsDrawn: number
+          foulsPersonal: number
+          foulsTechnical: number
+          freeThrowsAttempted: number
+          freeThrowsMade: number
+          freeThrowsPercentage: number
+          minus: number
+          minutes: string
+          minutesCalculated: string
+          plus: number
+          plusMinusPoints: number
+          points: number
+          pointsFastBreak: number
+          pointsInThePaint: number
+          pointsSecondChance: number
+          reboundsDefensive: number
+          reboundsOffensive: number
+          reboundsTotal: number
+          steals: number
+          threePointersAttempted: number
+          threePointersMade: number
+          threePointersPercentage: number
+          turnovers: number
+          twoPointersAttempted: number
+          twoPointersMade: number
+          twoPointersPercentage: number
+        }
+        name: string
+        nameI: string
+        firstName: string
+        familyName: string
+        notPlayingReason?: string
+        notPlayingDescription?: string
+      }>
+      statistics: {
+        assists: number
+        assistsTurnoverRatio: number
+        benchPoints: number
+        biggestLead: number
+        biggestLeadScore: string
+        biggestScoringRun: number
+        biggestScoringRunScore: string
+        blocks: number
+        blocksReceived: number
+        fastBreakPointsAttempted: number
+        fastBreakPointsMade: number
+        fastBreakPointsPercentage: number
+        fieldGoalsAttempted: number
+        fieldGoalsEffectiveAdjusted: number
+        fieldGoalsMade: number
+        fieldGoalsPercentage: number
+        foulsOffensive: number
+        foulsDrawn: number
+        foulsPersonal: number
+        foulsTeam: number
+        foulsTechnical: number
+        foulsTeamTechnical: number
+        freeThrowsAttempted: number
+        freeThrowsMade: number
+        freeThrowsPercentage: number
+        leadChanges: number
+        minutes: string
+        minutesCalculated: string
+        points: number
+        pointsAgainst: number
+        pointsFastBreak: number
+        pointsFromTurnovers: number
+        pointsInThePaint: number
+        pointsInThePaintAttempted: number
+        pointsInThePaintMade: number
+        pointsInThePaintPercentage: number
+        pointsSecondChance: number
+        reboundsDefensive: number
+        reboundsOffensive: number
+        reboundsPersonal: number
+        reboundsTeam: number
+        reboundsTeamDefensive: number
+        reboundsTeamOffensive: number
+        reboundsTotal: number
+        secondChancePointsAttempted: number
+        secondChancePointsMade: number
+        secondChancePointsPercentage: number
+        steals: number
+        threePointersAttempted: number
+        threePointersMade: number
+        threePointersPercentage: number
+        timeLeading: string
+        timesTied: number
+        trueShootingAttempts: number
+        trueShootingPercentage: number
+        turnovers: number
+        turnoversTeam: number
+        turnoversTotal: number
+        twoPointersAttempted: number
+        twoPointersMade: number
+        twoPointersPercentage: number
+      }
+    }
   }
-  
-  export type Arena = {
-    arenaId: number
-    arenaName: string
-    arenaCity: string
-    arenaState: string
-    arenaCountry: string
-    arenaTimezone: string
+}
+
+export type LeagueScheduleResponse = {
+  meta: {
+    version: number
+    request: string
+    time: string
   }
-  
-  export type Official = {
-    personId: number
-    name: string
-    nameI: string
-    firstName: string
-    familyName: string
-    jerseyNum: string
-    assignment: string
+  leagueSchedule: {
+    seasonYear: string
+    leagueId: string
+    gameDates: Array<{
+      gameDate: string
+      games: Array<{
+        gameId: string
+        gameCode: string
+        gameStatus: number
+        gameStatusText: string
+        gameSequence: number
+        gameDateEst: string
+        gameTimeEst: string
+        gameDateTimeEst: string
+        gameDateUTC: string
+        gameTimeUTC: string
+        gameDateTimeUTC: string
+        awayTeamTime: string
+        homeTeamTime: string
+        day: string
+        monthNum: number
+        weekNumber: number
+        weekName: string
+        ifNecessary: boolean
+        seriesGameNumber: string
+        seriesText: string
+        arenaName: string
+        arenaState: string
+        arenaCity: string
+        postponedStatus: string
+        branchLink: string
+        broadcasters: {
+          nationalTvBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          nationalRadioBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          homeTvBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          homeRadioBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          awayTvBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          awayRadioBroadcasters: Array<{
+            broadcasterScope: string
+            broadcasterMedia: string
+            broadcasterId: number
+            broadcasterDisplay: string
+            broadcasterAbbreviation: string
+            tapeDelayComments: string
+            regionId: number
+          }>
+          intlRadioBroadcasters: Array<any>
+          intlTvBroadcasters: Array<any>
+        }
+        homeTeam: {
+          teamId: number
+          teamName: string
+          teamCity: string
+          teamTricode: string
+          teamSlug: string
+          wins: number
+          losses: number
+          score: number
+          seed: number
+        }
+        awayTeam: {
+          teamId: number
+          teamName: string
+          teamCity: string
+          teamTricode: string
+          teamSlug: string
+          wins: number
+          losses: number
+          score: number
+          seed: number
+        }
+        pointsLeaders: Array<{
+          personId: number
+          firstName: string
+          lastName: string
+          teamId: number
+          teamCity: string
+          teamName: string
+          teamTricode: string
+          points: number
+        }>
+      }>
+    }>
+    weeks: Array<{
+      weekNumber: number
+      weekName: string
+      startDate: string
+      endDate: string
+    }>
+    broadcasterList: Array<{
+      broadcasterId: number
+      broadcasterDisplay: string
+      broadcasterAbbreviation: string
+      regionId: number
+    }>
   }
-  
-  export type HomeTeam = {
-    teamId: number
-    teamName: string
-    teamCity: string
-    teamTricode: string
-    score: number
-    inBonus: string
-    timeoutsRemaining: number
-    periods: Period[]
-    players: Player[]
-    statistics: Statistics2
-  }
-  
-  export type Period = {
-    period: number
-    periodType: string
-    score: number
-  }
-  
-  export type Player = {
-    status: string
-    order: number
-    personId: number
-    jerseyNum: string
-    position?: string
-    starter: string
-    oncourt: string
-    played: string
-    statistics: Statistics
-    name: string
-    nameI: string
-    firstName: string
-    familyName: string
-    notPlayingReason?: string
-    notPlayingDescription?: string
-  }
-  
-  export type Statistics = {
-    assists: number
-    blocks: number
-    blocksReceived: number
-    fieldGoalsAttempted: number
-    fieldGoalsMade: number
-    fieldGoalsPercentage: number
-    foulsOffensive: number
-    foulsDrawn: number
-    foulsPersonal: number
-    foulsTechnical: number
-    freeThrowsAttempted: number
-    freeThrowsMade: number
-    freeThrowsPercentage: number
-    minus: number
-    minutes: string
-    minutesCalculated: string
-    plus: number
-    plusMinusPoints: number
-    points: number
-    pointsFastBreak: number
-    pointsInThePaint: number
-    pointsSecondChance: number
-    reboundsDefensive: number
-    reboundsOffensive: number
-    reboundsTotal: number
-    steals: number
-    threePointersAttempted: number
-    threePointersMade: number
-    threePointersPercentage: number
-    turnovers: number
-    twoPointersAttempted: number
-    twoPointersMade: number
-    twoPointersPercentage: number
-  }
-  
-  export type Statistics2 = {
-    assists: number
-    assistsTurnoverRatio: number
-    benchPoints: number
-    biggestLead: number
-    biggestLeadScore: string
-    biggestScoringRun: number
-    biggestScoringRunScore: string
-    blocks: number
-    blocksReceived: number
-    fastBreakPointsAttempted: number
-    fastBreakPointsMade: number
-    fastBreakPointsPercentage: number
-    fieldGoalsAttempted: number
-    fieldGoalsEffectiveAdjusted: number
-    fieldGoalsMade: number
-    fieldGoalsPercentage: number
-    foulsOffensive: number
-    foulsDrawn: number
-    foulsPersonal: number
-    foulsTeam: number
-    foulsTechnical: number
-    foulsTeamTechnical: number
-    freeThrowsAttempted: number
-    freeThrowsMade: number
-    freeThrowsPercentage: number
-    leadChanges: number
-    minutes: string
-    minutesCalculated: string
-    points: number
-    pointsAgainst: number
-    pointsFastBreak: number
-    pointsFromTurnovers: number
-    pointsInThePaint: number
-    pointsInThePaintAttempted: number
-    pointsInThePaintMade: number
-    pointsInThePaintPercentage: number
-    pointsSecondChance: number
-    reboundsDefensive: number
-    reboundsOffensive: number
-    reboundsPersonal: number
-    reboundsTeam: number
-    reboundsTeamDefensive: number
-    reboundsTeamOffensive: number
-    reboundsTotal: number
-    secondChancePointsAttempted: number
-    secondChancePointsMade: number
-    secondChancePointsPercentage: number
-    steals: number
-    threePointersAttempted: number
-    threePointersMade: number
-    threePointersPercentage: number
-    timeLeading: string
-    timesTied: number
-    trueShootingAttempts: number
-    trueShootingPercentage: number
-    turnovers: number
-    turnoversTeam: number
-    turnoversTotal: number
-    twoPointersAttempted: number
-    twoPointersMade: number
-    twoPointersPercentage: number
-  }
-  
-  export type AwayTeam = {
-    teamId: number
-    teamName: string
-    teamCity: string
-    teamTricode: string
-    score: number
-    inBonus: string
-    timeoutsRemaining: number
-    periods: Period2[]
-    players: Player2[]
-    statistics: Statistics4
-  }
-  
-  export type Period2 = {
-    period: number
-    periodType: string
-    score: number
-  }
-  
-  export type Player2 = {
-    status: string
-    order: number
-    personId: number
-    jerseyNum: string
-    position?: string
-    starter: string
-    oncourt: string
-    played: string
-    statistics: Statistics3
-    name: string
-    nameI: string
-    firstName: string
-    familyName: string
-  }
-  
-  export type Statistics3 = {
-    assists: number
-    blocks: number
-    blocksReceived: number
-    fieldGoalsAttempted: number
-    fieldGoalsMade: number
-    fieldGoalsPercentage: number
-    foulsOffensive: number
-    foulsDrawn: number
-    foulsPersonal: number
-    foulsTechnical: number
-    freeThrowsAttempted: number
-    freeThrowsMade: number
-    freeThrowsPercentage: number
-    minus: number
-    minutes: string
-    minutesCalculated: string
-    plus: number
-    plusMinusPoints: number
-    points: number
-    pointsFastBreak: number
-    pointsInThePaint: number
-    pointsSecondChance: number
-    reboundsDefensive: number
-    reboundsOffensive: number
-    reboundsTotal: number
-    steals: number
-    threePointersAttempted: number
-    threePointersMade: number
-    threePointersPercentage: number
-    turnovers: number
-    twoPointersAttempted: number
-    twoPointersMade: number
-    twoPointersPercentage: number
-  }
-  
-  export type Statistics4 = {
-    assists: number
-    assistsTurnoverRatio: number
-    benchPoints: number
-    biggestLead: number
-    biggestLeadScore: string
-    biggestScoringRun: number
-    biggestScoringRunScore: string
-    blocks: number
-    blocksReceived: number
-    fastBreakPointsAttempted: number
-    fastBreakPointsMade: number
-    fastBreakPointsPercentage: number
-    fieldGoalsAttempted: number
-    fieldGoalsEffectiveAdjusted: number
-    fieldGoalsMade: number
-    fieldGoalsPercentage: number
-    foulsOffensive: number
-    foulsDrawn: number
-    foulsPersonal: number
-    foulsTeam: number
-    foulsTechnical: number
-    foulsTeamTechnical: number
-    freeThrowsAttempted: number
-    freeThrowsMade: number
-    freeThrowsPercentage: number
-    leadChanges: number
-    minutes: string
-    minutesCalculated: string
-    points: number
-    pointsAgainst: number
-    pointsFastBreak: number
-    pointsFromTurnovers: number
-    pointsInThePaint: number
-    pointsInThePaintAttempted: number
-    pointsInThePaintMade: number
-    pointsInThePaintPercentage: number
-    pointsSecondChance: number
-    reboundsDefensive: number
-    reboundsOffensive: number
-    reboundsPersonal: number
-    reboundsTeam: number
-    reboundsTeamDefensive: number
-    reboundsTeamOffensive: number
-    reboundsTotal: number
-    secondChancePointsAttempted: number
-    secondChancePointsMade: number
-    secondChancePointsPercentage: number
-    steals: number
-    threePointersAttempted: number
-    threePointersMade: number
-    threePointersPercentage: number
-    timeLeading: string
-    timesTied: number
-    trueShootingAttempts: number
-    trueShootingPercentage: number
-    turnovers: number
-    turnoversTeam: number
-    turnoversTotal: number
-    twoPointersAttempted: number
-    twoPointersMade: number
-    twoPointersPercentage: number
-  }
-  
+}
+
+export type Game =
+  LeagueScheduleResponse['leagueSchedule']['gameDates'][number]['games'][number]
+
+export type Broadcaster = Game['broadcasters']['nationalTvBroadcasters'][number]

@@ -1,10 +1,10 @@
 import { Stack, HStack, Text } from '@chakra-ui/react'
 import type { FC } from 'react'
-import type { IBoxscore } from '@/types';
+import type { BoxscoreResponse } from '@/types';
 import Image from 'next/image'
 
 export type ScoreSummaryProps = {
-  teamSummary: IBoxscore['game']['homeTeam']
+  teamSummary: BoxscoreResponse['game']['homeTeam']
   reverse?: boolean
 }
 
@@ -32,15 +32,21 @@ const ScoreSummary = ({
 }
 
 export interface BoxscoreScoreProps {
-  boxscore: IBoxscore
+  boxscore: BoxscoreResponse
 }
 
 export const BoxscoreScore: FC<BoxscoreScoreProps> = ({ boxscore }) => {
+    console.log(boxscore)
+    function getClock() {
+        return boxscore.game.gameStatusText;
+      }
+
   return (
     <HStack spacing={16}>
       <ScoreSummary
         teamSummary={boxscore.game.homeTeam}
       />
+      <Text>{getClock()}</Text>
       <ScoreSummary
         teamSummary={boxscore.game.awayTeam}
         reverse
