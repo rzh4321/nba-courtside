@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import {ColorModeScript} from '@/components/chakra';
+import {ColorModeScript} from '@chakra-ui/react';
 import theme from '@/theme';
 import ChakraProvider from '@/components/ChakraProvider';
 import NavBar from '@/components/NavBar';

@@ -1,7 +1,7 @@
 'use client'
 
-import { Box, Text, Flex, IconButton, useColorMode } from '@/components/chakra';
-import { SunIcon, MoonIcon } from '@/components/chakra';
+import { Box, Text, Flex, IconButton, useColorMode } from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 
 
 export type NavBarProps = {};
