@@ -36,10 +36,8 @@ const Page = ({ params } : { params: {gameId: string}}) => {
     <Container maxW={'container.xl'} paddingY={[8, 16]} centerContent>
       {boxscore? <VStack spacing={8}>
       <BoxscoreScore boxscore={boxscore} />
-        <VStack spacing={4}>
-          <BoxscoreTable playerStats={hTeamBoxscore || []} />
-          <BoxscoreTable playerStats={vTeamBoxscore || []} />
-        </VStack>
+        <BoxscoreTable teamName={boxscore.game.homeTeam.teamTricode} playerStats={hTeamBoxscore || []} />
+        <BoxscoreTable teamName={boxscore.game.awayTeam.teamTricode} playerStats={vTeamBoxscore || []} />
       </VStack> : null}
     </Container>
   )
