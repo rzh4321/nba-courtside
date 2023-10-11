@@ -17,7 +17,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
     <>
       <Box
               w={'full'}
-              position={'fixed'}
+              position={'sticky'}
               shadow={'md'}
               top={0}
               left={0}
@@ -48,7 +48,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
           </Box>
           <ScheduleBar />
       </Box>
-      <Container maxW={'container.lg'} mt={'65px'} >
+      <Container maxW={'container.lg'} mt={'10px'} >
         {children}
       </Container>
   </>

@@ -15,7 +15,7 @@ import type { BoxscoreResponse } from '@/types';
 import { useIsGameLive } from '@/hooks/useIsGameLive';
 
 // useColorModeValue first param is color in light mode, second param is in dark mode
-const useBg = () => useColorModeValue('white', 'gray.600')
+const useBg = () => useColorModeValue('gray.100', 'gray.600')
 const useSecondaryColor = () => useColorModeValue('gray.600', 'gray.400')
 const useBorderColor = () => useColorModeValue('gray.200', 'gray.700')
 
@@ -45,19 +45,6 @@ export const BoxscoreTable = ({ gameId, team } : BoxscoreProps) => {
       }
       return plusMinus
     }
-
-  // function formatPercentage(decimal : number) {{
-  //     // Calculate the percentage
-  //     let percentage = decimal * 100;
-      
-  //     // Round the percentage down to the nearest whole number
-  //     percentage = Math.floor(percentage);
-      
-  //     // Return the percentage as a string with a percent sign
-  //     return `${percentage}%`;
-  //   }
-  // }
-
 
   return (
     <Box w={'full'}>

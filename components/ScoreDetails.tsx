@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 
-const useBg = () => useColorModeValue('white', 'gray.600')
+const useBg = () => useColorModeValue('gray.100', 'gray.600')
 
 type TeamDetailsProps = {
   team: BoxscoreResponse['game']['homeTeam']
@@ -60,7 +60,7 @@ export const ScoreDetails = ({ boxscore } : ScoreDetailsProps) => {
         justify={'center'}
         mb={4}
       >
-        {isLive && <Badge colorScheme={'red'}>LIVE</Badge>}
+        {isLive && <Badge colorScheme={'red'}><Text fontSize={'xl'}>LIVE</Text></Badge>}
         <Text display={'inline-block'}>{boxscore.gameStatusText}</Text>
       </HStack>
       <Flex dir={'row'} justify={'space-between'} alignItems={'center'}>
