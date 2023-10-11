@@ -4,7 +4,7 @@ import { format, isToday } from 'date-fns'
 import { useLeaders } from '../hooks/useLeaders'
 import { PerformerCard } from '../components/PerformerCard'
 import { BoxscoreResponse, Game } from '@/types';
-import startCase from 'lodash/startCase'
+import startCase from 'lodash/startCase';
 import { useLastPlayedGameDate, getDateFromGameDate } from '@/hooks/useLastPlayedGameDate'
 
 type SectionProps = {
@@ -23,12 +23,6 @@ const Section = ({ leaders, category } : SectionProps) => {
       <HStack
         w={'full'}
         spacing={8}
-        overflowX={'scroll'}
-        sx={{
-          '::-webkit-scrollbar': {
-            display: 'none'
-          }
-        }}
       >
         {/* display leaders for this category */}
         {leaders.map((leader) => (

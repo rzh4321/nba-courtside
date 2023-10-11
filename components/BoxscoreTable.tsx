@@ -14,10 +14,7 @@ import type { BoxscoreResponse } from '@/types';
 
 import { useIsGameLive } from '@/hooks/useIsGameLive';
 
-// useColorModeValue first param is color in light mode, second param is in dark mode
-const useBg = () => useColorModeValue('gray.100', 'gray.600')
 const useSecondaryColor = () => useColorModeValue('gray.600', 'gray.400')
-const useBorderColor = () => useColorModeValue('gray.200', 'gray.700')
 
 export type BoxscoreProps = {
   gameId: string;
@@ -27,9 +24,9 @@ export type BoxscoreProps = {
 export const BoxscoreTable = ({ gameId, team } : BoxscoreProps) => {
 
   // get color values from the current color mode
-  const bg = useBg()
+  const bg = useColorModeValue('white', 'gray.600');
   const secondaryColor = useSecondaryColor()
-  const borderColor = useBorderColor()
+  const borderColor = useColorModeValue('gray.100', 'gray.700');
 
   // check if game is live
   const isLive = useIsGameLive(gameId)

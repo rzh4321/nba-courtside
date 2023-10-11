@@ -14,14 +14,10 @@ import {
   import { LiveGameCard } from './LiveGameCard';
   import { Game } from '@/types';
   import '@/global.css';
-
-  const useBg = () => useColorModeValue('gray.300', 'gray.900');
-  const useTextColor = () => useColorModeValue('black', 'gray.500');
     
   export const ScheduleBar = () => {
     const { data, isLoading } = useScoreboard()
-    const bg = useBg();
-    const textColor = useTextColor();
+    const bg = useColorModeValue('gray.800', 'gray.900');
 
     return (
       <Box bg={bg} w={'full'} h={isLoading ? '157px' : 'auto'}>
@@ -35,7 +31,7 @@ import {
               gap={[2, 0]}
             >
               {data && (
-                <Text color={textColor}>
+                <Text color={'white'} fontWeight={'semibold'}>
                   Games for{' '}
                   {format(
                     parse(data.scoreboard.gameDate, 'yyyy-MM-dd', new Date()),
@@ -46,7 +42,7 @@ import {
               <Link
                 as={NextLink}
                 href={'/'}
-                color={'blue.500'}
+                color={'blue.400'}
                 fontWeight={'semibold'}
               >
                 Choose Date

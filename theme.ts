@@ -1,4 +1,6 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
+
+
 import fonts from './font'
 
 const teamColors = {
@@ -44,7 +46,7 @@ const theme = extendTheme({
   config,
   fonts,
   colors: {
-    ...teamColors
+    ...teamColors,
   }
 })
 

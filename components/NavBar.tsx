@@ -13,6 +13,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
   // Using the useColorMode hook to get the current color mode and the function to toggle it
   const { colorMode, toggleColorMode } = useColorMode()
 
+
   return (
     <>
       <Box
@@ -24,7 +25,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
               zIndex={'sticky'}
       >
           <Box
-          bg={colorMode === 'light' ? 'gray.300' : 'gray.900'}
+          bg={colorMode === 'light'? 'gray.800' : 'gray.900'}
           height={65}
           paddingX={4}
           paddingY={2}
@@ -35,7 +36,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
                 height={'100%'}
             >
                 <Link href={'/'}>
-                  <Text fontSize={24} fontWeight={'semibold'}>
+                  <Text fontSize={24} fontWeight={'bold'} color={'white'}>
                   NBA Box Score
                   </Text>
                 </Link>
@@ -48,9 +49,11 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
           </Box>
           <ScheduleBar />
       </Box>
-      <Container maxW={'container.lg'} mt={'10px'} >
-        {children}
-      </Container>
+      <Box bg={colorMode === 'light'? 'gray.100' : 'gray.800'} pt={'10px'} >
+        <Container maxW={'container.lg'} >
+          {children}
+        </Container>
+      </Box>
   </>
   )
 }

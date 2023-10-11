@@ -27,7 +27,7 @@ export const LiveGameCard = ({ game } : LiveGameCardProps) => {
         bg={bg}
         rounded={'md'}
       >
-        <Text fontSize={'sm'} color={quarterColor}>
+        <Text fontSize={'md'} color={quarterColor} fontWeight={game.gameStatus === 3? 'bold' : 'semibold'}>
           {game.gameStatusText}
         </Text>
         <VStack spacing={0} align={'start'}>
