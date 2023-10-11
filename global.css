@@ -1,0 +1,16 @@
+.scrollable {
+    overflow: hidden;
+}
+
+.scrollable:hover {
+    overflow: auto;
+}
+
+/* Target WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    display: hidden;
+  }
+  
+.scrollable::-webkit-scrollbar { 
+    display: none;
+}

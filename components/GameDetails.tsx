@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Box, VStack } from '@chakra-ui/react'
 import useSWR from 'swr'
-//import { ScoreDetails } from './ScoreDetails';
-// import { NoGameMessage } from './NoGameMessage'
+import { ScoreDetails } from './ScoreDetails';
+import { NoGameMessage } from './NoGameMessage'
 import { BoxscoreTable } from './BoxscoreTable'
 
 export const GameDetails = ({ gameId } : { gameId: string }) => {
@@ -32,7 +32,7 @@ export const GameDetails = ({ gameId } : { gameId: string }) => {
       {gameId ? (
         boxscore ? (
           <VStack spacing={8} pb={[0, 8]}>
-            {/*<ScoreDetails boxscore={boxscore.game} />*/}
+            <ScoreDetails boxscore={boxscore.game} />
             <BoxscoreTable
               gameId={boxscore.game.gameId}
               team={boxscore.game.homeTeam}
@@ -44,8 +44,7 @@ export const GameDetails = ({ gameId } : { gameId: string }) => {
           </VStack>
         ) : null
       ) : (
-        <p>no games</p>
-        // <NoGameMessage>
+            <NoGameMessage />
       )}
     </Box>
   )

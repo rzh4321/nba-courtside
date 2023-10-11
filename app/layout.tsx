@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import {ColorModeScript} from '@chakra-ui/react';
+import {ColorModeScript, Container} from '@chakra-ui/react';
 import theme from '@/theme';
 import ChakraProvider from '@/components/ChakraProvider';
 import NavBar from '@/components/NavBar';
@@ -15,6 +15,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
       <body>
@@ -22,8 +23,9 @@ export default function RootLayout({
       <ColorModeScript initialColorMode={theme.config.initialColorMode} /> 
       {/* ChakraProvider to provide Chakra UI context to the children */}
       <ChakraProvider> 
-        <NavBar />
-        {children}
+        <NavBar>
+          {children}
+        </NavBar>
       </ChakraProvider> 
       </body>
     </html>

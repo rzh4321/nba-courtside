@@ -7,7 +7,6 @@ export function useSchedule() {
   }
     
   )
-
   return {
     ...result
   }

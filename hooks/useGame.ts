@@ -15,5 +15,6 @@ export function useGame(gameId: string) {
     // returns an object info about the game
     return gameDate?.games.find(findGame)
   }, [schedule, gameId])
+  
   return game
 }
