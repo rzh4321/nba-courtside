@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import type { BoxscoreResponse } from '@/types';
+import { BoxscoreResponse } from '@/types';
 import flatten from 'lodash/flatten';
 import { useMemo } from 'react';
 
@@ -38,7 +38,7 @@ function getLeaders(boxscores: BoxscoreResponse[], category: keyof Statistics) {
 }
 
 // refresh data if at least one game is still live
-// gameIds is gameIds of all played/playings games of either today or the last game date
+// gameIds is gameIds of all played/playings games of last game date
 export function useLeaders(gameIds: string[], refresh = false) {
   const { data } = useSWR(
     gameIds,
@@ -59,7 +59,7 @@ export function useLeaders(gameIds: string[], refresh = false) {
     }
   )
 
-  // only re-calculate leaders if refresh is true (if at least one game is still live)
+  // only re-calculate leaders if data changes (if at least one game is still live)
   const pointLeaders = useMemo(() => getLeaders(data || [], 'points'), [data])
   const assistLeaders = useMemo(() => getLeaders(data || [], 'assists'), [data])
   const reboundLeaders = useMemo(
