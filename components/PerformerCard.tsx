@@ -1,7 +1,7 @@
 import type { BoxscoreResponse } from '@/types';
-import { AspectRatio, Box, Text, useStatStyles } from '@chakra-ui/react'
+import { AspectRatio, Box, Text, useColorModeValue } from '@chakra-ui/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 type Player = BoxscoreResponse['game']['homeTeam']['players'][number]
 type Category =
@@ -20,10 +20,6 @@ function categoryDisplay(category: Category) {
   }
 }
 
-function handleImageError(event : any) {
-    //alert(event.target.src)
-    //event.target.src = 'https://cdn.nba.com/headshots/nba/latest/1040x760/fallback.png'; // Set the src to the default image
-  }
 
 export type PerformerCardProps = {
   player: Player & { team: string }
@@ -32,8 +28,11 @@ export type PerformerCardProps = {
 
 export const PerformerCard = ({ player, category } : PerformerCardProps) => {
     const [imageUrl, setImageUrl] = useState(`https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png`);
+    const cardColor = useColorModeValue('gray.700', 'gray.900');
+    const textColor = useColorModeValue('gray.300', 'gray.400');
+
   return (
-    <Box minW={'216px'} w={'216px'} position={'relative'}>
+    <Box minW={'216px'} w={'216px'} position={'relative'} zIndex={0}>
       <Box
         bg={player.team}
         w={'full'}
@@ -52,14 +51,14 @@ export const PerformerCard = ({ player, category } : PerformerCardProps) => {
           onError={() => setImageUrl('https://cdn.nba.com/headshots/nba/latest/1040x760/fallback.png')}
                   />
       </AspectRatio>
-      <Box bg={'gray.900'} px={4} py={2} roundedBottom={'lg'}>
-        <Text fontWeight={'semibold'}>
+      <Box bg={cardColor} px={4} py={2} roundedBottom={'lg'}>
+        <Text fontWeight={'semibold'} color={'white'}>
           {player.statistics[category]}{' '}
-          <Box as={'span'} color={'gray.400'}>
+          <Box as={'span'} color={textColor}>
             {categoryDisplay(category)}
           </Box>
         </Text>
-        <Text>
+        <Text color={'white'}>
           {player.firstName} {player.familyName}
         </Text>
       </Box>

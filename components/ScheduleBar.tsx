@@ -17,7 +17,7 @@ import {
     
   export const ScheduleBar = () => {
     const { data, isLoading } = useScoreboard()
-    const bg = useColorModeValue('gray.800', 'gray.900');
+    const bg = useColorModeValue('gray.700', 'gray.900');
 
     return (
       <Box bg={bg} w={'full'} h={isLoading ? '157px' : 'auto'}>

@@ -25,7 +25,7 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
               zIndex={'sticky'}
       >
           <Box
-          bg={colorMode === 'light'? 'gray.800' : 'gray.900'}
+          bg={colorMode === 'light'? 'gray.700' : 'gray.900'}
           height={65}
           paddingX={4}
           paddingY={2}
