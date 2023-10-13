@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { getScoreboard } from '@/service';
 import { NextResponse } from 'next/server';
 
