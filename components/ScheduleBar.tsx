@@ -2,7 +2,6 @@ import {
     Flex,
     VStack,
     Text,
-    Link,
     HStack,
     Container,
     Box,
@@ -12,6 +11,8 @@ import {
   import NextLink from 'next/link'
   import { useScoreboard } from '@/hooks/useScoreboard';
   import { LiveGameCard } from './LiveGameCard';
+  import { GameDetails } from './GameDetails';
+  import { DayPicker } from './DayPicker';
   import { Game } from '@/types';
   import '@/global.css';
     
@@ -39,14 +40,7 @@ import {
                   )}
                 </Text>
               )}
-              <Link
-                as={NextLink}
-                href={'/'}
-                color={'blue.400'}
-                fontWeight={'semibold'}
-              >
-                Choose Date
-              </Link>
+            <DayPicker />
             </Flex>
             <HStack w={'full'} className='scrollable' overflow={'auto'}>
               {isLoading ? (

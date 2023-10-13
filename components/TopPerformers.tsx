@@ -1,5 +1,5 @@
 'use client'    // need this for useSchedule to work
-import { VStack, Heading, HStack } from '@chakra-ui/react'
+import { VStack, Heading, HStack, useColorModeValue } from '@chakra-ui/react'
 import { format, isToday } from 'date-fns'
 import { useLeaders } from '../hooks/useLeaders'
 import { PerformerCard } from '../components/PerformerCard'
@@ -14,9 +14,10 @@ type SectionProps = {
 
 // display a category and its leaders
 const Section = ({ leaders, category } : SectionProps) => {
+  const categoryColor = useColorModeValue('gray.700', 'gray.400');
   return (
     <VStack w={'full'} align={'start'} spacing={4}>
-      <Heading fontSize={'2xl'} color={'gray.400'} fontWeight={'normal'}>
+      <Heading fontSize={'2xl'} color={categoryColor} fontWeight={'normal'}>
         {/* startCase turns string into words starting with uppercase, like hello world to Hello World */}
         {startCase(category).split(' ')[0]}
       </Heading>

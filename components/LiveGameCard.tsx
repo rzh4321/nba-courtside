@@ -21,7 +21,7 @@ export const LiveGameCard = ({ game } : LiveGameCardProps) => {
       <VStack
         align={'start'}
         spacing={2}
-        w={'125px'}
+        w={'135px'}
         px={4}
         py={2}
         bg={bg}
@@ -31,10 +31,10 @@ export const LiveGameCard = ({ game } : LiveGameCardProps) => {
           {game.gameStatusText}
         </Text>
         <VStack spacing={0} align={'start'}>
-          <Text fontWeight={'semibold'} letterSpacing={'wider'}>
+          <Text fontWeight={'semibold'} letterSpacing={'wider'} fontSize={game.homeTeam.score > game.awayTeam.score ? 'lg' : 'md'} >
             {game.homeTeam.teamTricode} - {game.homeTeam.score}
           </Text>
-          <Text fontWeight={'semibold'} letterSpacing={'wider'}>
+          <Text fontWeight={'semibold'} letterSpacing={'wider'} fontSize={game.awayTeam.score > game.homeTeam.score ? 'lg' : 'md'} >
             {game.awayTeam.teamTricode} - {game.awayTeam.score}
           </Text>
         </VStack>

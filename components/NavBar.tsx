@@ -9,7 +9,7 @@ import { ScheduleBar } from './ScheduleBar';
 
 export type NavBarProps = {};
 
-const NavBar = ({children} : {children: React.ReactNode}) => {
+const NavBar = () => {
   // Using the useColorMode hook to get the current color mode and the function to toggle it
   const { colorMode, toggleColorMode } = useColorMode()
 
@@ -48,11 +48,6 @@ const NavBar = ({children} : {children: React.ReactNode}) => {
             </Flex>
           </Box>
           <ScheduleBar />
-      </Box>
-      <Box bg={colorMode === 'light'? 'gray.100' : 'gray.800'} pt={'10px'} >
-        <Container maxW={'container.lg'} >
-          {children}
-        </Container>
       </Box>
   </>
   )

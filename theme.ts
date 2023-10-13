@@ -1,4 +1,5 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
+import { mode } from '@chakra-ui/theme-tools';
 
 
 import fonts from './font'
@@ -42,12 +43,21 @@ const config: ThemeConfig = {
   useSystemColorMode: false
 }
 
+
 const theme = extendTheme({
   config,
   fonts,
   colors: {
     ...teamColors,
-  }
+  },
+  semanticTokens: {
+    colors: {
+      background: {
+        default: 'gray.50',
+        _dark: 'gray.800',
+      },
+    },
+  },
 })
 
 export default theme

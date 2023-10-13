@@ -14,3 +14,9 @@
 .scrollable::-webkit-scrollbar { 
     display: none;
 }
+
+.react-datepicker-wrapper input {
+    border-radius: 0.375rem;
+    font-size: 14px;
+    padding-left: 5px;
+}
