@@ -42,11 +42,11 @@ function getLeaders(boxscores: BoxscoreResponse[], category: keyof Statistics) {
 export function useLeaders(gameIds: string[], refresh = false) {
   const { data } = useSWR(
     gameIds,
-    async (ids) => {
+    async () => {
       if (gameIds.length === 0) {
         return undefined
       }
-      const requests = ids.map(async (id) => {
+      const requests = gameIds.map(async (id) => {
         const res = await fetch(`/api/boxscore/${id}`);
         return await res.json();
       }

@@ -42,12 +42,15 @@ const Section = ({ leaders, category } : SectionProps) => {
 
 
 export const TopPerformers = () => {
+  // call useSchedule to get game dates, call functino to get last played game date
   const lastPlayedGameDate = useLastPlayedGameDate()
   const games = lastPlayedGameDate?.games;
   // get gameIds of all games from last game date
   const gameIds = games?.filter((g : Game) => g.gameStatus > 1).map((g : Game) => g.gameId);
   // hasLiveGame is true of one of the games is still live
   const hasLiveGame = games?.some((g : Game) => g.gameStatus === 2)
+  // using array of gameIds, useSWR to get an array of box score data, each one per gameId
+  // then call a function that flattens the array of box scores before getting leader for specific category
   const { pointLeaders, assistLeaders, reboundLeaders } = useLeaders(
     gameIds || [],
     hasLiveGame     // if a game is live, this will refresh the box score data and re-render this component

@@ -12,9 +12,20 @@ import {
   import { LiveGameCard } from './LiveGameCard';
   import { Game } from '@/types';
   import '@/global.css';
+  import useSWR from 'swr';
+
     
   export const ScheduleBar = () => {
-    const { data, isLoading } = useScoreboard()
+    const {data, isLoading} = useSWR(
+      '/api/scoreboard',
+      async () => {
+          const res = await fetch('/api/scoreboard');
+          return await res.json();
+      },
+      {
+        refreshInterval: 1000 * 20
+      }
+    );
     const bg = useColorModeValue('gray.700', 'gray.900');
 
     return (

@@ -2,7 +2,6 @@
 
 import { Box, Text, Flex, IconButton, Container, useColorMode, HStack } from '@chakra-ui/react';
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
-import Image from 'next/image';
 import { Link } from '@chakra-ui/next-js';
 import { ScheduleBar } from './ScheduleBar';
 
