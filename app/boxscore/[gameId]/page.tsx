@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import { GameDetails } from '@/components/GameDetails';
 import Head from 'next/head'
 

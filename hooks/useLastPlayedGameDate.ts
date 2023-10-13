@@ -18,11 +18,10 @@ export function getDateFromGameDate(
 export function useLastPlayedGameDate() {
   const { data } = useSchedule();
   const gameDates = data?.leagueSchedule.gameDates
-
   if (!gameDates) {
     return null
   }
-
+  // gameDates is a large array of objects, each object has gameDate and games array
   // traverse backwards to get most recent game date object
   for (let i = gameDates.length - 1; i >= 0; i--) {
     const gameDate = gameDates[i];

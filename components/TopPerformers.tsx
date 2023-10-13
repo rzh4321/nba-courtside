@@ -41,7 +41,6 @@ const Section = ({ leaders, category } : SectionProps) => {
 
 export const TopPerformers = () => {
   const lastPlayedGameDate = useLastPlayedGameDate()
-
   const games = lastPlayedGameDate?.games;
   // get gameIds of all games from last game date
   const gameIds = games?.filter((g : Game) => g.gameStatus > 1).map((g : Game) => g.gameId);

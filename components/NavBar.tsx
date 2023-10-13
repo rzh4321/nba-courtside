@@ -35,9 +35,9 @@ const NavBar = () => {
                 alignItems={'center'}
                 height={'100%'}
             >
-                <Link href={'/'}>
+                <Link href={'/'} _hover={{ textDecoration: "none" }}>
                   <Text fontSize={24} fontWeight={'bold'} color={'white'}>
-                  NBA Box Score
+                  NBA CourtSide
                   </Text>
                 </Link>
                 <IconButton         // toggle color mode

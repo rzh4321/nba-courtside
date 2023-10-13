@@ -1,8 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest } from 'next/server'; 
 import { getBoxscore } from '@/service';
 import { NextResponse } from 'next/server';
 
-export async function GET(req : NextApiRequest, context: {params: {gameId: string}}) {
+export async function GET(req : NextRequest, context: {params: {gameId: string}}) {
     const data = await getBoxscore(context.params.gameId);
     return NextResponse.json(data);
 }
