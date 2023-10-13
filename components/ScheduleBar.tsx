@@ -8,11 +8,8 @@ import {
     useColorModeValue,
   } from '@chakra-ui/react'
   import { format, parse } from 'date-fns'
-  import NextLink from 'next/link'
   import { useScoreboard } from '@/hooks/useScoreboard';
   import { LiveGameCard } from './LiveGameCard';
-  import { GameDetails } from './GameDetails';
-  import { DayPicker } from './DayPicker';
   import { Game } from '@/types';
   import '@/global.css';
     
@@ -29,7 +26,6 @@ import {
               direction={['row']}
               justify={'space-between'}
               align={['flex-start', 'center']}
-              gap={[2, 0]}
             >
               {data && (
                 <Text color={'white'} fontWeight={'semibold'}>
@@ -40,7 +36,6 @@ import {
                   )}
                 </Text>
               )}
-            <DayPicker />
             </Flex>
             <HStack w={'full'} className='scrollable' overflow={'auto'}>
               {isLoading ? (

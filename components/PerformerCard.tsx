@@ -32,7 +32,7 @@ export const PerformerCard = ({ player, category } : PerformerCardProps) => {
     const textColor = useColorModeValue('gray.300', 'gray.400');
 
   return (
-    <Box minW={'216px'} w={'216px'} position={'relative'} zIndex={0}>
+    <Box maxW={'216px'} minW={'150px'} w={'216px'} position={'relative'} className='performer-card' zIndex={0}>
       <Box
         bg={player.team}
         w={'full'}
@@ -58,7 +58,7 @@ export const PerformerCard = ({ player, category } : PerformerCardProps) => {
             {categoryDisplay(category)}
           </Box>
         </Text>
-        <Text color={'white'}>
+        <Text color={'white'} className='player-name'>
           {player.firstName} {player.familyName}
         </Text>
       </Box>

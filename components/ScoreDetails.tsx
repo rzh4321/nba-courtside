@@ -6,6 +6,7 @@ import {
   VStack,
   HStack,
   Badge,
+  Show,
   useColorModeValue
 } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -29,14 +30,26 @@ const TeamDetails = ({ team, reverse = false } : TeamDetailsProps) => {
         alt={team.teamName}
       />
       {/* display the tricode and score */}
-      <Box textAlign={reverse ? 'right' : 'left'}>
-        <Text fontSize={'lg'} fontWeight={'bold'}>
-          {team.teamTricode}
-        </Text>
-        <Text fontSize={'3xl'} fontWeight={'bold'} mt={-2}>
-          {team.score}
-        </Text>
-      </Box>
+      <Show above='sm'>
+        <Box textAlign={reverse ? 'right' : 'left'}>
+          <Text fontSize={'lg'} fontWeight={'bold'}>
+            {team.teamTricode}
+          </Text>
+          <Text fontSize={'3xl'} fontWeight={'bold'} mt={-2}>
+            {team.score}
+          </Text>
+        </Box>
+      </Show>
+      <Show below="sm">
+      <Box textAlign={reverse ? 'right' : 'left'} margin={-2}>
+          <Text fontSize={'md'} fontWeight={'bold'}>
+            {team.teamTricode}
+          </Text>
+          <Text fontSize={'2xl'} fontWeight={'bold'} mt={-2}>
+            {team.score}
+          </Text>
+        </Box>
+      </Show>
     </Flex>
   )
 }

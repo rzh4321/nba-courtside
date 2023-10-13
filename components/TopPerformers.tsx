@@ -16,7 +16,7 @@ type SectionProps = {
 const Section = ({ leaders, category } : SectionProps) => {
   const categoryColor = useColorModeValue('gray.700', 'gray.400');
   return (
-    <VStack w={'full'} align={'start'} spacing={4}>
+    <VStack w={'100%'} align={'start'} spacing={4}>
       <Heading fontSize={'2xl'} color={categoryColor} fontWeight={'normal'}>
         {/* startCase turns string into words starting with uppercase, like hello world to Hello World */}
         {startCase(category).split(' ')[0]}
@@ -24,6 +24,8 @@ const Section = ({ leaders, category } : SectionProps) => {
       <HStack
         w={'full'}
         spacing={8}
+        flexWrap={'wrap'}
+        className='flex-performers'
       >
         {/* display leaders for this category */}
         {leaders.map((leader) => (

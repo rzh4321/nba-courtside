@@ -24,7 +24,7 @@ export default function RootLayout({
         <ColorModeScript initialColorMode={theme.config.initialColorMode} /> 
       {/* ChakraProvider to provide Chakra UI context to the children */}
         <ChakraProvider> 
-        <Box className='asda' bg='background'>
+        <Box w={'full'} bg='background'>
           <NavBar />
           <Box pt={'10px'} >
             <Container maxW={'container.lg'} pt={'10px'} >
