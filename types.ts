@@ -536,5 +536,3 @@ export type LeagueScheduleResponse = {
 
 export type Game =
   LeagueScheduleResponse['leagueSchedule']['gameDates'][number]['games'][number]
-
-export type Broadcaster = Game['broadcasters']['nationalTvBroadcasters'][number]
