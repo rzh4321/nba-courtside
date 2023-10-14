@@ -4,13 +4,16 @@ import { Box, Text, Flex, IconButton, Container, useColorMode, HStack } from '@c
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/next-js';
 import { ScheduleBar } from './ScheduleBar';
+import { useScoreboard } from '@/hooks/useScoreboard';
+
 
 
 export type NavBarProps = {};
 
 const NavBar = () => {
   // Using the useColorMode hook to get the current color mode and the function to toggle it
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode();
+  const { data, isLoading } = useScoreboard();
 
 
   return (
@@ -46,7 +49,7 @@ const NavBar = () => {
                 />
             </Flex>
           </Box>
-          <ScheduleBar />
+          <ScheduleBar data={data} isLoading={isLoading} />
       </Box>
   </>
   )

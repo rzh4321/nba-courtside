@@ -10,11 +10,15 @@ import {
   import { format, parse } from 'date-fns'
   import { useScoreboard } from '@/hooks/useScoreboard';
   import { LiveGameCard } from './LiveGameCard';
-  import { Game } from '@/types';
+  import { Game, ScoreboardResponse } from '@/types';
   import '@/global.css';
+
+  type ScheduleBarProps = {
+    data: ScoreboardResponse;
+    isLoading: boolean;
+  }
     
-  export const ScheduleBar = () => {
-    const { data, isLoading } = useScoreboard();
+  export const ScheduleBar = ({ data, isLoading} : ScheduleBarProps) => {
     console.log('inside schedulebar');
     console.log('inside schedulebar, data is ', data?.scoreboard?.games)
     const bg = useColorModeValue('gray.700', 'gray.900');
