@@ -1,37 +1,38 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Box, VStack } from '@chakra-ui/react'
-import useSWR from 'swr'
-import { ScoreDetails } from './ScoreDetails';
-import { NoGameMessage } from './NoGameMessage'
-import { BoxscoreTable } from './BoxscoreTable'
+import { useEffect } from "react";
+import { Box, VStack } from "@chakra-ui/react";
+import useSWR from "swr";
+import { ScoreDetails } from "./ScoreDetails";
+import { NoGameMessage } from "./NoGameMessage";
+import { BoxscoreTable } from "./BoxscoreTable";
 
-export const GameDetails = ({ gameId } : { gameId: string }) => {
+export const GameDetails = ({ gameId }: { gameId: string }) => {
   const { data: boxscore } = useSWR(
     gameId ? `/api/boxscore/${gameId}` : null,
     async () => {
-        const res = await fetch(`/api/boxscore/${gameId}`)
-        return await res.json();
+      const res = await fetch(`/api/boxscore/${gameId}`);
+      return await res.json();
     },
     {
-      refreshInterval: 1000 * 30        // update boxscore data every 30 seconds
-    }
-  )
+      refreshInterval: 1000 * 30, // update boxscore data every 30 seconds
+    },
+  );
 
   // update document title
   useEffect(() => {
     if (boxscore) {
-      const { homeTeam, awayTeam } = boxscore.game
-      document.title = `${homeTeam.teamTricode} (${homeTeam.score}) vs ${awayTeam.teamTricode} (${awayTeam.score})`
+      const { homeTeam, awayTeam } = boxscore.game;
+      document.title = `${homeTeam.teamTricode} (${homeTeam.score}) vs ${awayTeam.teamTricode} (${awayTeam.score})`;
     }
-  }, [boxscore])
+  }, [boxscore]);
 
   return (
-    <Box h={'full'} p={8}>
+    <Box h={"full"} p={8}>
       {gameId ? (
         boxscore ? (
-          <VStack spacing={8} pb={[0, 8]}>
+          // VStack separating score, teamA boxscore, and teamB boxscore
+          <VStack spacing={8}>
             <ScoreDetails boxscore={boxscore.game} />
             <BoxscoreTable
               gameId={boxscore.game.gameId}
@@ -44,8 +45,8 @@ export const GameDetails = ({ gameId } : { gameId: string }) => {
           </VStack>
         ) : null
       ) : (
-            <NoGameMessage />
+        <NoGameMessage />
       )}
     </Box>
-  )
-}
+  );
+};

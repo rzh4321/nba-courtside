@@ -1,31 +1,28 @@
 .scrollable {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .scrollable:hover {
-    overflow: auto;
+  overflow: auto;
 }
 
 /* Target WebKit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-    display: hidden;
-  }
-  
-.scrollable::-webkit-scrollbar { 
-    display: none;
+  display: hidden;
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none;
 }
 
 .react-datepicker-wrapper input {
-    border-radius: 0.375rem;
-    font-size: 14px;
-    padding-left: 5px;
+  border-radius: 0.375rem;
+  font-size: 14px;
+  padding-left: 5px;
 }
 
-
-
 @media screen and (max-width: 530px) {
-    .flex-performers {
-        justify-content: center;
-    }
-    
+  .flex-performers {
+    justify-content: center;
   }
+}

@@ -1,7 +1,7 @@
-import { GameDetails } from '@/components/GameDetails';
-import Head from 'next/head'
+import { GameDetails } from "@/components/GameDetails";
+import Head from "next/head";
 
-const BoxscorePage = ({params} : {params : { gameId: string }}) => {
+const BoxscorePage = ({ params }: { params: { gameId: string } }) => {
   return (
     <>
       <Head>
@@ -9,7 +9,7 @@ const BoxscorePage = ({params} : {params : { gameId: string }}) => {
       </Head>
       <GameDetails gameId={params.gameId} />
     </>
-  )
-}
+  );
+};
 
-export default BoxscorePage
+export default BoxscorePage;

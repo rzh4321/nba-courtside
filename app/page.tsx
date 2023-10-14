@@ -1,7 +1,7 @@
-import {TopPerformers} from "@/components/TopPerformers";
+import { TopPerformers } from "@/components/TopPerformers";
 
 const Page = async () => {
-  return <TopPerformers />
-}
+  return <TopPerformers />;
+};
 
 export default Page;

@@ -1,12 +1,7 @@
-import { getScoreboard } from '@/service';
-import { NextResponse, NextRequest } from 'next/server';
-
-const scoreboardUrl = `https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
-
-
+import { getScoreboard } from "@/service";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-    const res = await fetch(scoreboardUrl, { cache: 'no-store' });
-    const data = await res.json();
-    return NextResponse.json(data);
+  const data = await getScoreboard();
+  return NextResponse.json(data);
 }

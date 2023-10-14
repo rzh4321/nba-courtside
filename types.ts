@@ -1,538 +1,538 @@
 export type ScoreboardResponse = {
   meta: {
-    version: number
-    request: string
-    time: string
-    code: number
-  }
+    version: number;
+    request: string;
+    time: string;
+    code: number;
+  };
   scoreboard: {
-    gameDate: string
-    leagueId: string
-    leagueName: string
+    gameDate: string;
+    leagueId: string;
+    leagueName: string;
     games: Array<{
-      gameId: string
-      gameCode: string
-      gameStatus: number
-      gameStatusText: string
-      period: number
-      gameClock: string
-      gameTimeUTC: string
-      gameEt: string
-      regulationPeriods: number
-      ifNecessary: boolean
-      seriesGameNumber: string
-      seriesText: string
+      gameId: string;
+      gameCode: string;
+      gameStatus: number;
+      gameStatusText: string;
+      period: number;
+      gameClock: string;
+      gameTimeUTC: string;
+      gameEt: string;
+      regulationPeriods: number;
+      ifNecessary: boolean;
+      seriesGameNumber: string;
+      seriesText: string;
       homeTeam: {
-        teamId: number
-        teamName: string
-        teamCity: string
-        teamTricode: string
-        wins: number
-        losses: number
-        score: number
-        seed: any
-        inBonus?: string
-        timeoutsRemaining: number
+        teamId: number;
+        teamName: string;
+        teamCity: string;
+        teamTricode: string;
+        wins: number;
+        losses: number;
+        score: number;
+        seed: any;
+        inBonus?: string;
+        timeoutsRemaining: number;
         periods: Array<{
-          period: number
-          periodType: string
-          score: number
-        }>
-      }
+          period: number;
+          periodType: string;
+          score: number;
+        }>;
+      };
       awayTeam: {
-        teamId: number
-        teamName: string
-        teamCity: string
-        teamTricode: string
-        wins: number
-        losses: number
-        score: number
-        seed: any
-        inBonus?: string
-        timeoutsRemaining: number
+        teamId: number;
+        teamName: string;
+        teamCity: string;
+        teamTricode: string;
+        wins: number;
+        losses: number;
+        score: number;
+        seed: any;
+        inBonus?: string;
+        timeoutsRemaining: number;
         periods: Array<{
-          period: number
-          periodType: string
-          score: number
-        }>
-      }
+          period: number;
+          periodType: string;
+          score: number;
+        }>;
+      };
       gameLeaders: {
         homeLeaders: {
-          personId: number
-          name: string
-          jerseyNum: string
-          position: string
-          teamTricode: string
-          playerSlug?: string
-          points: number
-          rebounds: number
-          assists: number
-        }
+          personId: number;
+          name: string;
+          jerseyNum: string;
+          position: string;
+          teamTricode: string;
+          playerSlug?: string;
+          points: number;
+          rebounds: number;
+          assists: number;
+        };
         awayLeaders: {
-          personId: number
-          name: string
-          jerseyNum: string
-          position: string
-          teamTricode: string
-          playerSlug?: string
-          points: number
-          rebounds: number
-          assists: number
-        }
-      }
+          personId: number;
+          name: string;
+          jerseyNum: string;
+          position: string;
+          teamTricode: string;
+          playerSlug?: string;
+          points: number;
+          rebounds: number;
+          assists: number;
+        };
+      };
       pbOdds: {
-        team: any
-        odds: number
-        suspended: number
-      }
-    }>
-  }
-}
+        team: any;
+        odds: number;
+        suspended: number;
+      };
+    }>;
+  };
+};
 
-export type LiveGame = ScoreboardResponse['scoreboard']['games'][number]
-  
+export type LiveGame = ScoreboardResponse["scoreboard"]["games"][number];
+
 export type BoxscoreResponse = {
   meta: {
-    version: number
-    code: number
-    request: string
-    time: string
-  }
+    version: number;
+    code: number;
+    request: string;
+    time: string;
+  };
   game: {
-    gameId: string
-    gameTimeLocal: string
-    gameTimeUTC: string
-    gameTimeHome: string
-    gameTimeAway: string
-    gameEt: string
-    duration: number
-    gameCode: string
-    gameStatusText: string
-    gameStatus: number
-    regulationPeriods: number
-    period: number
-    gameClock: string
-    attendance: number
-    sellout: string
+    gameId: string;
+    gameTimeLocal: string;
+    gameTimeUTC: string;
+    gameTimeHome: string;
+    gameTimeAway: string;
+    gameEt: string;
+    duration: number;
+    gameCode: string;
+    gameStatusText: string;
+    gameStatus: number;
+    regulationPeriods: number;
+    period: number;
+    gameClock: string;
+    attendance: number;
+    sellout: string;
     arena: {
-      arenaId: number
-      arenaName: string
-      arenaCity: string
-      arenaState: string
-      arenaCountry: string
-      arenaTimezone: string
-    }
+      arenaId: number;
+      arenaName: string;
+      arenaCity: string;
+      arenaState: string;
+      arenaCountry: string;
+      arenaTimezone: string;
+    };
     officials: Array<{
-      personId: number
-      name: string
-      nameI: string
-      firstName: string
-      familyName: string
-      jerseyNum: string
-      assignment: string
-    }>
+      personId: number;
+      name: string;
+      nameI: string;
+      firstName: string;
+      familyName: string;
+      jerseyNum: string;
+      assignment: string;
+    }>;
     homeTeam: {
-      teamId: number
-      teamName: string
-      teamCity: string
-      teamTricode: string
-      score: number
-      inBonus: string
-      timeoutsRemaining: number
+      teamId: number;
+      teamName: string;
+      teamCity: string;
+      teamTricode: string;
+      score: number;
+      inBonus: string;
+      timeoutsRemaining: number;
       periods: Array<{
-        period: number
-        periodType: string
-        score: number
-      }>
+        period: number;
+        periodType: string;
+        score: number;
+      }>;
       players: Array<{
-        status: string
-        order: number
-        personId: number
-        jerseyNum: string
-        position?: string
-        starter: string
-        oncourt: string
-        played: string
+        status: string;
+        order: number;
+        personId: number;
+        jerseyNum: string;
+        position?: string;
+        starter: string;
+        oncourt: string;
+        played: string;
         statistics: {
-          assists: number
-          blocks: number
-          blocksReceived: number
-          fieldGoalsAttempted: number
-          fieldGoalsMade: number
-          fieldGoalsPercentage: number
-          foulsOffensive: number
-          foulsDrawn: number
-          foulsPersonal: number
-          foulsTechnical: number
-          freeThrowsAttempted: number
-          freeThrowsMade: number
-          freeThrowsPercentage: number
-          minus: number
-          minutes: string
-          minutesCalculated: string
-          plus: number
-          plusMinusPoints: number
-          points: number
-          pointsFastBreak: number
-          pointsInThePaint: number
-          pointsSecondChance: number
-          reboundsDefensive: number
-          reboundsOffensive: number
-          reboundsTotal: number
-          steals: number
-          threePointersAttempted: number
-          threePointersMade: number
-          threePointersPercentage: number
-          turnovers: number
-          twoPointersAttempted: number
-          twoPointersMade: number
-          twoPointersPercentage: number
-        }
-        name: string
-        nameI: string
-        firstName: string
-        familyName: string
-        notPlayingReason?: string
-        notPlayingDescription?: string
-      }>
+          assists: number;
+          blocks: number;
+          blocksReceived: number;
+          fieldGoalsAttempted: number;
+          fieldGoalsMade: number;
+          fieldGoalsPercentage: number;
+          foulsOffensive: number;
+          foulsDrawn: number;
+          foulsPersonal: number;
+          foulsTechnical: number;
+          freeThrowsAttempted: number;
+          freeThrowsMade: number;
+          freeThrowsPercentage: number;
+          minus: number;
+          minutes: string;
+          minutesCalculated: string;
+          plus: number;
+          plusMinusPoints: number;
+          points: number;
+          pointsFastBreak: number;
+          pointsInThePaint: number;
+          pointsSecondChance: number;
+          reboundsDefensive: number;
+          reboundsOffensive: number;
+          reboundsTotal: number;
+          steals: number;
+          threePointersAttempted: number;
+          threePointersMade: number;
+          threePointersPercentage: number;
+          turnovers: number;
+          twoPointersAttempted: number;
+          twoPointersMade: number;
+          twoPointersPercentage: number;
+        };
+        name: string;
+        nameI: string;
+        firstName: string;
+        familyName: string;
+        notPlayingReason?: string;
+        notPlayingDescription?: string;
+      }>;
       statistics: {
-        assists: number
-        assistsTurnoverRatio: number
-        benchPoints: number
-        biggestLead: number
-        biggestLeadScore: string
-        biggestScoringRun: number
-        biggestScoringRunScore: string
-        blocks: number
-        blocksReceived: number
-        fastBreakPointsAttempted: number
-        fastBreakPointsMade: number
-        fastBreakPointsPercentage: number
-        fieldGoalsAttempted: number
-        fieldGoalsEffectiveAdjusted: number
-        fieldGoalsMade: number
-        fieldGoalsPercentage: number
-        foulsOffensive: number
-        foulsDrawn: number
-        foulsPersonal: number
-        foulsTeam: number
-        foulsTechnical: number
-        foulsTeamTechnical: number
-        freeThrowsAttempted: number
-        freeThrowsMade: number
-        freeThrowsPercentage: number
-        leadChanges: number
-        minutes: string
-        minutesCalculated: string
-        points: number
-        pointsAgainst: number
-        pointsFastBreak: number
-        pointsFromTurnovers: number
-        pointsInThePaint: number
-        pointsInThePaintAttempted: number
-        pointsInThePaintMade: number
-        pointsInThePaintPercentage: number
-        pointsSecondChance: number
-        reboundsDefensive: number
-        reboundsOffensive: number
-        reboundsPersonal: number
-        reboundsTeam: number
-        reboundsTeamDefensive: number
-        reboundsTeamOffensive: number
-        reboundsTotal: number
-        secondChancePointsAttempted: number
-        secondChancePointsMade: number
-        secondChancePointsPercentage: number
-        steals: number
-        threePointersAttempted: number
-        threePointersMade: number
-        threePointersPercentage: number
-        timeLeading: string
-        timesTied: number
-        trueShootingAttempts: number
-        trueShootingPercentage: number
-        turnovers: number
-        turnoversTeam: number
-        turnoversTotal: number
-        twoPointersAttempted: number
-        twoPointersMade: number
-        twoPointersPercentage: number
-      }
-    }
+        assists: number;
+        assistsTurnoverRatio: number;
+        benchPoints: number;
+        biggestLead: number;
+        biggestLeadScore: string;
+        biggestScoringRun: number;
+        biggestScoringRunScore: string;
+        blocks: number;
+        blocksReceived: number;
+        fastBreakPointsAttempted: number;
+        fastBreakPointsMade: number;
+        fastBreakPointsPercentage: number;
+        fieldGoalsAttempted: number;
+        fieldGoalsEffectiveAdjusted: number;
+        fieldGoalsMade: number;
+        fieldGoalsPercentage: number;
+        foulsOffensive: number;
+        foulsDrawn: number;
+        foulsPersonal: number;
+        foulsTeam: number;
+        foulsTechnical: number;
+        foulsTeamTechnical: number;
+        freeThrowsAttempted: number;
+        freeThrowsMade: number;
+        freeThrowsPercentage: number;
+        leadChanges: number;
+        minutes: string;
+        minutesCalculated: string;
+        points: number;
+        pointsAgainst: number;
+        pointsFastBreak: number;
+        pointsFromTurnovers: number;
+        pointsInThePaint: number;
+        pointsInThePaintAttempted: number;
+        pointsInThePaintMade: number;
+        pointsInThePaintPercentage: number;
+        pointsSecondChance: number;
+        reboundsDefensive: number;
+        reboundsOffensive: number;
+        reboundsPersonal: number;
+        reboundsTeam: number;
+        reboundsTeamDefensive: number;
+        reboundsTeamOffensive: number;
+        reboundsTotal: number;
+        secondChancePointsAttempted: number;
+        secondChancePointsMade: number;
+        secondChancePointsPercentage: number;
+        steals: number;
+        threePointersAttempted: number;
+        threePointersMade: number;
+        threePointersPercentage: number;
+        timeLeading: string;
+        timesTied: number;
+        trueShootingAttempts: number;
+        trueShootingPercentage: number;
+        turnovers: number;
+        turnoversTeam: number;
+        turnoversTotal: number;
+        twoPointersAttempted: number;
+        twoPointersMade: number;
+        twoPointersPercentage: number;
+      };
+    };
     awayTeam: {
-      teamId: number
-      teamName: string
-      teamCity: string
-      teamTricode: string
-      score: number
-      inBonus: string
-      timeoutsRemaining: number
+      teamId: number;
+      teamName: string;
+      teamCity: string;
+      teamTricode: string;
+      score: number;
+      inBonus: string;
+      timeoutsRemaining: number;
       periods: Array<{
-        period: number
-        periodType: string
-        score: number
-      }>
+        period: number;
+        periodType: string;
+        score: number;
+      }>;
       players: Array<{
-        status: string
-        order: number
-        personId: number
-        jerseyNum: string
-        position?: string
-        starter: string
-        oncourt: string
-        played: string
+        status: string;
+        order: number;
+        personId: number;
+        jerseyNum: string;
+        position?: string;
+        starter: string;
+        oncourt: string;
+        played: string;
         statistics: {
-          assists: number
-          blocks: number
-          blocksReceived: number
-          fieldGoalsAttempted: number
-          fieldGoalsMade: number
-          fieldGoalsPercentage: number
-          foulsOffensive: number
-          foulsDrawn: number
-          foulsPersonal: number
-          foulsTechnical: number
-          freeThrowsAttempted: number
-          freeThrowsMade: number
-          freeThrowsPercentage: number
-          minus: number
-          minutes: string
-          minutesCalculated: string
-          plus: number
-          plusMinusPoints: number
-          points: number
-          pointsFastBreak: number
-          pointsInThePaint: number
-          pointsSecondChance: number
-          reboundsDefensive: number
-          reboundsOffensive: number
-          reboundsTotal: number
-          steals: number
-          threePointersAttempted: number
-          threePointersMade: number
-          threePointersPercentage: number
-          turnovers: number
-          twoPointersAttempted: number
-          twoPointersMade: number
-          twoPointersPercentage: number
-        }
-        name: string
-        nameI: string
-        firstName: string
-        familyName: string
-        notPlayingReason?: string
-        notPlayingDescription?: string
-      }>
+          assists: number;
+          blocks: number;
+          blocksReceived: number;
+          fieldGoalsAttempted: number;
+          fieldGoalsMade: number;
+          fieldGoalsPercentage: number;
+          foulsOffensive: number;
+          foulsDrawn: number;
+          foulsPersonal: number;
+          foulsTechnical: number;
+          freeThrowsAttempted: number;
+          freeThrowsMade: number;
+          freeThrowsPercentage: number;
+          minus: number;
+          minutes: string;
+          minutesCalculated: string;
+          plus: number;
+          plusMinusPoints: number;
+          points: number;
+          pointsFastBreak: number;
+          pointsInThePaint: number;
+          pointsSecondChance: number;
+          reboundsDefensive: number;
+          reboundsOffensive: number;
+          reboundsTotal: number;
+          steals: number;
+          threePointersAttempted: number;
+          threePointersMade: number;
+          threePointersPercentage: number;
+          turnovers: number;
+          twoPointersAttempted: number;
+          twoPointersMade: number;
+          twoPointersPercentage: number;
+        };
+        name: string;
+        nameI: string;
+        firstName: string;
+        familyName: string;
+        notPlayingReason?: string;
+        notPlayingDescription?: string;
+      }>;
       statistics: {
-        assists: number
-        assistsTurnoverRatio: number
-        benchPoints: number
-        biggestLead: number
-        biggestLeadScore: string
-        biggestScoringRun: number
-        biggestScoringRunScore: string
-        blocks: number
-        blocksReceived: number
-        fastBreakPointsAttempted: number
-        fastBreakPointsMade: number
-        fastBreakPointsPercentage: number
-        fieldGoalsAttempted: number
-        fieldGoalsEffectiveAdjusted: number
-        fieldGoalsMade: number
-        fieldGoalsPercentage: number
-        foulsOffensive: number
-        foulsDrawn: number
-        foulsPersonal: number
-        foulsTeam: number
-        foulsTechnical: number
-        foulsTeamTechnical: number
-        freeThrowsAttempted: number
-        freeThrowsMade: number
-        freeThrowsPercentage: number
-        leadChanges: number
-        minutes: string
-        minutesCalculated: string
-        points: number
-        pointsAgainst: number
-        pointsFastBreak: number
-        pointsFromTurnovers: number
-        pointsInThePaint: number
-        pointsInThePaintAttempted: number
-        pointsInThePaintMade: number
-        pointsInThePaintPercentage: number
-        pointsSecondChance: number
-        reboundsDefensive: number
-        reboundsOffensive: number
-        reboundsPersonal: number
-        reboundsTeam: number
-        reboundsTeamDefensive: number
-        reboundsTeamOffensive: number
-        reboundsTotal: number
-        secondChancePointsAttempted: number
-        secondChancePointsMade: number
-        secondChancePointsPercentage: number
-        steals: number
-        threePointersAttempted: number
-        threePointersMade: number
-        threePointersPercentage: number
-        timeLeading: string
-        timesTied: number
-        trueShootingAttempts: number
-        trueShootingPercentage: number
-        turnovers: number
-        turnoversTeam: number
-        turnoversTotal: number
-        twoPointersAttempted: number
-        twoPointersMade: number
-        twoPointersPercentage: number
-      }
-    }
-  }
-}
+        assists: number;
+        assistsTurnoverRatio: number;
+        benchPoints: number;
+        biggestLead: number;
+        biggestLeadScore: string;
+        biggestScoringRun: number;
+        biggestScoringRunScore: string;
+        blocks: number;
+        blocksReceived: number;
+        fastBreakPointsAttempted: number;
+        fastBreakPointsMade: number;
+        fastBreakPointsPercentage: number;
+        fieldGoalsAttempted: number;
+        fieldGoalsEffectiveAdjusted: number;
+        fieldGoalsMade: number;
+        fieldGoalsPercentage: number;
+        foulsOffensive: number;
+        foulsDrawn: number;
+        foulsPersonal: number;
+        foulsTeam: number;
+        foulsTechnical: number;
+        foulsTeamTechnical: number;
+        freeThrowsAttempted: number;
+        freeThrowsMade: number;
+        freeThrowsPercentage: number;
+        leadChanges: number;
+        minutes: string;
+        minutesCalculated: string;
+        points: number;
+        pointsAgainst: number;
+        pointsFastBreak: number;
+        pointsFromTurnovers: number;
+        pointsInThePaint: number;
+        pointsInThePaintAttempted: number;
+        pointsInThePaintMade: number;
+        pointsInThePaintPercentage: number;
+        pointsSecondChance: number;
+        reboundsDefensive: number;
+        reboundsOffensive: number;
+        reboundsPersonal: number;
+        reboundsTeam: number;
+        reboundsTeamDefensive: number;
+        reboundsTeamOffensive: number;
+        reboundsTotal: number;
+        secondChancePointsAttempted: number;
+        secondChancePointsMade: number;
+        secondChancePointsPercentage: number;
+        steals: number;
+        threePointersAttempted: number;
+        threePointersMade: number;
+        threePointersPercentage: number;
+        timeLeading: string;
+        timesTied: number;
+        trueShootingAttempts: number;
+        trueShootingPercentage: number;
+        turnovers: number;
+        turnoversTeam: number;
+        turnoversTotal: number;
+        twoPointersAttempted: number;
+        twoPointersMade: number;
+        twoPointersPercentage: number;
+      };
+    };
+  };
+};
 
 export type LeagueScheduleResponse = {
   meta: {
-    version: number
-    request: string
-    time: string
-  }
+    version: number;
+    request: string;
+    time: string;
+  };
   leagueSchedule: {
-    seasonYear: string
-    leagueId: string
+    seasonYear: string;
+    leagueId: string;
     gameDates: Array<{
-      gameDate: string
+      gameDate: string;
       games: Array<{
-        gameId: string
-        gameCode: string
-        gameStatus: number
-        gameStatusText: string
-        gameSequence: number
-        gameDateEst: string
-        gameTimeEst: string
-        gameDateTimeEst: string
-        gameDateUTC: string
-        gameTimeUTC: string
-        gameDateTimeUTC: string
-        awayTeamTime: string
-        homeTeamTime: string
-        day: string
-        monthNum: number
-        weekNumber: number
-        weekName: string
-        ifNecessary: boolean
-        seriesGameNumber: string
-        seriesText: string
-        arenaName: string
-        arenaState: string
-        arenaCity: string
-        postponedStatus: string
-        branchLink: string
+        gameId: string;
+        gameCode: string;
+        gameStatus: number;
+        gameStatusText: string;
+        gameSequence: number;
+        gameDateEst: string;
+        gameTimeEst: string;
+        gameDateTimeEst: string;
+        gameDateUTC: string;
+        gameTimeUTC: string;
+        gameDateTimeUTC: string;
+        awayTeamTime: string;
+        homeTeamTime: string;
+        day: string;
+        monthNum: number;
+        weekNumber: number;
+        weekName: string;
+        ifNecessary: boolean;
+        seriesGameNumber: string;
+        seriesText: string;
+        arenaName: string;
+        arenaState: string;
+        arenaCity: string;
+        postponedStatus: string;
+        branchLink: string;
         broadcasters: {
           nationalTvBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
           nationalRadioBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
           homeTvBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
           homeRadioBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
           awayTvBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
           awayRadioBroadcasters: Array<{
-            broadcasterScope: string
-            broadcasterMedia: string
-            broadcasterId: number
-            broadcasterDisplay: string
-            broadcasterAbbreviation: string
-            tapeDelayComments: string
-            regionId: number
-          }>
-          intlRadioBroadcasters: Array<any>
-          intlTvBroadcasters: Array<any>
-        }
+            broadcasterScope: string;
+            broadcasterMedia: string;
+            broadcasterId: number;
+            broadcasterDisplay: string;
+            broadcasterAbbreviation: string;
+            tapeDelayComments: string;
+            regionId: number;
+          }>;
+          intlRadioBroadcasters: Array<any>;
+          intlTvBroadcasters: Array<any>;
+        };
         homeTeam: {
-          teamId: number
-          teamName: string
-          teamCity: string
-          teamTricode: string
-          teamSlug: string
-          wins: number
-          losses: number
-          score: number
-          seed: number
-        }
+          teamId: number;
+          teamName: string;
+          teamCity: string;
+          teamTricode: string;
+          teamSlug: string;
+          wins: number;
+          losses: number;
+          score: number;
+          seed: number;
+        };
         awayTeam: {
-          teamId: number
-          teamName: string
-          teamCity: string
-          teamTricode: string
-          teamSlug: string
-          wins: number
-          losses: number
-          score: number
-          seed: number
-        }
+          teamId: number;
+          teamName: string;
+          teamCity: string;
+          teamTricode: string;
+          teamSlug: string;
+          wins: number;
+          losses: number;
+          score: number;
+          seed: number;
+        };
         pointsLeaders: Array<{
-          personId: number
-          firstName: string
-          lastName: string
-          teamId: number
-          teamCity: string
-          teamName: string
-          teamTricode: string
-          points: number
-        }>
-      }>
-    }>
+          personId: number;
+          firstName: string;
+          lastName: string;
+          teamId: number;
+          teamCity: string;
+          teamName: string;
+          teamTricode: string;
+          points: number;
+        }>;
+      }>;
+    }>;
     weeks: Array<{
-      weekNumber: number
-      weekName: string
-      startDate: string
-      endDate: string
-    }>
+      weekNumber: number;
+      weekName: string;
+      startDate: string;
+      endDate: string;
+    }>;
     broadcasterList: Array<{
-      broadcasterId: number
-      broadcasterDisplay: string
-      broadcasterAbbreviation: string
-      regionId: number
-    }>
-  }
-}
+      broadcasterId: number;
+      broadcasterDisplay: string;
+      broadcasterAbbreviation: string;
+      regionId: number;
+    }>;
+  };
+};
 
 export type Game =
-  LeagueScheduleResponse['leagueSchedule']['gameDates'][number]['games'][number]
+  LeagueScheduleResponse["leagueSchedule"]["gameDates"][number]["games"][number];
