@@ -14,12 +14,10 @@ import {
   import '@/global.css';
 import useSWR from 'swr';
 
-  const host = 'https://cdn.nba.com';
-const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
     
   export const ScheduleBar = () => {
     const { data, isLoading } = useSWR('/api/scoreboard', async () => {
-      const res = await fetch(scoreboardUrl, { cache: 'no-store' });
+      const res = await fetch('/api/scoreboard', { cache: 'no-store' });
       return await res.json();
     },
     {
