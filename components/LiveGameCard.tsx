@@ -8,6 +8,8 @@ export type LiveGameCardProps = {
 }
 
 export const LiveGameCard = ({ game } : LiveGameCardProps) => {
+  console.log('inside livegamecard')
+  console.log('inside livegamecard, game is ', game.homeTeam.score, ' and ', game.awayTeam.score);
   const hasBoxscore = game.gameStatus > 1;  // no boxscore if game hasnt started
   const isLive = useIsGameLive(game.gameId);
   const bg = useColorModeValue('white', 'gray.700');

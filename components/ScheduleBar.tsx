@@ -15,6 +15,8 @@ import {
     
   export const ScheduleBar = () => {
     const { data, isLoading } = useScoreboard();
+    console.log('inside schedulebar');
+    console.log('inside schedulebar, data is ', data.scoreboard.games)
     const bg = useColorModeValue('gray.700', 'gray.900');
 
     return (
