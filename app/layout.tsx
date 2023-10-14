@@ -26,11 +26,9 @@ export default function RootLayout({
         <ChakraProvider> 
         <Box w={'full'} bg='background'>
           <NavBar />
-          <Box pt={'10px'} >
             <Container maxW={'container.lg'} pt={'10px'} >
               {children}
             </Container>
-          </Box>
           </Box>
 
        </ChakraProvider> 

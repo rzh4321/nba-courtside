@@ -1,6 +1,6 @@
-const host = 'https://cdn.nba.com'
-const scheduleUrl = `${host}/static/json/staticData/scheduleLeagueV2_1.json`
-const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`
+const host = 'https://cdn.nba.com';
+const scheduleUrl = `${host}/static/json/staticData/scheduleLeagueV2_1.json`;
+const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
 const boxscoreUrl = (gameId: string) =>
   `${host}/static/json/liveData/boxscore/boxscore_${gameId}.json`
 

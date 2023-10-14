@@ -8,7 +8,9 @@ export function useScoreboard() {
         return await res.json();
     },
     {
-      refreshInterval: 1000 * 20
+      refreshInterval: 1000 * 30
     }
   );
+
+  
 }
