@@ -12,9 +12,19 @@ import {
   import { LiveGameCard } from './LiveGameCard';
   import { LiveGame, ScoreboardResponse } from '@/types';
   import '@/global.css';
+import useSWR from 'swr';
+
+  const host = 'https://cdn.nba.com';
+const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
     
   export const ScheduleBar = () => {
-    const { data, isLoading } = useScoreboard();
+    const { data, isLoading } = useSWR('/api/scoreboard', async () => {
+      const res = await fetch(scoreboardUrl, { cache: 'no-store' });
+      return await res.json();
+    },
+    {
+      refreshInterval: 1000 * 30        // update boxscore data every 30 seconds
+    })
     console.log('inside schedulebar');
     console.log('inside schedulebar, data is ', data?.scoreboard?.games)
     const bg = useColorModeValue('gray.700', 'gray.900');
