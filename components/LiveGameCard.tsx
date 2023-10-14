@@ -1,10 +1,10 @@
 import { VStack, Text, useColorModeValue, Show } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { Game } from '@/types';
+import { LiveGame } from '@/types';
 import { useIsGameLive } from '@/hooks/useIsGameLive';
 
 export type LiveGameCardProps = {
-  game: Game
+  game: LiveGame
 }
 
 export const LiveGameCard = ({ game } : LiveGameCardProps) => {

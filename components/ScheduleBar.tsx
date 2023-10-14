@@ -10,7 +10,7 @@ import {
   import { format, parse } from 'date-fns'
   import { useScoreboard } from '@/hooks/useScoreboard';
   import { LiveGameCard } from './LiveGameCard';
-  import { Game, ScoreboardResponse } from '@/types';
+  import { LiveGame, ScoreboardResponse } from '@/types';
   import '@/global.css';
 
   type ScheduleBarProps = {
@@ -50,7 +50,7 @@ import {
                 <Text>There was an error</Text>
               ) : data.scoreboard.games.length > 0 ? (
                 <HStack spacing={8}>
-                  {data.scoreboard.games.map((game: Game) => (
+                  {data.scoreboard.games.map((game: LiveGame) => (
                     <LiveGameCard key={game.gameId} game={game} />
                   ))}
                 </HStack>
