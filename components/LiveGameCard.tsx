@@ -1,7 +1,6 @@
 import { VStack, Text, useColorModeValue, Show } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { LiveGame } from "@/types";
-import { useIsGameLive } from "@/hooks/useIsGameLive";
 
 export type LiveGameCardProps = {
   game: LiveGame;
@@ -16,7 +15,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
     game.awayTeam.score,
   );
   const hasBoxscore = game.gameStatus > 1; // no boxscore if game hasnt started
-  const isLive = useIsGameLive(game.gameId);
+  const isLive = game.gameStatus === 2;
   const bg = useColorModeValue("white", "gray.700");
   const quarterColor = useColorModeValue(
     isLive ? "darkgreen" : "black",
