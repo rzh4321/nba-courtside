@@ -15,7 +15,9 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       return await res.json();
     },
     {
-      refreshInterval: 1000 * 30, // update boxscore data every 30 seconds
+      refreshInterval: 1000 * 30, // update boxscore data every 30 seconds,
+      refreshWhenHidden: true,
+      refreshWhenOffline: true
     },
   );
 
