@@ -10,6 +10,8 @@ export function useScoreboard() {
     },
     {
       refreshInterval: 1000 * 20,
+      refreshWhenHidden: true,
+      refreshWhenOffline: true
     },
   );
 }

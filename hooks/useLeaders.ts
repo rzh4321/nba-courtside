@@ -53,6 +53,8 @@ export function useLeaders(gameIds: string[], refresh = false) {
     },
     {
       refreshInterval: refresh ? 1000 * 30 : undefined,
+      refreshWhenHidden: true,
+      refreshWhenOffline: true
     },
   );
 
