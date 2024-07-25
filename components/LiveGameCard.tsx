@@ -1,14 +1,15 @@
 import { VStack, Text, useColorModeValue, Show } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { LiveGame } from "@/types";
+import type { ParsedGames } from "@/utils/mappers";
+import { GAME_STATUS } from "@/constants";
 
 export type LiveGameCardProps = {
-  game: LiveGame;
+  game: ParsedGames[0];
 };
 
 export const LiveGameCard = ({ game }: LiveGameCardProps) => {
-  const hasBoxscore = game.gameStatus > 1; // no boxscore if game hasnt started
-  const isLive = game.gameStatus === 2;
+  const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED; // no boxscore if game hasnt started
+  const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
   const bg = useColorModeValue("white", "gray.700");
   const quarterColor = useColorModeValue(
     isLive ? "darkgreen" : "black",
@@ -32,7 +33,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
           <Text
             fontSize={"md"}
             color={quarterColor}
-            fontWeight={game.gameStatus === 3 ? "bold" : "semibold"}
+            fontWeight={game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"}
           >
             {game.gameStatusText}
           </Text>
@@ -68,7 +69,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
           <Text
             fontSize={"md"}
             color={quarterColor}
-            fontWeight={game.gameStatus === 3 ? "bold" : "semibold"}
+            fontWeight={game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"}
           >
             {game.gameStatusText}
           </Text>

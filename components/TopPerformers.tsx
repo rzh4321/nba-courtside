@@ -9,6 +9,7 @@ import {
   useLastPlayedGameDate,
   getDateFromGameDate,
 } from "@/hooks/useLastPlayedGameDate";
+import { usePathname } from "next/navigation";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
@@ -45,7 +46,15 @@ const Section = ({ leaders, category }: SectionProps) => {
 };
 
 export const TopPerformers = () => {
-  const lastPlayedGameDate = useLastPlayedGameDate();
+  const pathname = usePathname();
+  let date;
+  if (pathname === '/') {
+    date = useLastPlayedGameDate();
+  } else {
+    date = pathname.replace('/', '-');
+  }
+
+  console.log('DATE: ', date)
   const games = lastPlayedGameDate?.games;
   // get gameIds of all games from last game date
   const gameIds = games
@@ -63,7 +72,6 @@ export const TopPerformers = () => {
     return null;
   }
 
-  const date = getDateFromGameDate(lastPlayedGameDate);
 
   return (
     // VStack separating the "Top Performers" text and each category section

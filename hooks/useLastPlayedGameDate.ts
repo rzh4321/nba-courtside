@@ -1,6 +1,6 @@
-import { useSchedule } from "./useSchedule";
 import { LeagueScheduleResponse } from "@/types";
 import { parse } from "date-fns";
+import useSWR from "swr";
 
 function getHasPlayedGames(
   gameDate: LeagueScheduleResponse["leagueSchedule"]["gameDates"][number],
@@ -15,8 +15,21 @@ export function getDateFromGameDate(
   return parse(gameDate.gameDate, "MM/dd/yyyy 00:00:00", new Date());
 }
 
+
+function useFullSchedule() {
+  const result = useSWR("/api/schedule", async (url) => {
+    const res = await fetch(url);
+    return await res.json();
+  });
+
+  return {
+    ...result, // dont rename fetch result to 'data' since it has a property
+    // named 'data', so just use spread operator instead
+  };
+}
+
 export function useLastPlayedGameDate() {
-  const { data } = useSchedule();
+  const { data } = useFullSchedule();
   const gameDates = data?.leagueSchedule.gameDates;
   if (!gameDates) {
     return null;
@@ -26,7 +39,7 @@ export function useLastPlayedGameDate() {
   for (let i = gameDates.length - 1; i >= 0; i--) {
     const gameDate = gameDates[i];
     if (gameDate && getHasPlayedGames(gameDate)) {
-      return gameDate;
+      return gameDate.gameDate.split(' ')[0].replace(/\//g, '-')
     }
   }
 
