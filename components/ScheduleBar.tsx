@@ -8,19 +8,17 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
-// import { useScoreboard } from "@/hooks/useScoreboard";
 import { useSchedule } from "@/hooks/useSchedule";
 import { LiveGameCard } from "./LiveGameCard";
-// import { LiveGame, ScoreboardResponse } from "@/types";
-import getDays from "@/utils/getDays";
 import { usePathname } from "next/navigation";
 import "@/global.css";
 
 export const ScheduleBar = () => {
   const pathname = usePathname();
   const dateWithDashes = pathname === '/' ? new Date(Date.now()).toISOString().split('T')[0] : pathname.split('/').pop()!;
-  const formattedDate = pathname === '/' ? null : pathname.split('/').pop()!.replace(/-/g, '');
-  const {data, isLoading, error} = useSchedule(formattedDate);
+  // const formattedDate = pathname === '/' ? null : pathname.split('/').pop()!.replace(/-/g, '');
+  const {data, isLoading, error} = useSchedule(dateWithDashes);
+
 
   // call api every 20 secs to get updated scoreboard
   // const { data, isLoading } = useScoreboard();
@@ -50,10 +48,10 @@ export const ScheduleBar = () => {
               <Text>Loading</Text>
             ) : error ? (
               <Text>There was an error when fetching today's schedule</Text>
-            ) : data.length > 0 ? (
+            ) : data!.length > 0 ? (
               // all the game cards are in an HStack with a gap of 8
               <HStack spacing={8}>
-                {data.map((game) => (
+                {data!.map((game) => (
                   <LiveGameCard key={game.gameId} game={game} />
                 ))}
               </HStack>

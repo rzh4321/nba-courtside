@@ -1,31 +1,31 @@
 import useSWR from "swr";
 import { parseGames } from "@/utils/mappers";
 import getDays from "@/utils/getDays";
-import { API, DATE_TITLE_FORMAT } from "@/constants";
-
+import getScoreboards from "@/actions/getScoreboards";
 
 export function useSchedule(date: string | null) {
   if (date) {
-    const {data, error, isValidating} = useSWR(`${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`, async (url: string) => {
-      console.log('URL IS ', url);
-      const res = await fetch(url, {cache: 'no-store'});
-      const data = await res.json();
+    // a specific date on the calendar was chosen
+    const {data, error, isValidating} = useSWR(`/api/schedule/${date}`, async (url: string) => {
+      // if calling api instead, call fetch with {cache: 'no-store'}
+      const data = await getScoreboards(date);
       return data;
     },
     )
-    return {data: parseGames(data), error, isLoading: isValidating};
+    if (error) console.log(error)
+    return {data, error, isLoading: isValidating};
   } else {
-    const {data, error, isValidating} = useSWR(`${API.DETAILS_URL}/scoreboard/todaysScoreboard_00.json`, async (url: string) => {
-      console.log('URL IS ', url);
-      const res = await fetch(url);
-      const data = await res.json();
+    // no date, show todays games
+    const {data, error, isValidating} = useSWR('/api/schedule/today', async (url: string) => {
+      const data = await getScoreboards();
+      // if using api instead of server action, call fetch with no extra params
       return data;
     },
     {
       refreshInterval: 15000,
     }
-    )
-    return {data: parseGames(data), error, isLoading: isValidating};
+    );
+    return {data, error, isLoading: isValidating};
   }
   
 }

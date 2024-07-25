@@ -12,11 +12,12 @@ export const orderByStatus = (
 
 export type ParsedGames = ReturnType<typeof parseGames>;
 
-export const parseGames = (data: Games | undefined) => {
-  if (data === undefined) return [];
+export const parseGames = (data: Games) => {
+  console.log("DATA IS ", data)
   const {
-    scoreboard: { games },
+    scoreboard : { games},
   } = data;
+
 
   const getTeamData = (team: Team) => {
     return {

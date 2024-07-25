@@ -17,7 +17,7 @@ export function getDateFromGameDate(
 
 
 function useFullSchedule() {
-  const result = useSWR("/api/schedule", async (url) => {
+  const result = useSWR("/api/schedule/year", async (url) => {
     const res = await fetch(url);
     return await res.json();
   });
@@ -29,19 +29,21 @@ function useFullSchedule() {
 }
 
 export function useLastPlayedGameDate() {
-  const { data } = useFullSchedule();
-  const gameDates = data?.leagueSchedule.gameDates;
-  if (!gameDates) {
-    return null;
-  }
-  // gameDates is a large array of objects, each object has gameDate and games array
-  // traverse backwards to get most recent game date object
-  for (let i = gameDates.length - 1; i >= 0; i--) {
-    const gameDate = gameDates[i];
-    if (gameDate && getHasPlayedGames(gameDate)) {
-      return gameDate.gameDate.split(' ')[0].replace(/\//g, '-')
+  const {data, isLoading, error}  = useFullSchedule();
+  let date;
+  if (!isLoading && data) {
+    const gameDates = data?.leagueSchedule.gameDates;
+    // gameDates is a large array of objects, each object has gameDate and games array
+    // traverse backwards to get most recent game date object
+    for (let i = gameDates.length - 1; i >= 0; i--) {
+      const gameDate = gameDates[i];
+      if (gameDate && getHasPlayedGames(gameDate)) {
+        date = gameDate.gameDate.split(' ')[0].replace(/\//g, '-');
+        break;
+      }
     }
+
   }
 
-  return null;
+  return {date, isLoading, error};
 }

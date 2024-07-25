@@ -1,9 +1,9 @@
 "use client"; // need this for useSchedule to work
 import { VStack, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
-import { format, isToday } from "date-fns";
+import { format, isToday, parse } from "date-fns";
 import { useLeaders } from "../hooks/useLeaders";
 import { PerformerCard } from "../components/PerformerCard";
-import { BoxscoreResponse, Game } from "@/types";
+import { Spinner } from "@chakra-ui/react";
 import startCase from "lodash/startCase";
 import {
   useLastPlayedGameDate,
@@ -46,44 +46,46 @@ const Section = ({ leaders, category }: SectionProps) => {
 };
 
 export const TopPerformers = () => {
+  const {date : lastDate, isLoading, error} = useLastPlayedGameDate();
   const pathname = usePathname();
   let date;
   if (pathname === '/') {
-    date = useLastPlayedGameDate();
+    if (!isLoading && lastDate) {
+      date = lastDate;
+    }
   } else {
     date = pathname.replace('/', '-');
   }
 
-  console.log('DATE: ', date)
-  const games = lastPlayedGameDate?.games;
-  // get gameIds of all games from last game date
-  const gameIds = games
-    ?.filter((g: Game) => g.gameStatus > 1)
-    .map((g: Game) => g.gameId);
-  // hasLiveGame is true if one of the games is still live
-  const hasLiveGame = games?.some((g: Game) => g.gameStatus === 2);
-  const { pointLeaders, assistLeaders, reboundLeaders } = useLeaders(
-    gameIds || [],
-    hasLiveGame, // if a game is live, this will refresh the box score data and re-render this component
-    // with updated leaders (a state change from custom hook re-renders components using it)
-  );
-  // cant find a last played game date for some reason
-  if (!lastPlayedGameDate) {
-    return null;
-  }
+  // const games = lastPlayedGameDate?.games;
+  // // get gameIds of all games from last game date
+  // const gameIds = games
+  //   ?.filter((g: Game) => g.gameStatus > 1)
+  //   .map((g: Game) => g.gameId);
+  // // hasLiveGame is true if one of the games is still live
+  // const hasLiveGame = games?.some((g: Game) => g.gameStatus === 2);
+  // const { pointLeaders, assistLeaders, reboundLeaders } = useLeaders(
+  //   gameIds || [],
+  //   hasLiveGame, // if a game is live, this will refresh the box score data and re-render this component
+  //   // with updated leaders (a state change from custom hook re-renders components using it)
+  // );
+  // // cant find a last played game date for some reason
+  // if (!lastPlayedGameDate) {
+  //   return null;
+  // }
 
 
   return (
     // VStack separating the "Top Performers" text and each category section
     <VStack w={"full"} align={"start"} px={4} py={8} spacing={12}>
       <Heading fontSize={"3xl"} fontWeight={"normal"} mb={-4}>
-        {isToday(date)
+        {date ? isToday(date)
           ? `Today's Top Performers`
-          : `Top Performers for ${format(date, "MMMM do")}`}
+          : `Top Performers for ${format(parse(date, 'MM-dd-yyyy', new Date()), "MMMM do")}` : <Spinner />}
       </Heading>
-      <Section leaders={pointLeaders} category={"points"} />
+      {/* <Section leaders={pointLeaders} category={"points"} />
       <Section leaders={assistLeaders} category={"assists"} />
-      <Section leaders={reboundLeaders} category={"reboundsTotal"} />
+      <Section leaders={reboundLeaders} category={"reboundsTotal"} /> */}
     </VStack>
   );
 };

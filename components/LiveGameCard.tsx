@@ -41,16 +41,16 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
             <Text
               fontWeight={"semibold"}
               letterSpacing={"wider"}
-              fontSize={game.homeTeam.score > game.awayTeam.score ? "lg" : "md"}
+              fontSize={game.awayTeam.score > game.homeTeam.score ? "lg" : "md"}
             >
-              {game.homeTeam.teamTricode} - {game.homeTeam.score}
+              {game.awayTeam.teamTricode} - {game.awayTeam.score}
             </Text>
             <Text
               fontWeight={"semibold"}
               letterSpacing={"wider"}
-              fontSize={game.awayTeam.score > game.homeTeam.score ? "lg" : "md"}
+              fontSize={game.homeTeam.score > game.awayTeam.score ? "lg" : "md"}
             >
-              {game.awayTeam.teamTricode} - {game.awayTeam.score}
+              {game.homeTeam.teamTricode} - {game.homeTeam.score}
             </Text>
           </VStack>
         </VStack>
