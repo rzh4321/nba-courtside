@@ -1,71 +1,78 @@
-import useSWR from "swr";
-import { BoxscoreResponse } from "@/types";
+import { API } from "@/constants";
 import flatten from "lodash/flatten";
+import useSWR from "swr";
+import { nbaTeamAcronyms } from "@/utils/mappers";
+import type { Team, PlayerStatistics } from "@/types";
+import getBoxScore from "@/actions/getBoxScore";
 import { useMemo } from "react";
 
-type Statistics =
-  BoxscoreResponse["game"]["homeTeam"]["players"][number]["statistics"];
-
-function getLeaders(boxscores: BoxscoreResponse[], category: keyof Statistics) {
-  const players = flatten(
-    // create an array of player objects
-    boxscores.map((boxscore) => [
-      ...boxscore.game.homeTeam.players.map((p) => ({
-        ...p,
-        team: boxscore.game.homeTeam.teamTricode,
-      })),
-      ...boxscore.game.awayTeam.players.map((p) => ({
-        ...p,
-        team: boxscore.game.awayTeam.teamTricode,
-      })),
-    ]),
-  );
-
-  // sort players by box score stats
-  const sorted = players.sort((a, b) => {
-    if (a.statistics[category] > b.statistics[category]) {
-      return -1;
-    } else if (a.statistics[category] < b.statistics[category]) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
-
-  return sorted;
-}
-
-// refresh data if at least one game is still live
-// gameIds is gameIds of all played/playings games of last game date
-export function useLeaders(gameIds: string[], refresh = false) {
-  const { data } = useSWR(
-    gameIds,
-    async () => {
-      if (gameIds.length === 0) {
-        return undefined;
+function getLeaders(teams: Team[], category: keyof PlayerStatistics) {
+    console.log('team ')
+    const players = flatten(
+      // create an array of player objects
+      teams.map((team) => [
+        ...team.players.map((p) => ({
+          ...p,
+          team: team.teamTricode,
+        }))
+      ]),
+    );
+  
+    // sort players by box score stats
+    const sorted = players.sort((a, b) => {
+      if (a.statistics[category] > b.statistics[category]) {
+        return -1;
+      } else if (a.statistics[category] < b.statistics[category]) {
+        return 1;
+      } else {
+        return 0;
       }
-      const requests = gameIds.map(async (id) => {
-        const res = await fetch(`/api/boxscore/${id}`);
-        return await res.json();
-      });
-      // return an array of boxscore data
-      return await Promise.all(requests);
-    },
-    {
-      refreshInterval: refresh ? 1000 * 30 : undefined,
-      refreshWhenHidden: true,
-      refreshWhenOffline: true
-    },
-  );
+    });
+  
+    return sorted;
+  }
 
-  // only re-calculate leaders if data changes (if at least one game is still live)
-  const pointLeaders = useMemo(() => getLeaders(data || [], "points"), [data]);
+export default function useLeaders(gameIds: string[] | undefined, refresh=false) {
+    const { data, isLoading, error } = useSWR(
+        gameIds ? gameIds : null,
+        async () => {
+          if (gameIds!.length === 0) {
+            return undefined;
+          }
+          const requests = gameIds!.map(async (id) => {
+            return await getBoxScore(id);
+          });
+          // return an array of boxscore data
+          return await Promise.all(requests);
+        },
+        {
+          refreshInterval: refresh ? 1000 * 30 : undefined,
+          refreshWhenHidden: true,
+          refreshWhenOffline: true
+        },
+      );
+      // data is an array of games. Extract all top leaders
+        const teams = data?.flatMap(game => [
+            game.awayTeam,
+            game.homeTeam,
+        ])
+        console.log('TEAMS IS ', teams)
+        // only re-calculate leaders if data changes (if at least one game is still live)
+  const pointLeaders = useMemo(() => getLeaders(teams || [], "points"), [data]);
   const assistLeaders = useMemo(
-    () => getLeaders(data || [], "assists"),
+    () => getLeaders(teams || [], "assists"),
     [data],
   );
   const reboundLeaders = useMemo(
-    () => getLeaders(data || [], "reboundsTotal"),
+    () => getLeaders(teams || [], "reboundsTotal"),
+    [data],
+  );
+  const stealLeaders = useMemo(
+    () => getLeaders(teams || [], "steals"),
+    [data],
+  );
+  const blockLeaders = useMemo(
+    () => getLeaders(teams || [], "blocks"),
     [data],
   );
 
@@ -73,5 +80,10 @@ export function useLeaders(gameIds: string[], refresh = false) {
     pointLeaders: pointLeaders.slice(0, 4),
     assistLeaders: assistLeaders.slice(0, 4),
     reboundLeaders: reboundLeaders.slice(0, 4),
+    stealLeaders: stealLeaders.slice(0, 4),
+    blockLeaders: blockLeaders.slice(0, 4),
+
+
   };
+    
 }

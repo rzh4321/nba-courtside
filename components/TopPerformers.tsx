@@ -13,11 +13,12 @@ import { usePathname } from "next/navigation";
 import getGameIds from "@/actions/getGameIds";
 import { useMemo } from "react";
 import useSWR from "swr";
-import useLeaders from "@/hooks/useLeaders2";
+import useLeaders from "@/hooks/useLeaders";
+import type { PlayerStatistics } from "@/types";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
-  category: keyof BoxscoreResponse["game"]["homeTeam"]["players"][number]["statistics"];
+  category: keyof PlayerStatistics;
 };
 
 // display a category and its leaders
@@ -83,18 +84,7 @@ export const TopPerformers = () => {
   );
 
   // get all leaders once date is available
-    useLeaders(data?.gameIds, data?.shouldRefreshStats);
-
-  // const { pointLeaders, assistLeaders, reboundLeaders } = useLeaders(
-  //   gameIds || [],
-  //   hasLiveGame, // if a game is live, this will refresh the box score data and re-render this component
-  //   // with updated leaders (a state change from custom hook re-renders components using it)
-  // );
-  // // cant find a last played game date for some reason
-  // if (!lastPlayedGameDate) {
-  //   return null;
-  // }
-
+  const { pointLeaders, assistLeaders, reboundLeaders, stealLeaders, blockLeaders } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
 
   return (
     // VStack separating the "Top Performers" text and each category section
@@ -104,9 +94,12 @@ export const TopPerformers = () => {
           ? `Today's Top Performers`
           : `Top Performers for ${format(parse(date, 'MM-dd-yyyy', new Date()), "MMMM do")}` : <Spinner />}
       </Heading>
-      {/* <Section leaders={pointLeaders} category={"points"} />
+      <Section leaders={pointLeaders} category={"points"} />
       <Section leaders={assistLeaders} category={"assists"} />
-      <Section leaders={reboundLeaders} category={"reboundsTotal"} /> */}
+      <Section leaders={reboundLeaders} category={"reboundsTotal"} />
+      <Section leaders={stealLeaders} category={"steals"} />
+      <Section leaders={blockLeaders} category={"blocks"} />
+
     </VStack>
   );
 };

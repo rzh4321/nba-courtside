@@ -7,7 +7,7 @@ import {
   Box,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { format, parse } from "date-fns";
+import { format, parse, isToday } from "date-fns";
 import { useSchedule } from "@/hooks/useSchedule";
 import { LiveGameCard } from "./LiveGameCard";
 import { usePathname } from "next/navigation";
@@ -19,9 +19,6 @@ export const ScheduleBar = () => {
   // const formattedDate = pathname === '/' ? null : pathname.split('/').pop()!.replace(/-/g, '');
   const {data, isLoading, error} = useSchedule(dateWithDashes);
 
-
-  // call api every 20 secs to get updated scoreboard
-  // const { data, isLoading } = useScoreboard();
   const bg = useColorModeValue("gray.700", "gray.900");
 
   return (
@@ -57,7 +54,7 @@ export const ScheduleBar = () => {
               </HStack>
             ) : (
               <Flex w={"full"} color={"gray.500"} fontWeight={"semibold"}>
-                <Text>No games scheduled for today</Text>
+                <Text>No games scheduled for {isToday(parse(dateWithDashes, 'yyyy-MM-dd', new Date())) ? 'today' : 'this date'}</Text>
               </Flex>
             )}
           </HStack>
