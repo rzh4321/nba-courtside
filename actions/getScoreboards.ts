@@ -12,7 +12,6 @@ export default async function getScoreboards(date? : string) {
           );
         
           const data = await res.json();
-          console.log('DATA IS ', data)
           return parseGames(data);
     } else {
         const res = await fetch(

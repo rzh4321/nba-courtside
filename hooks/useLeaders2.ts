@@ -3,6 +3,7 @@ import flatten from "lodash/flatten";
 import useSWR from "swr";
 import { nbaTeamAcronyms } from "@/utils/mappers";
 import type { Team, PlayerStatistics } from "@/types";
+import getBoxScore from "@/actions/getBoxScore";
 
 function getLeaders(teams: Team[], category: keyof PlayerStatistics) {
     const players = flatten(
@@ -33,17 +34,25 @@ function getLeaders(teams: Team[], category: keyof PlayerStatistics) {
     return sorted;
   }
 
-export default function useLeaders(gameIds: string[], refresh=false) {
-    const {data, isLoading, error} = useSWR(`${API.DETAILS_URL}/boxscore/boxscore_${gameId}.json`, async(url) => {
-        fetch(url, {
-            cache: 'no-store',
-        })
-    });
-    if (!error && data) {
-        const homeTeam = (data as { game: { homeTeam: any } }).game.homeTeam.teamTricode;
-        const awayTeam = (data as { game: { awayTeam: any } }).game.awayTeam.teamTricode;
-
-
-    }
+export default function useLeaders(gameIds: string[] | undefined, refresh=false) {
+    const { data, isLoading, error } = useSWR(
+        gameIds ? gameIds : null,
+        async () => {
+          if (gameIds!.length === 0) {
+            return undefined;
+          }
+          const requests = gameIds!.map(async (id) => {
+            return await getBoxScore(id);
+          });
+          // return an array of boxscore data
+          return await Promise.all(requests);
+        },
+        {
+          refreshInterval: refresh ? 1000 * 30 : undefined,
+          refreshWhenHidden: true,
+          refreshWhenOffline: true
+        },
+      );
+        console.log('LEADER DATA IS ', data);
     
 }

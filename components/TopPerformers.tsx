@@ -1,7 +1,7 @@
-"use client"; // need this for useSchedule to work
+"use client";
+
 import { VStack, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
 import { format, isToday, parse } from "date-fns";
-import { useLeaders } from "../hooks/useLeaders";
 import { PerformerCard } from "../components/PerformerCard";
 import { Spinner } from "@chakra-ui/react";
 import startCase from "lodash/startCase";
@@ -10,6 +10,10 @@ import {
   getDateFromGameDate,
 } from "@/hooks/useLastPlayedGameDate";
 import { usePathname } from "next/navigation";
+import getGameIds from "@/actions/getGameIds";
+import { useMemo } from "react";
+import useSWR from "swr";
+import useLeaders from "@/hooks/useLeaders2";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
@@ -48,22 +52,39 @@ const Section = ({ leaders, category }: SectionProps) => {
 export const TopPerformers = () => {
   const {date : lastDate, isLoading, error} = useLastPlayedGameDate();
   const pathname = usePathname();
-  let date;
+  let date : string | undefined;
   if (pathname === '/') {
+    // get the last game date if user did ask for a specific date
     if (!isLoading && lastDate) {
       date = lastDate;
     }
   } else {
-    date = pathname.replace('/', '-');
+    // user asked for a specific date, get it from the url
+    date = pathname.split('/').pop();
+    // convert it to format of mm-dd-yyyy
+    date = format(parse(date!, 'yyyy-MM-dd', new Date()), 'MM-dd-yyyy');
   }
 
-  // const games = lastPlayedGameDate?.games;
-  // // get gameIds of all games from last game date
-  // const gameIds = games
-  //   ?.filter((g: Game) => g.gameStatus > 1)
-  //   .map((g: Game) => g.gameId);
-  // // hasLiveGame is true if one of the games is still live
-  // const hasLiveGame = games?.some((g: Game) => g.gameStatus === 2);
+  // get all the gameIds once date is available
+  const {
+    data,
+    isValidating: gameIdsLoading,
+    error: gameIdsError
+  } = useSWR(
+    date ? `/api/gameIds/${date}` : null,
+    async (url) => {
+      const formattedDate = format(parse(date!, 'MM-dd-yyyy', new Date()), 'yyyy-MM-dd');
+      return await getGameIds(formattedDate);
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
+  );
+
+  // get all leaders once date is available
+    useLeaders(data?.gameIds, data?.shouldRefreshStats);
+
   // const { pointLeaders, assistLeaders, reboundLeaders } = useLeaders(
   //   gameIds || [],
   //   hasLiveGame, // if a game is live, this will refresh the box score data and re-render this component
@@ -79,7 +100,7 @@ export const TopPerformers = () => {
     // VStack separating the "Top Performers" text and each category section
     <VStack w={"full"} align={"start"} px={4} py={8} spacing={12}>
       <Heading fontSize={"3xl"} fontWeight={"normal"} mb={-4}>
-        {date ? isToday(date)
+        {date ? isToday(parse(date, 'MM-dd-yyyy', new Date()))
           ? `Today's Top Performers`
           : `Top Performers for ${format(parse(date, 'MM-dd-yyyy', new Date()), "MMMM do")}` : <Spinner />}
       </Heading>
