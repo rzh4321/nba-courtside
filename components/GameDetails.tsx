@@ -43,6 +43,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
         <HStack
           cursor={"pointer"}
           marginBottom={5}
+          width={'fit-content'}
           onClick={() => router.back()}
         >
           <Undo2 />

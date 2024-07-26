@@ -23,7 +23,6 @@ export default function TeamStatistic({
   leftColor,
   rightColor,
 }: TeamStatisticProps) {
-  console.log(leftLabel);
   let leftInt, rightInt;
   if (
     label === "Field Goals" ||
