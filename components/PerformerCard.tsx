@@ -1,13 +1,10 @@
-import type { BoxscoreResponse } from "@/types";
+import type { PlayerStatistics } from "@/types";
 import { AspectRatio, Box, Text, useColorModeValue } from "@chakra-ui/react";
 import Image from "next/image";
 import { useState } from "react";
+import useLeaders from "@/hooks/useLeaders";
 
-type Player = BoxscoreResponse["game"]["homeTeam"]["players"][number];
-type Category =
-  keyof BoxscoreResponse["game"]["homeTeam"]["players"][number]["statistics"];
-
-function categoryDisplay(category: Category) {
+function categoryDisplay(category: string) {
   switch (category) {
     case "points":
       return "PTS";
@@ -21,8 +18,8 @@ function categoryDisplay(category: Category) {
 }
 
 export type PerformerCardProps = {
-  player: Player & { team: string };
-  category: Category;
+  player: ReturnType<typeof useLeaders>["pointLeaders"][0];
+  category: keyof PlayerStatistics;
 };
 
 export const PerformerCard = ({ player, category }: PerformerCardProps) => {

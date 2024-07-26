@@ -11,6 +11,7 @@ import { Undo2 } from "lucide-react";
 import getBoxScore from "@/actions/getBoxScore";
 import { GAME_STATUS } from "@/constants";
 import GameSummary from "./GameSummary";
+import TeamStats from "./TeamStats";
 
 export const GameDetails = ({ gameId }: { gameId: string }) => {
   const router = useRouter();
@@ -22,11 +23,11 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     {
       refreshInterval: 1000 * 30, // update boxscore data every 30 seconds,
       refreshWhenHidden: true,
-      refreshWhenOffline: true
+      refreshWhenOffline: true,
     },
   );
 
-  console.log('boxscore is ', boxscore)
+  console.log("boxscore is ", boxscore);
 
   // update document title
   useEffect(() => {
@@ -37,30 +38,38 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   }, [boxscore]);
 
   return (
-    <Box h={"full"} p={8}>
-      <HStack cursor={'pointer'} marginBottom={5} onClick={() => router.back()}>
-        <Undo2 />
-        <span>Go Back</span>
-      </HStack>
-      {gameId ? (
-        boxscore ? (
-          // VStack separating score, teamA boxscore, and teamB boxscore
-          <VStack spacing={8}>
-            <ScoreDetails boxscore={boxscore} />
-            <GameSummary game={boxscore} />
-            <BoxscoreTable
-              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-              team={boxscore.homeTeam}
-            />
-            <BoxscoreTable
-              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-              team={boxscore.awayTeam}
-            />
-          </VStack>
-        ) : null
-      ) : (
-        <NoGameMessage />
-      )}
+    <Box display={"flex"} p={8} flexDirection={"column"} gap={50}>
+      <Box>
+        <HStack
+          cursor={"pointer"}
+          marginBottom={5}
+          onClick={() => router.back()}
+        >
+          <Undo2 />
+          <span>Go Back</span>
+        </HStack>
+        {gameId ? (
+          boxscore ? (
+            // VStack separating score, teamA boxscore, and teamB boxscore
+            <VStack spacing={8}>
+              <ScoreDetails boxscore={boxscore} />
+              <GameSummary game={boxscore} />
+              <BoxscoreTable
+                isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+                team={boxscore.homeTeam}
+              />
+              <BoxscoreTable
+                isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+                team={boxscore.awayTeam}
+              />
+            </VStack>
+          ) : null
+        ) : (
+          <NoGameMessage />
+        )}
+      </Box>
+
+      {boxscore && <TeamStats boxscore={boxscore} />}
     </Box>
   );
 };

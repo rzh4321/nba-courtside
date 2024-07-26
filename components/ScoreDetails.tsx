@@ -69,14 +69,14 @@ export const ScoreDetails = ({ boxscore }: ScoreDetailsProps) => {
     <Box p={4} bg={bg} rounded={"lg"} shadow={"lg"} w={"full"} maxW={"480px"}>
       {/* HStack for separating teamA, the game status, and teamB */}
       <HStack justify={"space-between"} align={"center"}>
-        <TeamDetails team={boxscore.homeTeam} />
+        <TeamDetails team={boxscore.awayTeam} />
         {/* VStack for separating the game status and "LIVE" */}
         <VStack spacing={1}>
           <Text>{boxscore.gameStatusText}</Text>
           {isLive && <Badge colorScheme={"red"}>LIVE</Badge>}
         </VStack>
         {/* reverse the team details for teamB to make it symmetrical */}
-        <TeamDetails team={boxscore.awayTeam} reverse />
+        <TeamDetails team={boxscore.homeTeam} reverse />
       </HStack>
     </Box>
   );

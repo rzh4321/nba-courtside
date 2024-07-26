@@ -22,19 +22,18 @@ import "@/global.css";
 export const ScheduleBar = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const date = searchParams.get('date');
+  const date = searchParams.get("date");
   const today = format(new Date(), DATE_LINK_FORMAT);
   // date is in the format of yyyy-MM-dd
-  const dateWithDashes = date ? date : new Date().toLocaleDateString('en-CA');
+  const dateWithDashes = date ? date : new Date().toLocaleDateString("en-CA");
   const { day, prevDay, nextDay } = getDays(dateWithDashes);
-  const {data, isLoading, error} = useSchedule(dateWithDashes);
+  const { data, isLoading, error } = useSchedule(dateWithDashes);
 
   const bg = useColorModeValue("gray.700", "gray.900");
   const arrowColors = useColorModeValue("white", "black");
 
-
-  const prevLink = pathname + (prevDay === today ? '?' : `?date=${prevDay}`);
-  const nextLink = pathname + (nextDay === today ? '?' : `?date=${nextDay}`);
+  const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
+  const nextLink = pathname + (nextDay === today ? "?" : `?date=${nextDay}`);
 
   return (
     // overall box for the schedule bar
@@ -55,21 +54,21 @@ export const ScheduleBar = () => {
             )}
           </HStack>
           {/* date picker */}
-          <HStack alignSelf={'start'}>
-                  <Link href={prevLink}>
-                    <ArrowBackIcon color={"white"} />
-                  </Link>
-                  <DatePicker day={dateWithDashes} />
-                  <Link href={nextLink}>
-                    <ArrowForwardIcon color={'white'} />
-                  </Link>
+          <HStack alignSelf={"start"}>
+            <Link href={prevLink}>
+              <ArrowBackIcon color={"white"} />
+            </Link>
+            <DatePicker day={dateWithDashes} />
+            <Link href={nextLink}>
+              <ArrowForwardIcon color={"white"} />
+            </Link>
           </HStack>
           {/* scrollable class removes scrollbar, auto overflow makes it scrollable at all */}
           <HStack w={"full"} className="scrollable" overflow={"auto"}>
             {isLoading ? (
               <Text>Loading</Text>
             ) : error ? (
-              <Text>There was an error when fetching today's schedule</Text>
+              <Text>There was an error when fetching today{"'"}s schedule</Text>
             ) : data!.length > 0 ? (
               // all the game cards are in an HStack with a gap of 8
               <HStack spacing={8}>
@@ -79,7 +78,12 @@ export const ScheduleBar = () => {
               </HStack>
             ) : (
               <Flex w={"full"} color={"gray.500"} fontWeight={"semibold"}>
-                <Text>No games scheduled for {isToday(parse(dateWithDashes, 'yyyy-MM-dd', new Date())) ? 'today' : 'this date'}</Text>
+                <Text>
+                  No games scheduled for{" "}
+                  {isToday(parse(dateWithDashes, "yyyy-MM-dd", new Date()))
+                    ? "today"
+                    : "this date"}
+                </Text>
               </Flex>
             )}
           </HStack>

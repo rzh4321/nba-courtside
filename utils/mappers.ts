@@ -1,23 +1,20 @@
-import { Games, Team, Game, NBATeamAcronyms } from '@/types';
-import { PRIORITY } from '@/constants';
-
+import { Games, Team, Game, NBATeamAcronyms } from "@/types";
+import { PRIORITY } from "@/constants";
 
 export const orderByStatus = (
-    a: Pick<Game, "gameStatus">,
-    b: Pick<Game, "gameStatus">,
-  ) => {
-    return PRIORITY[a.gameStatus] - PRIORITY[b.gameStatus];
-  };
-  
+  a: Pick<Game, "gameStatus">,
+  b: Pick<Game, "gameStatus">,
+) => {
+  return PRIORITY[a.gameStatus] - PRIORITY[b.gameStatus];
+};
 
 export type ParsedGames = ReturnType<typeof parseGames>;
 
 export const parseGames = (data: Games) => {
-  console.log("DATA IS ", data)
+  console.log("DATA IS ", data);
   const {
-    scoreboard : { games},
+    scoreboard: { games },
   } = data;
-
 
   const getTeamData = (team: Team) => {
     return {
@@ -87,36 +84,35 @@ export const conferenceExtractor = (
       streak: team[36],
     }));
 
-
-  export const nbaTeamAcronyms : NBATeamAcronyms = {
-      "76ers": "PHI",
-      "bucks": "MIL",
-      "bulls": "CHI",
-      "cavaliers": "CLE",
-      "celtics": "BOS",
-      "clippers": "LAC",
-      "grizzlies": "MEM",
-      "hawks": "ATL",
-      "heat": "MIA",
-      "hornets": "CHA",
-      "jazz": "UTA",
-      "kings": "SAC",
-      "knicks": "NYK",
-      "lakers": "LAL",
-      "magic": "ORL",
-      "mavericks": "DAL",
-      "nets": "BKN",
-      "nuggets": "DEN",
-      "pacers": "IND",
-      "pelicans": "NOP",
-      "pistons": "DET",
-      "raptors": "TOR",
-      "rockets": "HOU",
-      "spurs": "SAS",
-      "suns": "PHX",
-      "thunder": "OKC",
-      "timberwolves": "MIN",
-      "trail blazers": "POR",
-      "warriors": "GSW",
-      "wizards": "WAS"
-    };
+export const nbaTeamAcronyms: NBATeamAcronyms = {
+  "76ers": "PHI",
+  bucks: "MIL",
+  bulls: "CHI",
+  cavaliers: "CLE",
+  celtics: "BOS",
+  clippers: "LAC",
+  grizzlies: "MEM",
+  hawks: "ATL",
+  heat: "MIA",
+  hornets: "CHA",
+  jazz: "UTA",
+  kings: "SAC",
+  knicks: "NYK",
+  lakers: "LAL",
+  magic: "ORL",
+  mavericks: "DAL",
+  nets: "BKN",
+  nuggets: "DEN",
+  pacers: "IND",
+  pelicans: "NOP",
+  pistons: "DET",
+  raptors: "TOR",
+  rockets: "HOU",
+  spurs: "SAS",
+  suns: "PHX",
+  thunder: "OKC",
+  timberwolves: "MIN",
+  "trail blazers": "POR",
+  warriors: "GSW",
+  wizards: "WAS",
+};

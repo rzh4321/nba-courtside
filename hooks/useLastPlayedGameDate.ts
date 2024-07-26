@@ -15,7 +15,6 @@ export function getDateFromGameDate(
   return parse(gameDate.gameDate, "MM/dd/yyyy 00:00:00", new Date());
 }
 
-
 function useFullSchedule() {
   const result = useSWR("/api/schedule/year", async (url) => {
     const res = await fetch(url);
@@ -29,7 +28,7 @@ function useFullSchedule() {
 }
 
 export function useLastPlayedGameDate() {
-  const {data, isLoading, error}  = useFullSchedule();
+  const { data, isLoading, error } = useFullSchedule();
   let date;
   if (!isLoading && data) {
     const gameDates = data?.leagueSchedule.gameDates;
@@ -38,12 +37,11 @@ export function useLastPlayedGameDate() {
     for (let i = gameDates.length - 1; i >= 0; i--) {
       const gameDate = gameDates[i];
       if (gameDate && getHasPlayedGames(gameDate)) {
-        date = gameDate.gameDate.split(' ')[0].replace(/\//g, '-');
+        date = gameDate.gameDate.split(" ")[0].replace(/\//g, "-");
         break;
       }
     }
-
   }
 
-  return {date, isLoading, error};
+  return { date, isLoading, error };
 }

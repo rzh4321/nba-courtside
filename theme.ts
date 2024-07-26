@@ -3,7 +3,7 @@ import { mode } from "@chakra-ui/theme-tools";
 
 import fonts from "./font";
 
-const teamColors = {
+export const teamColors: Record<string, string> = {
   ATL: "#e03a3e",
   BKN: "#000",
   BOS: "#008348",
