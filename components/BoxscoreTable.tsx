@@ -10,25 +10,17 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import type { BoxscoreResponse } from "@/types";
-
-import { useIsGameLive } from "@/hooks/useIsGameLive";
-
-const useSecondaryColor = () => useColorModeValue("gray.600", "gray.400");
+import type { Team } from "@/types";
 
 export type BoxscoreProps = {
-  gameId: string;
-  team: BoxscoreResponse["game"]["homeTeam"];
+  isLive: boolean;
+  team: Team;
 };
 
-export const BoxscoreTable = ({ gameId, team }: BoxscoreProps) => {
+export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
   // get color values from the current color mode
   const bg = useColorModeValue("white", "gray.600");
-  const secondaryColor = useSecondaryColor();
   const borderColor = useColorModeValue("gray.100", "gray.700");
-
-  // check if game is live
-  const isLive = useIsGameLive(gameId);
 
   function formatMinutes(minutes: string) {
     const match = minutes.match(/[0-9]+/);

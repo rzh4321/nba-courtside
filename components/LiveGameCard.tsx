@@ -2,12 +2,15 @@ import { VStack, Text, useColorModeValue, Show } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { ParsedGames } from "@/utils/mappers";
 import { GAME_STATUS } from "@/constants";
+import { useSearchParams } from "next/navigation";
 
 export type LiveGameCardProps = {
   game: ParsedGames[0];
 };
 
 export const LiveGameCard = ({ game }: LiveGameCardProps) => {
+  const searchParams = useSearchParams();
+  const date = searchParams.get('date');
   const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED; // no boxscore if game hasnt started
   const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
   const bg = useColorModeValue("white", "gray.700");
@@ -17,7 +20,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
   );
 
   return (
-    <NextLink href={hasBoxscore ? `/boxscore/${game.gameId}` : "#"}>
+    <NextLink href={hasBoxscore ? `/boxscore/${game.gameId}${date ? '?date='+date : '' }` : date ? '?date='+date : '#'}>
       {/* in larger screens, make its width bigger */}
       <Show above="sm">
         {/* VStack separating the quarter/time and scores */}

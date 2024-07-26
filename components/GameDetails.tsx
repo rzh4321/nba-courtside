@@ -1,18 +1,23 @@
 "use client";
 
 import { useEffect } from "react";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
 import useSWR from "swr";
 import { ScoreDetails } from "./ScoreDetails";
 import { NoGameMessage } from "./NoGameMessage";
 import { BoxscoreTable } from "./BoxscoreTable";
+import { useRouter } from "next/navigation";
+import { Undo2 } from "lucide-react";
+import getBoxScore from "@/actions/getBoxScore";
+import { GAME_STATUS } from "@/constants";
+import GameSummary from "./GameSummary";
 
 export const GameDetails = ({ gameId }: { gameId: string }) => {
+  const router = useRouter();
   const { data: boxscore } = useSWR(
     gameId ? `/api/boxscore/${gameId}` : null,
-    async () => {
-      const res = await fetch(`/api/boxscore/${gameId}`);
-      return await res.json();
+    async (url) => {
+      return await getBoxScore(gameId);
     },
     {
       refreshInterval: 1000 * 30, // update boxscore data every 30 seconds,
@@ -21,28 +26,35 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     },
   );
 
+  console.log('boxscore is ', boxscore)
+
   // update document title
   useEffect(() => {
     if (boxscore) {
-      const { homeTeam, awayTeam } = boxscore.game;
-      document.title = `${homeTeam.teamTricode} (${homeTeam.score}) vs ${awayTeam.teamTricode} (${awayTeam.score})`;
+      const { homeTeam, awayTeam } = boxscore;
+      document.title = `${awayTeam.teamTricode} (${awayTeam.score}) vs ${homeTeam.teamTricode} (${homeTeam.score})`;
     }
   }, [boxscore]);
 
   return (
     <Box h={"full"} p={8}>
+      <HStack cursor={'pointer'} marginBottom={5} onClick={() => router.back()}>
+        <Undo2 />
+        <span>Go Back</span>
+      </HStack>
       {gameId ? (
         boxscore ? (
           // VStack separating score, teamA boxscore, and teamB boxscore
           <VStack spacing={8}>
-            <ScoreDetails boxscore={boxscore.game} />
+            <ScoreDetails boxscore={boxscore} />
+            <GameSummary game={boxscore} />
             <BoxscoreTable
-              gameId={boxscore.game.gameId}
-              team={boxscore.game.homeTeam}
+              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+              team={boxscore.homeTeam}
             />
             <BoxscoreTable
-              gameId={boxscore.game.gameId}
-              team={boxscore.game.awayTeam}
+              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+              team={boxscore.awayTeam}
             />
           </VStack>
         ) : null

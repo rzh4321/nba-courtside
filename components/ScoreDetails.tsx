@@ -1,4 +1,3 @@
-import type { BoxscoreResponse } from "@/types";
 import {
   Box,
   Text,
@@ -10,13 +9,16 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import type { Boxscore, Team } from "@/types";
 
 type TeamDetailsProps = {
-  team: BoxscoreResponse["game"]["homeTeam"];
+  team: Team;
   reverse?: boolean;
 };
 
 const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
+  const bg = useColorModeValue("white", "gray.600");
+
   return (
     <Flex
       direction={reverse ? "row-reverse" : "row"}
@@ -55,7 +57,7 @@ const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
 };
 
 export type ScoreDetailsProps = {
-  boxscore: BoxscoreResponse["game"];
+  boxscore: Boxscore;
 };
 
 export const ScoreDetails = ({ boxscore }: ScoreDetailsProps) => {
