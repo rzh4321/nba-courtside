@@ -9,9 +9,8 @@ import {
   useLastPlayedGameDate,
   getDateFromGameDate,
 } from "@/hooks/useLastPlayedGameDate";
-import { usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import getGameIds from "@/actions/getGameIds";
-import { useMemo } from "react";
 import useSWR from "swr";
 import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
@@ -38,13 +37,13 @@ const Section = ({ leaders, category }: SectionProps) => {
         className="flex-performers"
       >
         {/* display leaders for this category */}
-        {leaders.map((leader) => (
+        {leaders.length > 0 ? leaders.map((leader) => (
           <PerformerCard
             key={`${leader.personId}-${category}`}
             player={leader}
             category={category}
           />
-        ))}
+        )) : <div>No games were scheduled for this date</div>}
       </HStack>
     </VStack>
   );
@@ -52,18 +51,17 @@ const Section = ({ leaders, category }: SectionProps) => {
 
 export const TopPerformers = () => {
   const {date : lastDate, isLoading, error} = useLastPlayedGameDate();
-  const pathname = usePathname();
-  let date : string | undefined;
-  if (pathname === '/') {
-    // get the last game date if user did ask for a specific date
+  const searchParams = useSearchParams();
+  let date = searchParams.get('date');
+  if (date === null) {
+    // get the last game date if user didnt ask for a specific date
     if (!isLoading && lastDate) {
       date = lastDate;
     }
   } else {
     // user asked for a specific date, get it from the url
-    date = pathname.split('/').pop();
     // convert it to format of mm-dd-yyyy
-    date = format(parse(date!, 'yyyy-MM-dd', new Date()), 'MM-dd-yyyy');
+    date = format(parse(date, 'yyyy-MM-dd', new Date()), 'MM-dd-yyyy');
   }
 
   // get all the gameIds once date is available

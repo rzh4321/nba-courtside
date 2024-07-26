@@ -7,7 +7,6 @@ import getBoxScore from "@/actions/getBoxScore";
 import { useMemo } from "react";
 
 function getLeaders(teams: Team[], category: keyof PlayerStatistics) {
-    console.log('team ')
     const players = flatten(
       // create an array of player objects
       teams.map((team) => [

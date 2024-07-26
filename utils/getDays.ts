@@ -11,7 +11,7 @@ import {
 const DATE_LINK_FORMAT = "yyyy-MM-dd";
 
 export default function getDays(date: string | null) {
-    const now = new Date().toISOString();
+    const now = new Date().toLocaleDateString('en-CA');
     const day = parseISO(date ?? now);
   
     return {
