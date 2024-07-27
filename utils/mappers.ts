@@ -11,7 +11,6 @@ export const orderByStatus = (
 export type ParsedGames = ReturnType<typeof parseGames>;
 
 export const parseGames = (data: Games) => {
-  console.log("DATA IS ", data);
   const {
     scoreboard: { games },
   } = data;

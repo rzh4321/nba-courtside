@@ -39,13 +39,13 @@ export default function TeamStatistic({
   const [ref, isVisible] = useIntersectionObserver();
 
   const getWidth = (width: string) => {
-    if (!isVisible) return '50%';
+    if (!isVisible) return "50%";
     return width;
   };
 
   const total = leftInt + rightInt;
-  const leftWidth = total === 0 ? '50%' : `${(leftInt / total) * 100}%`;
-  const rightWidth = total === 0 ? '50%' :`${(rightInt / total) * 100}%`;
+  const leftWidth = total === 0 ? "50%" : `${(leftInt / total) * 100}%`;
+  const rightWidth = total === 0 ? "50%" : `${(rightInt / total) * 100}%`;
 
   return (
     <VStack gap={2} w={"full"}>

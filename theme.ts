@@ -4,15 +4,14 @@ import { mode } from "@chakra-ui/theme-tools";
 import fonts from "./font";
 
 export function colorsTooSimilar(tricode1: string, tricode2: string): boolean {
-  return similarTeamColors.some(tuple => 
-      (tuple[0] === tricode1 && tuple[1] === tricode2) || 
-      (tuple[0] === tricode2 && tuple[1] === tricode1)
+  return similarTeamColors.some(
+    (tuple) =>
+      (tuple[0] === tricode1 && tuple[1] === tricode2) ||
+      (tuple[0] === tricode2 && tuple[1] === tricode1),
   );
 }
 
-const similarTeamColors : [string, string][] = [
-  ['DEN', 'MIN']
-]
+const similarTeamColors: [string, string][] = [["DEN", "MIN"]];
 
 export const teamColors: Record<string, string> = {
   ATL: "#e03a3e",

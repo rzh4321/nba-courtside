@@ -8,6 +8,7 @@ import {
   Container,
   useColorMode,
   HStack,
+  Button,
 } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
@@ -45,13 +46,18 @@ const NavBar = () => {
                 NBA CourtSide
               </Text>
             </Link>
-            <IconButton // toggle color mode
-              icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-              aria-label={`Switch to ${
-                colorMode === "light" ? "dark" : "light"
-              } theme`}
-              onClick={toggleColorMode}
-            />
+            <Flex gap={5}>
+              <Link href={"/standings"}>
+                <Button>Standings</Button>
+              </Link>
+              <IconButton // toggle color mode
+                icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                aria-label={`Switch to ${
+                  colorMode === "light" ? "dark" : "light"
+                } theme`}
+                onClick={toggleColorMode}
+              />
+            </Flex>
           </Flex>
         </Box>
         <ScheduleBar />

@@ -1,6 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 
-export default function useIntersectionObserver(): [React.RefObject<HTMLDivElement>, boolean] {
+export default function useIntersectionObserver(): [
+  React.RefObject<HTMLDivElement>,
+  boolean,
+] {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -11,9 +14,9 @@ export default function useIntersectionObserver(): [React.RefObject<HTMLDivEleme
       },
       {
         root: null,
-        rootMargin: '0px',
+        rootMargin: "0px",
         threshold: 0.1,
-      }
+      },
     );
 
     if (ref.current) {

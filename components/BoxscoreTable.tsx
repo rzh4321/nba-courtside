@@ -76,7 +76,7 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
             {team.players.map((player, i) => (
               <Tr
                 key={player.personId}
-                borderBottom={i === 4 ? "4px" : "1px"}
+                borderBottom={i === 4 ? "4px" : "1.5px"}
                 borderColor={borderColor}
               >
                 <Td display={{ base: "none", xl: "table-cell" }}>

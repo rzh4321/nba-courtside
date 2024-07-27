@@ -27,7 +27,6 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     },
   );
 
-
   // update document title
   useEffect(() => {
     if (boxscore) {
@@ -42,7 +41,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
         <HStack
           cursor={"pointer"}
           marginBottom={5}
-          width={'fit-content'}
+          width={"fit-content"}
           onClick={() => router.back()}
         >
           <Undo2 />
