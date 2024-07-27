@@ -28,7 +28,7 @@
 
 .bar-container {
   width: 100%;
-  height: 10px; /* Adjust height as needed */
+  height: 10px;
   display: flex;
   gap: 1px;
 }
@@ -37,6 +37,7 @@
 .right-bar {
   border-radius: 0.25rem;
   height: 100%;
+  transition: width 1s ease-in-out;
 }
 
 @media screen and (max-width: 530px) {
