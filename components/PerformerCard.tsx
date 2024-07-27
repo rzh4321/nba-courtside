@@ -12,6 +12,10 @@ function categoryDisplay(category: string) {
       return "AST";
     case "reboundsTotal":
       return "REB";
+    case "steals":
+      return "STL";
+    case "blocks":
+      return "BLK";
     default:
       return category;
   }

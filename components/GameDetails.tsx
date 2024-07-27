@@ -27,7 +27,6 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     },
   );
 
-  console.log("boxscore is ", boxscore);
 
   // update document title
   useEffect(() => {

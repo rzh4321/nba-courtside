@@ -50,12 +50,12 @@ function GameSummary({ game }: { game: Boxscore }) {
         </Thead>
         <Tbody>
           <Tr>
-            <Td>{game.homeTeam.teamName}</Td>
-            {renderPeriods(game.homeTeam.periods)}
-          </Tr>
-          <Tr>
             <Td>{game.awayTeam.teamName}</Td>
             {renderPeriods(game.awayTeam.periods)}
+          </Tr>
+          <Tr>
+            <Td>{game.homeTeam.teamName}</Td>
+            {renderPeriods(game.homeTeam.periods)}
           </Tr>
         </Tbody>
       </Table>

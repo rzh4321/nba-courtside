@@ -36,8 +36,8 @@ export default function TeamStatistic({
     rightInt = parseInt(rightLabel);
   }
   const total = leftInt + rightInt;
-  const leftWidth = `${(leftInt / total) * 100}%`;
-  const rightWidth = `${(rightInt / total) * 100}%`;
+  const leftWidth = total === 0 ? '50%' : `${(leftInt / total) * 100}%`;
+  const rightWidth = total === 0 ? '50%' :`${(rightInt / total) * 100}%`;
 
   return (
     <VStack gap={2} w={"full"}>
