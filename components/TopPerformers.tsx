@@ -15,10 +15,11 @@ import type { PlayerStatistics } from "@/types";
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
   category: keyof PlayerStatistics;
+  isLoading: boolean;
 };
 
 // display a category and its leaders
-const Section = ({ leaders, category }: SectionProps) => {
+const Section = ({ leaders, category, isLoading }: SectionProps) => {
   const categoryColor = useColorModeValue("gray.700", "gray.400");
   return (
     <VStack w={"100%"} align={"start"} spacing={4}>
@@ -34,7 +35,9 @@ const Section = ({ leaders, category }: SectionProps) => {
         className="flex-performers"
       >
         {/* display leaders for this category */}
-        {leaders.length > 0 ? (
+        {isLoading ? (
+          <Spinner />
+        ) : leaders.length > 0 ? (
           leaders.map((leader) => (
             <PerformerCard
               key={`${leader.personId}-${category}`}
@@ -92,7 +95,9 @@ export const TopPerformers = () => {
     reboundLeaders,
     stealLeaders,
     blockLeaders,
+    isLoading: useLeadersLoading,
   } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
+  console.log(gameIdsLoading || useLeadersLoading);
 
   return (
     // VStack separating the "Top Performers" text and each category section
@@ -108,11 +113,31 @@ export const TopPerformers = () => {
           <Spinner />
         )}
       </Heading>
-      <Section leaders={pointLeaders} category={"points"} />
-      <Section leaders={assistLeaders} category={"assists"} />
-      <Section leaders={reboundLeaders} category={"reboundsTotal"} />
-      <Section leaders={stealLeaders} category={"steals"} />
-      <Section leaders={blockLeaders} category={"blocks"} />
+      <Section
+        leaders={pointLeaders}
+        category={"points"}
+        isLoading={!date || gameIdsLoading || useLeadersLoading}
+      />
+      <Section
+        leaders={assistLeaders}
+        category={"assists"}
+        isLoading={!date || gameIdsLoading || useLeadersLoading}
+      />
+      <Section
+        leaders={reboundLeaders}
+        category={"reboundsTotal"}
+        isLoading={!date || gameIdsLoading || useLeadersLoading}
+      />
+      <Section
+        leaders={stealLeaders}
+        category={"steals"}
+        isLoading={!date || gameIdsLoading || useLeadersLoading}
+      />
+      <Section
+        leaders={blockLeaders}
+        category={"blocks"}
+        isLoading={!date || gameIdsLoading || useLeadersLoading}
+      />
     </VStack>
   );
 };

@@ -28,7 +28,7 @@ export default function StandingTable({
   const outlineBorderColor = useColorModeValue("gray.500", "gray.400");
 
   return (
-    <Box w={"full"}>
+    <Box w={"full"} overflowX={"auto"}>
       <Table
         w={"full"}
         variant={"simple"}
@@ -44,7 +44,7 @@ export default function StandingTable({
                 {label.toUpperCase()}
               </Text>
             </Th>
-            <Th>W - L</Th>
+            <Th minW={20}>W - L</Th>
             <Th>PCT</Th>
             <Th>GB</Th>
             <Th>HOME</Th>

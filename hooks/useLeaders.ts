@@ -74,5 +74,6 @@ export default function useLeaders(
     reboundLeaders: reboundLeaders.slice(0, 4),
     stealLeaders: stealLeaders.slice(0, 4),
     blockLeaders: blockLeaders.slice(0, 4),
+    isLoading,
   };
 }
