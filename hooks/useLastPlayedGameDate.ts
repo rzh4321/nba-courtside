@@ -28,9 +28,10 @@ function useFullSchedule() {
 }
 
 export function useLastPlayedGameDate() {
-  const { data, isLoading, error } = useFullSchedule();
-  let date;
-  if (!isLoading && data) {
+  const { data, isLoading: fullScheduleLoading, error } = useFullSchedule();
+  let dateLoading = true;
+  let date = null;
+  if (!fullScheduleLoading && data) {
     const gameDates = data?.leagueSchedule.gameDates;
     // gameDates is a large array of objects, each object has gameDate and games array
     // traverse backwards to get most recent game date object
@@ -42,6 +43,7 @@ export function useLastPlayedGameDate() {
       }
     }
   }
+  dateLoading = false;
 
-  return { date, isLoading, error };
+  return { date, dateLoading, error };
 }

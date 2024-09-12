@@ -54,20 +54,26 @@ const Section = ({ leaders, category, isLoading }: SectionProps) => {
 };
 
 export const TopPerformers = () => {
-  const { date: lastDate, isLoading, error } = useLastPlayedGameDate();
+  const {
+    date: lastDate,
+    dateLoading: isLoading,
+    error,
+  } = useLastPlayedGameDate();
   const searchParams = useSearchParams();
-  let date = searchParams.get("date");
+  let date: null | string | undefined = searchParams.get("date");
   if (date === null) {
     // get the last game date if user didnt ask for a specific date
     if (!isLoading && lastDate) {
       date = lastDate;
+    } else {
+      // lastDate not found
+      date = undefined;
     }
   } else {
     // user asked for a specific date, get it from the url
     // convert it to format of mm-dd-yyyy
     date = format(parse(date, "yyyy-MM-dd", new Date()), "MM-dd-yyyy");
   }
-
   // get all the gameIds once date is available
   const {
     data,
@@ -97,7 +103,6 @@ export const TopPerformers = () => {
     blockLeaders,
     isLoading: useLeadersLoading,
   } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
-  console.log(gameIdsLoading || useLeadersLoading);
 
   return (
     // VStack separating the "Top Performers" text and each category section
@@ -109,6 +114,8 @@ export const TopPerformers = () => {
           ) : (
             `Top Performers for ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
           )
+        ) : date === undefined ? (
+          `Today's Top Performers`
         ) : (
           <Spinner />
         )}
@@ -116,27 +123,27 @@ export const TopPerformers = () => {
       <Section
         leaders={pointLeaders}
         category={"points"}
-        isLoading={!date || gameIdsLoading || useLeadersLoading}
+        isLoading={gameIdsLoading || useLeadersLoading}
       />
       <Section
         leaders={assistLeaders}
         category={"assists"}
-        isLoading={!date || gameIdsLoading || useLeadersLoading}
+        isLoading={gameIdsLoading || useLeadersLoading}
       />
       <Section
         leaders={reboundLeaders}
         category={"reboundsTotal"}
-        isLoading={!date || gameIdsLoading || useLeadersLoading}
+        isLoading={gameIdsLoading || useLeadersLoading}
       />
       <Section
         leaders={stealLeaders}
         category={"steals"}
-        isLoading={!date || gameIdsLoading || useLeadersLoading}
+        isLoading={gameIdsLoading || useLeadersLoading}
       />
       <Section
         leaders={blockLeaders}
         category={"blocks"}
-        isLoading={!date || gameIdsLoading || useLeadersLoading}
+        isLoading={gameIdsLoading || useLeadersLoading}
       />
     </VStack>
   );
