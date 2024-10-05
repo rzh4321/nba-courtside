@@ -1,7 +1,7 @@
 "use client";
 
 import { VStack, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
-import { format, isToday, parse } from "date-fns";
+import { format, isToday, parse, isFuture, endOfDay } from "date-fns";
 import { PerformerCard } from "../components/PerformerCard";
 import { Spinner } from "@chakra-ui/react";
 import startCase from "lodash/startCase";
@@ -16,10 +16,11 @@ type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
   category: keyof PlayerStatistics;
   isLoading: boolean;
+  date: string | null | undefined;
 };
 
 // display a category and its leaders
-const Section = ({ leaders, category, isLoading }: SectionProps) => {
+const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
   const categoryColor = useColorModeValue("gray.700", "gray.400");
   return (
     <VStack w={"100%"} align={"start"} spacing={4}>
@@ -45,8 +46,18 @@ const Section = ({ leaders, category, isLoading }: SectionProps) => {
               category={category}
             />
           ))
+        ) : date && isFuture(parse(date, "MM-dd-yyyy", new Date())) ? (
+          <div>
+            Top performers will be displayed here after any games are played
+          </div>
         ) : (
-          <div>No games were scheduled for this date</div>
+          <div>
+            No games{" "}
+            {date && isToday(parse(date, "MM-dd-yyyy", new Date()))
+              ? "are"
+              : "were"}{" "}
+            scheduled for this date
+          </div>
         )}
       </HStack>
     </VStack>
@@ -124,26 +135,31 @@ export const TopPerformers = () => {
         leaders={pointLeaders}
         category={"points"}
         isLoading={gameIdsLoading || useLeadersLoading}
+        date={date}
       />
       <Section
         leaders={assistLeaders}
         category={"assists"}
         isLoading={gameIdsLoading || useLeadersLoading}
+        date={date}
       />
       <Section
         leaders={reboundLeaders}
         category={"reboundsTotal"}
         isLoading={gameIdsLoading || useLeadersLoading}
+        date={date}
       />
       <Section
         leaders={stealLeaders}
         category={"steals"}
         isLoading={gameIdsLoading || useLeadersLoading}
+        date={date}
       />
       <Section
         leaders={blockLeaders}
         category={"blocks"}
         isLoading={gameIdsLoading || useLeadersLoading}
+        date={date}
       />
     </VStack>
   );

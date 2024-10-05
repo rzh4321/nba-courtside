@@ -74,6 +74,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
           align={"start"}
           spacing={2}
           w={"120px"}
+          h={"112px"}
           px={4}
           py={2}
           bg={bg}
