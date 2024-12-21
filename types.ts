@@ -583,6 +583,26 @@ export type Game = {
   awayTeam: Team;
 };
 
+export type ScheduleGame = {
+  gameId: string;
+  gameStatus: number;
+  gameStatusText: string;
+  period: number;
+  gameClock: string;
+  gameTimeUTC: Date;
+  homeTeam: Team;
+  awayTeam: Team;
+};
+
+export type ScheduleTeam = {
+  teamId: number;
+  teamName: string;
+  teamTricode: string;
+  wins: number;
+  losses: number;
+  score: number;
+};
+
 export type TeamStatistics = {
   assists: number;
   assistsTurnoverRatio: number;

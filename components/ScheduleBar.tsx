@@ -65,14 +65,14 @@ export const ScheduleBar = () => {
           </HStack>
           {/* scrollable class removes scrollbar, auto overflow makes it scrollable at all */}
           <HStack w={"full"} className="scrollable" overflow={"auto"}>
-            {isLoading ? (
+            {isLoading || data == undefined ? (
               <Text>Loading</Text>
             ) : error ? (
               <Text>There was an error when fetching today{"'"}s schedule</Text>
-            ) : data!.length > 0 ? (
+            ) : data.length > 0 ? (
               // all the game cards are in an HStack with a gap of 8
               <HStack spacing={8}>
-                {data!.map((game) => (
+                {data.map((game) => (
                   <LiveGameCard key={game.gameId} game={game} />
                 ))}
               </HStack>
