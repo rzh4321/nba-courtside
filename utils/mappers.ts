@@ -115,3 +115,7 @@ export const nbaTeamAcronyms: NBATeamAcronyms = {
   warriors: "GSW",
   wizards: "WAS",
 };
+
+export const nbaTeamsFromTricode = Object.fromEntries(
+  Object.entries(nbaTeamAcronyms).map(([name, tricode]) => [tricode, name])
+);
