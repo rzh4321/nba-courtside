@@ -36,3 +36,5 @@ next-env.d.ts
 
 venv
 __pycache__
+/scraper/db.py
+.env

@@ -4,7 +4,6 @@ import type { ScheduleGame } from "@/types";
 export function useSchedule(date: string) {
   const todaysDate = new Date().toLocaleDateString("en-CA");
   const isToday = todaysDate === date;
-
   const { data, error, isValidating } = useSWR(
     `${isToday ? "/api/schedule/today" : `/api/schedule/${date}`}`,
     async (url: string) => {
