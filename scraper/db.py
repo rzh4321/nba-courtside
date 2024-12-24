@@ -14,7 +14,10 @@ PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
-DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
+
+
+DATABASE_URL = f"postgresql+psycopg2://{USER}.{HOST}:{PASSWORD}@aws-0-us-east-2.pooler.supabase.com:{PORT}/{DBNAME}"
+
 engine = create_engine(DATABASE_URL)
 
 try:
@@ -46,7 +49,7 @@ class Game(Base):
     under_odds = Column(Numeric(6,2), nullable=True)        # Changed to 6,2
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     game_date = Column(Date, nullable=False)
-    
+
     def __repr__(self):
         return f"<Game(game_id={self.game_id}, home_team={self.home_team}, away_team={self.away_team}, game_date={self.game_date})>"
 

@@ -17,7 +17,6 @@ chrome_options.add_argument('--disable-gpu')  # Required for headless mode
 chrome_options.add_argument('--window-size=1920,1080')  # Set window size
 
 driver = webdriver.Chrome(options=chrome_options)
-# driver = webdriver.Chrome()
 url = """
 https://sportsbook.draftkings.com/leagues/basketball/nba
 """
@@ -35,7 +34,6 @@ games = parlay_div.find('tbody')
 
 # Get all tr elements
 tr_elements = games.find_all('tr')
-print(len(tr_elements))
 
 
 # Get the thead element
@@ -45,8 +43,10 @@ date_th = thead.find('tr').find('th').text.strip().lower()
 # Determine game date based on thead text
 if date_th == 'today':
     game_date = date.today()
+    print('date is today. game_date is set to ', game_date)
 elif date_th == 'tomorrow':
     game_date = date.today() + timedelta(days=1)
+    print('date is tomorrow. game_date is set to ', game_date)
 else:
     # Extract month and day from format like 'WED DEC 25TH'
     date_parts = date_th.split()[1:]  # Skip the day of week
@@ -58,14 +58,19 @@ else:
     # If the date is in the past (December -> January transition), add a year
     if game_date < date.today():
         game_date = datetime.strptime(f"{month_day} {date.today().year + 1}", "%b %d %Y").date()
+    print(f'date is not today or tomorrow, its {date_parts}. game_date is set to {game_date}')
 
-print('game date is: ', game_date)
+
+print(f'no of games is {len(games)/2}')
 try:
     # Iterate through pairs of tr elements
     for i in range(0, len(tr_elements), 2):
         # Process first tr (away team)
         away_team_row = tr_elements[i]
-        away_team_name = utils.nba_teams_full[away_team_row.find('a').text.strip().split()[-1]]
+        # print(utils.nba_teams_full[away_team_row.find('a').find('div').find_all('div', recursive=False)[1].find('div').text.strip().split()[-1]])
+        away_team_name = utils.nba_teams_full[away_team_row.find('a').find('div').find_all('div', recursive=False)[1].find('div').text.strip().split()[-1]]
+        # away_team_name = utils.nba_teams_full[away_team_row.find('a').text.strip().split()[-1]]
+
         
         # Get first td for away team (spread)
         away_spread_td = away_team_row.find('td')
@@ -86,7 +91,7 @@ try:
         
         # Process second tr (home team)
         home_team_row = tr_elements[i+1]
-        home_team_name = utils.nba_teams_full[home_team_row.find('a').text.strip().split()[-1]]
+        home_team_name = utils.nba_teams_full[home_team_row.find('a').find('div').find_all('div', recursive=False)[1].find('div').text.strip().split()[-1]]
         
         # Get first td for home team (spread)
         home_spread_td = home_team_row.find('td')
@@ -117,18 +122,21 @@ try:
         print(f"Under Odds: {under_odds}")
         print("---")
 
-        # Convert string values to appropriate numeric types
-        home_spread_num = utils.convert_spread(home_spread)
-        away_spread_num = utils.convert_spread(away_spread)
-        home_spread_odds_num = utils.convert_odds(home_spread_odds)
-        away_spread_odds_num = utils.convert_odds(away_spread_odds)
-        home_moneyline_num = utils.convert_odds(home_moneyline)
-        away_moneyline_num = utils.convert_odds(away_moneyline)
-        over_under_num = float(over_under_number)
-        over_odds_num = utils.convert_odds(over_odds)
-        under_odds_num = utils.convert_odds(under_odds)
+        try:
+            home_spread_num = utils.convert_spread(home_spread) if home_spread.strip() else None
+            away_spread_num = utils.convert_spread(away_spread) if away_spread.strip() else None
+            home_spread_odds_num = utils.convert_odds(home_spread_odds) if home_spread_odds.strip() else None
+            away_spread_odds_num = utils.convert_odds(away_spread_odds) if away_spread_odds.strip() else None
+            home_moneyline_num = utils.convert_odds(home_moneyline) if home_moneyline.strip() else None
+            away_moneyline_num = utils.convert_odds(away_moneyline) if away_moneyline.strip() else None
+            over_under_num = float(over_under_number) if over_under_number.strip() else None
+            over_odds_num = utils.convert_odds(over_odds) if over_odds.strip() else None
+            under_odds_num = utils.convert_odds(under_odds) if under_odds.strip() else None
+        except ValueError as e:
+            print(f"Error converting values for {away_team_name} vs {home_team_name}: {e}")
+            continue  # Skip this game and continue with the next one   
 
-        # Add game to database
+        # Add or update game
         add_game(
             home_team=home_team_name,
             away_team=away_team_name,
