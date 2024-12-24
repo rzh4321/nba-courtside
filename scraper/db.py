@@ -41,8 +41,8 @@ class Game(Base):
     away_spread_odds = Column(Numeric(6,2), nullable=True)  # Changed to 6,2
     home_spread = Column(Numeric(5,2), nullable=True)       # This can stay 5,2
     opening_home_spread = Column(Numeric(5,2), nullable=True)
-    home_moneyline = Column(Numeric(7,2), nullable=True)    # Changed to 7,2
-    away_moneyline = Column(Numeric(7,2), nullable=True)    # Changed to 7,2
+    home_moneyline = Column(Numeric(8,2), nullable=True)    # Changed to 7,2
+    away_moneyline = Column(Numeric(8,2), nullable=True)    # Changed to 7,2
     opening_over_under = Column(Numeric(5,2), nullable=True)
     over_under = Column(Numeric(5,2), nullable=True)
     over_odds = Column(Numeric(6,2), nullable=True)         # Changed to 6,2
