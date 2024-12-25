@@ -15,7 +15,6 @@ import sys
 
 eastern = pytz.timezone('America/New_York')
 today = datetime.now(eastern).date()
-
 def should_scrape():
     current_time = datetime.now(eastern)
     # Check if it's during typical NBA game hours (e.g., 11 AM - 2 AM ET)
@@ -42,6 +41,16 @@ def setup_driver():
     chrome_options.add_argument('--window-size=1920,1080')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--force-device-scale-factor=1')
+    chrome_options.add_argument('--timezone="America/New_York"')
+    chrome_options.add_experimental_option('prefs', {
+        'profile.default_content_setting_values.timezone': 1,
+        'profile.managed_default_content_settings.timezone': 1,
+        'profile.default_content_settings.timezone': 1,
+        'intl.accept_languages': 'en-US,en',
+        'profile.content_settings.exceptions.timezone': {
+            '[*.]draftkings.com': {'setting': 1}
+        }
+    })
     
     try:
         driver = webdriver.Chrome(options=chrome_options)
