@@ -1,13 +1,17 @@
 from selenium import webdriver # type: ignore
 from selenium.webdriver.common.by import By # type: ignore
 from selenium.webdriver.chrome.options import Options # type: ignore
+from selenium.webdriver.support.ui import WebDriverWait # type: ignore
+from selenium.webdriver.support import expected_conditions as EC # type: ignore
+from selenium.common.exceptions import TimeoutException, WebDriverException # type: ignore
 from bs4 import BeautifulSoup # type: ignore
 import time
 import utils
 from db import add_game
 import re
 from datetime import date, timedelta, datetime
-import pytz
+import pytz # type: ignore
+import sys
 
 eastern = pytz.timezone('America/New_York')
 today = datetime.now(eastern).date()
@@ -20,7 +24,7 @@ def should_scrape():
     print(f'its not beween 11 am and 2 am, not running scraper')
     return False
 
-if should_scrape():
+def setup_driver():
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -35,54 +39,96 @@ if should_scrape():
     chrome_options.add_argument('--disable-browser-side-navigation')
     chrome_options.add_argument('--dns-prefetch-disable')
     chrome_options.add_argument('--disable-features=VizDisplayCompositor')
-
-    driver = webdriver.Chrome(options=chrome_options)
-    url = """
-    https://sportsbook.draftkings.com/leagues/basketball/nba
-    """
-    driver.get(url)
-    time.sleep(4)
-
-    html = driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')
-
-    # Find first div with class starting with "parlay-card-"
-    parlay_div = soup.find('div', class_=lambda x: x and x.startswith('parlay-card-'))
-
-    # Get the tbody within this div
-    games = parlay_div.find('tbody')
-
-    # Get all tr elements
-    tr_elements = games.find_all('tr')
-
-
-    # Get the thead element
-    thead = parlay_div.find('thead')
-    date_th = thead.find('tr').find('th').text.strip().lower()
-
-    # Determine game date based on thead text
-    if date_th == 'today':
-        game_date = today
-        print('date is today. game_date is set to ', game_date)
-    elif date_th == 'tomorrow':
-        game_date = today + timedelta(days=1)
-        print('date is tomorrow. game_date is set to ', game_date)
-    else:
-        # Extract month and day from format like 'WED DEC 25TH'
-        date_parts = date_th.split()[1:]  # Skip the day of week
-        month_day = ' '.join(date_parts)  # 'DEC 25TH'
-        # Remove 'TH', 'ST', 'ND', 'RD' from the day
-        month_day = re.sub(r'(?:ST|ND|RD|TH)$', '', month_day)
-        # Parse the date string
-        game_date = datetime.strptime(f"{month_day} {date.today().year}", "%b %d %Y").date()
-        # If the date is in the past (December -> January transition), add a year
-        if game_date < date.today():
-            game_date = datetime.strptime(f"{month_day} {date.today().year + 1}", "%b %d %Y").date()
-        print(f'date is not today or tomorrow, its {date_parts}. game_date is set to {game_date}')
-
-
-    print(f'no of games is {len(games)/2}')
+    chrome_options.add_argument('--window-size=1920,1080')
+    chrome_options.add_argument('--start-maximized')
+    chrome_options.add_argument('--force-device-scale-factor=1')
+    
     try:
+        driver = webdriver.Chrome(options=chrome_options)
+        driver.set_page_load_timeout(30)  # Set page load timeout
+        return driver
+    except Exception as e:
+        print(f"Failed to create driver: {e}")
+        sys.exit(1)
+
+def scrape_with_retry(url, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            driver = setup_driver()
+            driver.get(url)
+            
+            # Wait for some element that indicates the page is loaded
+            wait = WebDriverWait(driver, 20)
+            # Replace with an element that should be present when page is loaded
+            wait.until(EC.presence_of_element_located((By.CLASS_NAME, "sportsbook-table")))
+            
+            time.sleep(4)  # Keep your existing sleep
+            
+            html = driver.page_source
+            return driver, html
+            
+        except TimeoutException as e:
+            print(f"Timeout on attempt {attempt + 1}: {e}")
+        except WebDriverException as e:
+            print(f"WebDriver error on attempt {attempt + 1}: {e}")
+        except Exception as e:
+            print(f"Unexpected error on attempt {attempt + 1}: {e}")
+        
+        if driver:
+            try:
+                driver.quit()
+            except:
+                pass
+            
+        if attempt < max_retries - 1:
+            time.sleep(10 * (attempt + 1))  # Exponential backoff
+        else:
+            print("Max retries reached, exiting")
+            sys.exit(1)
+
+if should_scrape():
+    try:
+        url = "https://sportsbook.draftkings.com/leagues/basketball/nba"
+        driver, html = scrape_with_retry(url)
+        soup = BeautifulSoup(html, 'html.parser')
+    
+
+        # Find first div with class starting with "parlay-card-"
+        parlay_div = soup.find('div', class_=lambda x: x and x.startswith('parlay-card-'))
+
+        # Get the tbody within this div
+        games = parlay_div.find('tbody')
+
+        # Get all tr elements
+        tr_elements = games.find_all('tr')
+
+
+        # Get the thead element
+        thead = parlay_div.find('thead')
+        date_th = thead.find('tr').find('th').text.strip().lower()
+
+        # Determine game date based on thead text
+        if date_th == 'today':
+            game_date = today
+            print('date is today. game_date is set to ', game_date)
+        elif date_th == 'tomorrow':
+            game_date = today + timedelta(days=1)
+            print('date is tomorrow. game_date is set to ', game_date)
+        else:
+            # Extract month and day from format like 'WED DEC 25TH'
+            date_parts = date_th.split()[1:]  # Skip the day of week
+            month_day = ' '.join(date_parts)  # 'DEC 25TH'
+            # Remove 'TH', 'ST', 'ND', 'RD' from the day
+            month_day = re.sub(r'(?:ST|ND|RD|TH)$', '', month_day)
+            # Parse the date string
+            game_date = datetime.strptime(f"{month_day} {date.today().year}", "%b %d %Y").date()
+            # If the date is in the past (December -> January transition), add a year
+            if game_date < date.today():
+                game_date = datetime.strptime(f"{month_day} {date.today().year + 1}", "%b %d %Y").date()
+            print(f'date is not today or tomorrow, its {date_parts}. game_date is set to {game_date}')
+
+
+        print(f'no of games is {len(games)/2}')
         # Iterate through pairs of tr elements
         for i in range(0, len(tr_elements), 2):
             try:
@@ -170,5 +216,12 @@ if should_scrape():
                 under_odds=under_odds_num,
                 game_date=game_date
             )
+    except Exception as e:
+        print(f"Fatal error: {e}")
+        sys.exit(1)
     finally:
-        driver.quit()
+        if 'driver' in locals():
+            try:
+                driver.quit()
+            except:
+                pass
