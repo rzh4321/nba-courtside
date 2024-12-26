@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, BigInteger, String, Numeric, DateTime, Date, ForeignKey, and_
+from sqlalchemy import create_engine, text, Column, BigInteger, String, Numeric, DateTime, Date, ForeignKey, and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, validates
 from sqlalchemy.sql import func
@@ -47,8 +47,17 @@ class Game(Base):
     over_under = Column(Numeric(5,2), nullable=True)
     over_odds = Column(Numeric(6,2), nullable=True)       
     under_odds = Column(Numeric(6,2), nullable=True)     
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
+        nullable=False
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
+        onupdate=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
+        nullable=False
+    )
     game_date = Column(Date, nullable=False)
 
     def __repr__(self):
