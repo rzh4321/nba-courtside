@@ -54,6 +54,10 @@ def setup_driver():
     
     try:
         driver = webdriver.Chrome(options=chrome_options)
+        # Execute JavaScript to set timezone
+        driver.execute_cdp_cmd('Emulation.setTimezoneOverride', {
+            'timezoneId': 'America/New_York'
+        })
         driver.set_page_load_timeout(30)  # Set page load timeout
         return driver
     except Exception as e:

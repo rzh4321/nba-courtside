@@ -37,17 +37,18 @@ class Game(Base):
     game_id = Column(String(255), nullable=False)
     home_team = Column(String(255), nullable=False)
     away_team = Column(String(255), nullable=False)
-    home_spread_odds = Column(Numeric(6,2), nullable=True)  # Changed to 6,2
-    away_spread_odds = Column(Numeric(6,2), nullable=True)  # Changed to 6,2
-    home_spread = Column(Numeric(5,2), nullable=True)       # This can stay 5,2
+    home_spread_odds = Column(Numeric(6,2), nullable=True) 
+    away_spread_odds = Column(Numeric(6,2), nullable=True)  
+    home_spread = Column(Numeric(5,2), nullable=True)      
     opening_home_spread = Column(Numeric(5,2), nullable=True)
-    home_moneyline = Column(Numeric(8,2), nullable=True)    # Changed to 7,2
-    away_moneyline = Column(Numeric(8,2), nullable=True)    # Changed to 7,2
+    home_moneyline = Column(Numeric(8,2), nullable=True)  
+    away_moneyline = Column(Numeric(8,2), nullable=True) 
     opening_over_under = Column(Numeric(5,2), nullable=True)
     over_under = Column(Numeric(5,2), nullable=True)
-    over_odds = Column(Numeric(6,2), nullable=True)         # Changed to 6,2
-    under_odds = Column(Numeric(6,2), nullable=True)        # Changed to 6,2
+    over_odds = Column(Numeric(6,2), nullable=True)       
+    under_odds = Column(Numeric(6,2), nullable=True)     
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     game_date = Column(Date, nullable=False)
 
     def __repr__(self):
