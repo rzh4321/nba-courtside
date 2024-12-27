@@ -24,66 +24,54 @@ def should_scrape():
     print(f'its not beween 11 am and 2 am, not running scraper')
     return False
 
+
 def setup_driver(max_attempts=3):
     for attempt in range(max_attempts):
         try:
             chrome_options = Options()
-            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--headless=new')  # Use new headless mode
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument('--dns-prefetch-disable')
             chrome_options.add_argument('--disable-extensions')
             chrome_options.add_argument('--disable-infobars')
-            chrome_options.add_argument('--disable-setuid-sandbox')
-            chrome_options.add_argument('--disable-software-rasterizer')
-            chrome_options.add_argument('--ignore-certificate-errors')
-            chrome_options.add_argument('--disable-browser-side-navigation')
-            chrome_options.add_argument('--dns-prefetch-disable')
-            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+            chrome_options.add_argument('--remote-debugging-port=9222')
             chrome_options.add_argument('--window-size=1920,1080')
             chrome_options.add_argument('--start-maximized')
-            chrome_options.add_argument('--force-device-scale-factor=1')
-            chrome_options.add_argument('--timezone="America/New_York"')
-            chrome_options.add_argument('--remote-debugging-port=9222')  # Add this line
+            chrome_options.add_argument('--single-process')  # Add this
+            chrome_options.add_argument('--disable-features=site-per-process')  # Add this
+            chrome_options.add_argument('--ignore-certificate-errors')
+            chrome_options.add_argument('--disable-web-security')  # Add this
+            chrome_options.add_argument('--disable-features=IsolateOrigins,site-per-process')  # Add this
+            
+            # Set shared memory /dev/shm size
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--shm-size=2gb')
+            
+            # Add performance options
+            chrome_options.add_argument('--aggressive-cache-discard')
+            chrome_options.add_argument('--disable-cache')
+            chrome_options.add_argument('--disable-application-cache')
+            chrome_options.add_argument('--disable-offline-load-stale-cache')
+            chrome_options.add_argument('--disk-cache-size=0')
+            
+            # Memory management
+            chrome_options.add_argument('--disable-backing-store-limit')
             chrome_options.add_argument('--disable-background-networking')
+            chrome_options.add_argument('--disable-component-extensions-with-background-pages')
             chrome_options.add_argument('--disable-default-apps')
-            chrome_options.add_argument('--disable-sync')
-            chrome_options.add_argument('--disable-translate')
-            chrome_options.add_argument('--hide-scrollbars')
-            chrome_options.add_argument('--metrics-recording-only')
-            chrome_options.add_argument('--mute-audio')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--safebrowsing-disable-auto-update')
-            chrome_options.add_argument('--log-level=3')  # Minimal logging
-            chrome_options.add_experimental_option('prefs', {
-                'profile.default_content_setting_values.timezone': 1,
-                'profile.managed_default_content_settings.timezone': 1,
-                'profile.default_content_settings.timezone': 1,
-                'intl.accept_languages': 'en-US,en',
-                'profile.content_settings.exceptions.timezone': {
-                    '[*.]draftkings.com': {'setting': 1}
-                }
-            })
-
-            # Create a service with specific timeout
-            from selenium.webdriver.chrome.service import Service
-            service = Service(
-                log_output=os.path.devnull,  # Suppress service logs
-                service_args=['--verbose']
-            )
+            
 
             driver = webdriver.Chrome(
                 options=chrome_options,
-                service=service
             )
             
-            driver.set_page_load_timeout(30)
+            # Increase timeouts
+            driver.set_page_load_timeout(60)
+            driver.implicitly_wait(20)
             
-            # Test the driver with a simple command
+            # Test the driver
             driver.execute_script('return document.readyState')
-            
-            # If we get here, driver is working
             return driver
             
         except Exception as e:
@@ -94,9 +82,10 @@ def setup_driver(max_attempts=3):
                 except:
                     pass
             
-            # Kill any hanging chrome processes
+            # Kill chrome processes and clean up
             try:
                 os.system("pkill -f chrome")
+                os.system("pkill -f chromedriver")
                 time.sleep(2)
             except:
                 pass
@@ -104,42 +93,56 @@ def setup_driver(max_attempts=3):
             if attempt == max_attempts - 1:
                 raise Exception(f"Failed to create driver after {max_attempts} attempts: {str(e)}")
             
-            time.sleep(5 * (attempt + 1))  # Exponential backoff
+            time.sleep(5 * (attempt + 1))
+
 
 def scrape_with_retry(url, max_retries=3):
     for attempt in range(max_retries):
+        driver = None
         try:
             driver = setup_driver()
+            
+            # Clear cookies and cache before loading page
+            driver.execute_cdp_cmd('Network.clearBrowserCache', {})
+            driver.execute_cdp_cmd('Network.clearBrowserCookies', {})
+            
+            # Load the page with a more robust wait strategy
             driver.get(url)
             
-            # Wait for some element that indicates the page is loaded
-            wait = WebDriverWait(driver, 20)
-            # Replace with an element that should be present when page is loaded
+            wait = WebDriverWait(driver, 30)
             wait.until(EC.presence_of_element_located((By.CLASS_NAME, "sportsbook-table")))
+            wait.until(lambda d: d.execute_script('return document.readyState') == 'complete')
             
-            time.sleep(4)  # Keep your existing sleep
+            # Add additional wait for dynamic content
+            time.sleep(5)
             
             html = driver.page_source
+            if not html or len(html) < 1000:  # Basic check for valid content
+                raise Exception("Retrieved HTML appears to be invalid")
+                
             return driver, html
             
-        except TimeoutException as e:
-            print(f"Timeout on attempt {attempt + 1}: {e}")
-        except WebDriverException as e:
-            print(f"WebDriver error on attempt {attempt + 1}: {e}")
         except Exception as e:
-            print(f"Unexpected error on attempt {attempt + 1}: {e}")
-        
-        if driver:
+            print(f"Error on attempt {attempt + 1}: {str(e)}")
+            if driver:
+                try:
+                    driver.quit()
+                except:
+                    pass
+            
+            # Clean up between attempts
             try:
-                driver.quit()
+                os.system("pkill -f chrome")
+                os.system("pkill -f chromedriver")
+                time.sleep(5)
             except:
                 pass
             
-        if attempt < max_retries - 1:
-            time.sleep(10 * (attempt + 1))  # Exponential backoff
-        else:
-            print("Max retries reached, exiting")
-            sys.exit(1)
+            if attempt < max_retries - 1:
+                time.sleep(10 * (attempt + 1))
+            else:
+                raise Exception(f"Failed after {max_retries} attempts")
+
 
 if should_scrape():
     try:
