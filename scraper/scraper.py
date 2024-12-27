@@ -29,6 +29,17 @@ def setup_driver(max_attempts=3):
     for attempt in range(max_attempts):
         try:
             chrome_options = Options()
+            # Add timezone-specific arguments
+            chrome_options.add_argument('--timezone="America/New_York"')
+            chrome_options.add_experimental_option('prefs', {
+                'profile.default_content_setting_values.timezone': 1,
+                'profile.managed_default_content_settings.timezone': 1,
+                'profile.default_content_settings.timezone': 1,
+                'intl.accept_languages': 'en-US,en',
+                'profile.content_settings.exceptions.timezone': {
+                    '[*.]draftkings.com': {'setting': 1}
+                }
+            })
             chrome_options.add_argument('--headless=new')  # Use new headless mode
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
@@ -65,7 +76,9 @@ def setup_driver(max_attempts=3):
             driver = webdriver.Chrome(
                 options=chrome_options,
             )
-            
+            driver.execute_cdp_cmd('Emulation.setTimezoneOverride', {
+            'timezoneId': 'America/New_York'
+            })            
             # Increase timeouts
             driver.set_page_load_timeout(60)
             driver.implicitly_wait(20)
@@ -114,7 +127,7 @@ def scrape_with_retry(url, max_retries=3):
             wait.until(lambda d: d.execute_script('return document.readyState') == 'complete')
             
             # Add additional wait for dynamic content
-            time.sleep(5)
+            time.sleep(8)
             
             html = driver.page_source
             if not html or len(html) < 1000:  # Basic check for valid content
