@@ -174,14 +174,29 @@ if should_scrape():
             date_parts = date_th.split()[1:]  # Skip the day of week
             month_day = ' '.join(date_parts)  # 'DEC 25TH'
             # Remove 'TH', 'ST', 'ND', 'RD' from the day
-            month_day = re.sub(r'(?:ST|ND|RD|TH)$', '', month_day)
-            # Parse the date string
-            game_date = datetime.strptime(f"{month_day} {date.today().year}", "%b %d %Y").date()
-            # If the date is in the past (December -> January transition), add a year
-            if game_date < date.today():
-                game_date = datetime.strptime(f"{month_day} {date.today().year + 1}", "%b %d %Y").date()
-            print(f'date is not today or tomorrow, its {date_parts}. game_date is set to {game_date}')
+            month_day = re.sub(r'(?:ST|ND|RD|TH|st|nd|rd|th)$', '', month_day)
+            # Convert month to proper case (DEC -> Dec) for strptime
+            month_day = month_day.title()
+            print(f'date is not today or tomorrow, its {month_day}')
 
+            try:
+                # Parse the date string
+                game_date = datetime.strptime(f"{month_day} {date.today().year}", "%b %d %Y").date()
+                
+                # If the date is in the past, check if it's due to year change or day change
+                if game_date < today:
+                    # If we're in January and the game date is in December, it's from last year
+                    if today.month == 1 and game_date.month == 12:
+                        game_date = datetime.strptime(f"{month_day} {today.year - 1}", "%b %d %Y").date()
+                    # If it's just the day that's behind (midnight transition), keep the same month/year
+                    else:
+                        game_date = game_date
+                print(f'game date is set to {game_date}')
+
+            except ValueError as e:
+                print(f"Error parsing date: {e}")
+                print(f"Input date string was: '{month_day} {date.today().year}'")
+                raise
 
         print(f'no of games is {len(games)/2}')
         # Iterate through pairs of tr elements
@@ -196,16 +211,25 @@ if should_scrape():
                 
                 # Get first td for away team (spread)
                 away_spread_td = away_team_row.find('td')
-                away_spread_divs = away_spread_td.find('div').find('div').find('div').find_all('div')
-                away_spread = away_spread_divs[0].text.strip()
-                away_spread_odds = away_spread_divs[1].text.strip()
+                away_spread_divs = away_spread_td.find('div').find('div').find('div')
+                if away_spread_divs is None:
+                    away_spread = None
+                    away_spread_odds = None
+                else:
+                    away_spread_divs = away_spread_divs.find_all('div')
+                    away_spread = away_spread_divs[0].text.strip()
+                    away_spread_odds = away_spread_divs[1].text.strip()
                 
                 # Get second td for away team (over)
                 over_td = away_team_row.find_all('td')[1]
                 over_total_div = over_td.find('div').find('div').find('div')
-                over_total_divs = over_total_div.find_all('div')
-                over_under_number = over_total_divs[0].find_all('span')[2].text.strip()
-                over_odds = over_total_divs[1].text.strip()
+                if over_total_div is None:
+                    over_under_number = None
+                    over_odds = None
+                else:
+                    over_total_divs = over_total_div.find_all('div')
+                    over_under_number = over_total_divs[0].find_all('span')[2].text.strip()
+                    over_odds = over_total_divs[1].text.strip()
                 
                 # Get third td for away team (moneyline)
                 away_moneyline_td = away_team_row.find_all('td')[2]
@@ -217,15 +241,23 @@ if should_scrape():
                 
                 # Get first td for home team (spread)
                 home_spread_td = home_team_row.find('td')
-                home_spread_divs = home_spread_td.find('div').find('div').find('div').find_all('div')
-                home_spread = home_spread_divs[0].text.strip()
-                home_spread_odds = home_spread_divs[1].text.strip()
+                home_spread_divs = home_spread_td.find('div').find('div').find('div')
+                if home_spread_divs is None:
+                    home_spread = None
+                    home_spread_odds = None
+                else:
+                    home_spread_divs = home_spread_divs.find_all('div')
+                    home_spread = home_spread_divs[0].text.strip()
+                    home_spread_odds = home_spread_divs[1].text.strip()
                 
                 # Get second td for home team (under)
                 under_td = home_team_row.find_all('td')[1]
                 under_total_div = under_td.find('div').find('div').find('div')
-                under_total_divs = under_total_div.find_all('div')
-                under_odds = under_total_divs[1].text.strip()
+                if under_total_div is None:
+                    under_odds = None
+                else:
+                    under_total_divs = under_total_div.find_all('div')
+                    under_odds = under_total_divs[1].text.strip()
                 
                 # Get third td for home team (moneyline)
                 home_moneyline_td = home_team_row.find_all('td')[2]
@@ -244,15 +276,15 @@ if should_scrape():
                 print(f"Under Odds: {under_odds}")
                 print("---")
 
-                home_spread_num = utils.convert_spread(home_spread) if home_spread.strip() else None
-                away_spread_num = utils.convert_spread(away_spread) if away_spread.strip() else None
-                home_spread_odds_num = utils.convert_odds(home_spread_odds) if home_spread_odds.strip() else None
-                away_spread_odds_num = utils.convert_odds(away_spread_odds) if away_spread_odds.strip() else None
-                home_moneyline_num = utils.convert_odds(home_moneyline) if home_moneyline.strip() else None
-                away_moneyline_num = utils.convert_odds(away_moneyline) if away_moneyline.strip() else None
-                over_under_num = float(over_under_number) if over_under_number.strip() else None
-                over_odds_num = utils.convert_odds(over_odds) if over_odds.strip() else None
-                under_odds_num = utils.convert_odds(under_odds) if under_odds.strip() else None
+                home_spread_num = utils.convert_spread(home_spread) if home_spread else None
+                away_spread_num = utils.convert_spread(away_spread) if away_spread else None
+                home_spread_odds_num = utils.convert_odds(home_spread_odds) if home_spread_odds else None
+                away_spread_odds_num = utils.convert_odds(away_spread_odds) if away_spread_odds else None
+                home_moneyline_num = utils.convert_odds(home_moneyline) if home_moneyline else None
+                away_moneyline_num = utils.convert_odds(away_moneyline) if away_moneyline else None
+                over_under_num = float(over_under_number) if over_under_number else None
+                over_odds_num = utils.convert_odds(over_odds) if over_odds else None
+                under_odds_num = utils.convert_odds(under_odds) if under_odds else None
             except Exception as e:
                 print(f"Error: {e}")
                 continue  # Skip this game and continue with the next one   

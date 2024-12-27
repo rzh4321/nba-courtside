@@ -79,15 +79,6 @@ def add_game(
              game_date: date) -> Game:
     session = Session()
     
-    # Check if game already exists
-    existing_game = session.query(Game).filter(
-        and_(
-            Game.home_team == home_team,
-            Game.away_team == away_team,
-            Game.game_date == game_date
-        )
-    ).first()
-
     try:
         # Check if game exists and update in one step
         result = session.query(Game).filter(
