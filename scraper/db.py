@@ -49,13 +49,13 @@ class Game(Base):
     under_odds = Column(Numeric(6,2), nullable=True)     
     created_at = Column(
         DateTime(timezone=True),
-        server_default=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
+        server_default=func.now(),
         nullable=False
     )
     updated_at = Column(
         DateTime(timezone=True),
-        server_default=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
-        onupdate=text("CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York'"),
+        server_default=func.now(),
+        onupdate=func.now(),
         nullable=False
     )
     game_date = Column(Date, nullable=False)
@@ -89,19 +89,34 @@ def add_game(
     ).first()
 
     try:
-        if existing_game:
-            # Update betting information except opening lines
-            existing_game.home_spread_odds = home_spread_odds
-            existing_game.away_spread_odds = away_spread_odds
-            existing_game.home_spread = home_spread
-            existing_game.home_moneyline = home_moneyline
-            existing_game.away_moneyline = away_moneyline
-            existing_game.over_under = over_under
-            existing_game.over_odds = over_odds
-            existing_game.under_odds = under_odds
-            
+        # Check if game exists and update in one step
+        result = session.query(Game).filter(
+            and_(
+                Game.home_team == home_team,
+                Game.away_team == away_team,
+                Game.game_date == game_date
+            )
+        ).update({
+            Game.home_spread_odds: home_spread_odds,
+            Game.away_spread_odds: away_spread_odds,
+            Game.home_spread: home_spread,
+            Game.home_moneyline: home_moneyline,
+            Game.away_moneyline: away_moneyline,
+            Game.over_under: over_under,
+            Game.over_odds: over_odds,
+            Game.under_odds: under_odds,
+            Game.updated_at: func.now()  # Force update to change updated_at
+        }, synchronize_session=False)
+
+        if result > 0:
             session.commit()
-            return existing_game
+            return session.query(Game).filter(
+                and_(
+                    Game.home_team == home_team,
+                    Game.away_team == away_team,
+                    Game.game_date == game_date
+                )
+            ).first()
         else:
             # Create new game with all information
             new_game = Game(
