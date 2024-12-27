@@ -12,6 +12,7 @@ import re
 from datetime import date, timedelta, datetime
 import pytz # type: ignore
 import sys
+import os
 
 eastern = pytz.timezone('America/New_York')
 today = datetime.now(eastern).date()
@@ -23,46 +24,87 @@ def should_scrape():
     print(f'its not beween 11 am and 2 am, not running scraper')
     return False
 
-def setup_driver():
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--disable-gpu')  # Required for headless mode
-    chrome_options.add_argument('--dns-prefetch-disable')
-    chrome_options.add_argument('--disable-extensions')
-    chrome_options.add_argument('--disable-infobars')
-    chrome_options.add_argument('--disable-setuid-sandbox')
-    chrome_options.add_argument('--disable-software-rasterizer')
-    chrome_options.add_argument('--ignore-certificate-errors')
-    chrome_options.add_argument('--disable-browser-side-navigation')
-    chrome_options.add_argument('--dns-prefetch-disable')
-    chrome_options.add_argument('--disable-features=VizDisplayCompositor')
-    chrome_options.add_argument('--window-size=1920,1080')
-    chrome_options.add_argument('--start-maximized')
-    chrome_options.add_argument('--force-device-scale-factor=1')
-    chrome_options.add_argument('--timezone="America/New_York"')
-    chrome_options.add_experimental_option('prefs', {
-        'profile.default_content_setting_values.timezone': 1,
-        'profile.managed_default_content_settings.timezone': 1,
-        'profile.default_content_settings.timezone': 1,
-        'intl.accept_languages': 'en-US,en',
-        'profile.content_settings.exceptions.timezone': {
-            '[*.]draftkings.com': {'setting': 1}
-        }
-    })
-    
-    try:
-        driver = webdriver.Chrome(options=chrome_options)
-        # Execute JavaScript to set timezone
-        driver.execute_cdp_cmd('Emulation.setTimezoneOverride', {
-            'timezoneId': 'America/New_York'
-        })
-        driver.set_page_load_timeout(30)  # Set page load timeout
-        return driver
-    except Exception as e:
-        print(f"Failed to create driver: {e}")
-        sys.exit(1)
+def setup_driver(max_attempts=3):
+    for attempt in range(max_attempts):
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--dns-prefetch-disable')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-infobars')
+            chrome_options.add_argument('--disable-setuid-sandbox')
+            chrome_options.add_argument('--disable-software-rasterizer')
+            chrome_options.add_argument('--ignore-certificate-errors')
+            chrome_options.add_argument('--disable-browser-side-navigation')
+            chrome_options.add_argument('--dns-prefetch-disable')
+            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+            chrome_options.add_argument('--window-size=1920,1080')
+            chrome_options.add_argument('--start-maximized')
+            chrome_options.add_argument('--force-device-scale-factor=1')
+            chrome_options.add_argument('--timezone="America/New_York"')
+            chrome_options.add_argument('--remote-debugging-port=9222')  # Add this line
+            chrome_options.add_argument('--disable-background-networking')
+            chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-sync')
+            chrome_options.add_argument('--disable-translate')
+            chrome_options.add_argument('--hide-scrollbars')
+            chrome_options.add_argument('--metrics-recording-only')
+            chrome_options.add_argument('--mute-audio')
+            chrome_options.add_argument('--no-first-run')
+            chrome_options.add_argument('--safebrowsing-disable-auto-update')
+            chrome_options.add_argument('--log-level=3')  # Minimal logging
+            chrome_options.add_experimental_option('prefs', {
+                'profile.default_content_setting_values.timezone': 1,
+                'profile.managed_default_content_settings.timezone': 1,
+                'profile.default_content_settings.timezone': 1,
+                'intl.accept_languages': 'en-US,en',
+                'profile.content_settings.exceptions.timezone': {
+                    '[*.]draftkings.com': {'setting': 1}
+                }
+            })
+
+            # Create a service with specific timeout
+            from selenium.webdriver.chrome.service import Service
+            service = Service(
+                log_output=os.path.devnull,  # Suppress service logs
+                service_args=['--verbose']
+            )
+
+            driver = webdriver.Chrome(
+                options=chrome_options,
+                service=service
+            )
+            
+            driver.set_page_load_timeout(30)
+            
+            # Test the driver with a simple command
+            driver.execute_script('return document.readyState')
+            
+            # If we get here, driver is working
+            return driver
+            
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {str(e)}")
+            if 'driver' in locals():
+                try:
+                    driver.quit()
+                except:
+                    pass
+            
+            # Kill any hanging chrome processes
+            try:
+                os.system("pkill -f chrome")
+                time.sleep(2)
+            except:
+                pass
+            
+            if attempt == max_attempts - 1:
+                raise Exception(f"Failed to create driver after {max_attempts} attempts: {str(e)}")
+            
+            time.sleep(5 * (attempt + 1))  # Exponential backoff
 
 def scrape_with_retry(url, max_retries=3):
     for attempt in range(max_retries):
