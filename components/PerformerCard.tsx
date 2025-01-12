@@ -75,7 +75,7 @@ export const PerformerCard = ({ player, category }: PerformerCardProps) => {
         </Text>
         <Text color={"white"} className="player-name">
           {player.firstName}{" "}
-          {player.familyName.length >= 10
+          {player.familyName.length >= 12
             ? player.familyName.slice(0, 1) + "."
             : player.familyName}
         </Text>
