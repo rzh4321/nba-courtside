@@ -91,7 +91,7 @@ export const TopPerformers = () => {
     isValidating: gameIdsLoading,
     error: gameIdsError,
   } = useSWR(
-    date ? `/api/gameIds/${date}` : null,
+    `/api/gameIds/${date}`,
     async (url) => {
       const formattedDate = format(
         parse(date!, "MM-dd-yyyy", new Date()),
@@ -104,7 +104,6 @@ export const TopPerformers = () => {
       revalidateOnReconnect: false,
     },
   );
-
   // get all leaders once date is available
   const {
     pointLeaders,

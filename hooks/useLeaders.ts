@@ -1,15 +1,14 @@
-import { API } from "@/constants";
 import flatten from "lodash/flatten";
 import useSWR from "swr";
-import { nbaTeamAcronyms } from "@/utils/mappers";
 import type { Team, PlayerStatistics } from "@/types";
 import getBoxScore from "@/actions/getBoxScore";
 import { useMemo } from "react";
 
-function getLeaders(teams: Team[], category: keyof PlayerStatistics) {
+function getLeaders(teams: (Team | null)[], category: keyof PlayerStatistics) {
+  const validTeams = teams.filter((team) => team != null);
   const players = flatten(
     // create an array of player objects
-    teams.map((team) => [
+    validTeams.map((team) => [
       ...team.players.map((p) => ({
         ...p,
         team: team.teamTricode,
@@ -42,7 +41,13 @@ export default function useLeaders(
         return undefined;
       }
       const requests = gameIds!.map(async (id) => {
-        return await getBoxScore(id);
+        let data;
+        try {
+          const data = await getBoxScore(id);
+          return data;
+        } catch (e) {
+          console.log("ERROR: ", e);
+        }
       });
       // return an array of boxscore data
       return await Promise.all(requests);
@@ -53,8 +58,11 @@ export default function useLeaders(
       refreshWhenOffline: true,
     },
   );
+
   // data is an array of games. Extract all top leaders
-  const teams = data?.flatMap((game) => [game.awayTeam, game.homeTeam]);
+  const teams = data?.flatMap((game) =>
+    game ? [game.awayTeam, game.homeTeam] : [null],
+  );
   // only re-calculate leaders if data changes (if at least one game is still live)
   const pointLeaders = useMemo(() => getLeaders(teams || [], "points"), [data]);
   const assistLeaders = useMemo(

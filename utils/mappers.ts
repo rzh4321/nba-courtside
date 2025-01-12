@@ -117,5 +117,5 @@ export const nbaTeamAcronyms: NBATeamAcronyms = {
 };
 
 export const nbaTeamsFromTricode = Object.fromEntries(
-  Object.entries(nbaTeamAcronyms).map(([name, tricode]) => [tricode, name])
+  Object.entries(nbaTeamAcronyms).map(([name, tricode]) => [tricode, name]),
 );
