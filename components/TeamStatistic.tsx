@@ -12,9 +12,12 @@ type TeamStatisticProps = {
 function extractPercentage(str: string) {
   // Use a regular expression to match the number inside parentheses
   const match = str.match(/\((\d+)%\)/);
-
   // extract the number and convert it to an integer
-  return parseInt(match![1], 10);
+  try {
+    return parseInt(match![1], 10);
+  } catch {
+    return 0;
+  }
 }
 
 export default function TeamStatistic({
