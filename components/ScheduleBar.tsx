@@ -31,6 +31,7 @@ export const ScheduleBar = () => {
   const { data, isLoading, error } = useSchedule(dateWithDashes);
 
   const bg = useColorModeValue("gray.700", "gray.900");
+
   const arrowColors = useColorModeValue("white", "black");
 
   const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
@@ -94,12 +95,14 @@ export const ScheduleBar = () => {
           </VStack>
         </Container>
       </Box>
-      <span
+      <Box
+        bg={"white"}
+        _dark={{ bg: "black" }}
         onClick={() => setHidden((prev) => !prev)}
-        className="absolute cursor-pointer flex items-center justify-center bottom-[-8px] shadow-xl left-1/2 -translate-x-1/2 border-2 rounded-full w-[22px] h-[22px] bg-white"
+        className="absolute cursor-pointer flex items-center justify-center bottom-[-8px] shadow-xl left-1/2 -translate-x-1/2 border-2 rounded-full w-[22px] h-[22px]"
       >
         {!hidden ? <ChevronUp width={20} /> : <ChevronDown width={20} />}
-      </span>
+      </Box>
     </div>
   );
 };
