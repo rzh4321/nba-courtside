@@ -99,7 +99,7 @@ export const ScheduleBar = () => {
         bg={"white"}
         _dark={{ bg: "black" }}
         onClick={() => setHidden((prev) => !prev)}
-        className="absolute cursor-pointer flex items-center justify-center bottom-[-8px] shadow-xl left-1/2 -translate-x-1/2 border-2 rounded-full w-[22px] h-[22px]"
+        className="absolute cursor-pointer flex items-center justify-center bottom-[-8px] shadow-xl left-1/2 -translate-x-1/2 border-0 rounded-full w-[22px] h-[22px]"
       >
         {!hidden ? <ChevronUp width={20} /> : <ChevronDown width={20} />}
       </Box>

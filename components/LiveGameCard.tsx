@@ -89,7 +89,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
               fontSize={game.awayTeam.score > game.homeTeam.score ? "lg" : "md"}
             >
               {game.awayTeam.teamTricode} - {game.awayTeam.score}
-            </Text>
+              </Text>
             <Text
               fontWeight={"semibold"}
               letterSpacing={"wider"}
