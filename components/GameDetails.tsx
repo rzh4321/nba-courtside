@@ -77,8 +77,9 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           <NoGameMessage />
         )}
       </Box>
-        <span className='font-semibold tracking-widest mb-5'>ODDS</span>
-        <div className="flex flex-col gap-3">
+      <div>
+        <span className='font-semibold tracking-widest'>ODDS</span>
+        <div className="flex flex-col gap-2">
           {loading ? <Loader className="animate-spin" /> : 
           error ? <span>{error}</span> : 
           <div className="flex justify-between">
@@ -114,6 +115,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           
           }
         </div>
+      </div>
       {boxscore && <TeamStats boxscore={boxscore} />}
     </Box>
   );
