@@ -7,11 +7,12 @@ import { ScoreDetails } from "./ScoreDetails";
 import { NoGameMessage } from "./NoGameMessage";
 import { BoxscoreTable } from "./BoxscoreTable";
 import { useRouter } from "next/navigation";
-import { Undo2 } from "lucide-react";
+import { Loader, Undo2 } from "lucide-react";
 import getBoxScore from "@/actions/getBoxScore";
 import { GAME_STATUS } from "@/constants";
 import GameSummary from "./GameSummary";
 import TeamStats from "./TeamStats";
+import useGameBettingInfo from "@/hooks/useGameBettingInfo";
 
 export const GameDetails = ({ gameId }: { gameId: string }) => {
   const router = useRouter();
@@ -26,6 +27,15 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       refreshWhenOffline: true,
     },
   );
+  const awayTeamName = boxscore?.awayTeam.teamCity! + ' ' + boxscore?.awayTeam.teamName;
+  const homeTeamName = boxscore?.homeTeam.teamCity! + ' ' + boxscore?.homeTeam.teamName;
+
+  const {gameBettingInfo, error, loading} = useGameBettingInfo('gameid', homeTeamName, awayTeamName);
+
+  const getAwaySpread = (homeSpread: number | null | undefined) => {
+    if (homeSpread === null || homeSpread === undefined) return '-';
+    return -1 * homeSpread;
+  }
 
   // update document title
   useEffect(() => {
@@ -67,7 +77,45 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           <NoGameMessage />
         )}
       </Box>
-
+      <div>
+        <span className='font-semibold tracking-widest'>ODDS</span>
+        <div className="flex flex-col gap-2">
+          {loading ? <Loader className="animate-spin" /> : 
+          error ? <span>{error}</span> : 
+          <div className="flex justify-between">
+            
+            <div className="flex flex-col gap-2">
+              <div className="invisible">s</div>
+              <div>{gameBettingInfo?.awayTeam}</div>
+              </div>
+            <div className="flex gap-2">
+              <div className="w-[70px] flex flex-col gap-2 items-center">
+                <span>Spread</span>
+                <div className="flex flex-col self-stretch  rounded-md border-2 p-2 items-center">
+                  <span>{getAwaySpread(gameBettingInfo?.homeSpread)}</span>
+                  <span>{gameBettingInfo?.awaySpreadOdds}</span>
+                </div>
+              </div>
+              <div className="w-[70px] flex flex-col gap-2 items-center">
+              <span>Total</span>
+                <div className="flex flex-col self-stretch rounded-md border-2 p-2 items-center">
+                  <span>{gameBettingInfo?.overUnder && 'O'} {getAwaySpread(gameBettingInfo?.overUnder)}</span>
+                  <span>{gameBettingInfo?.overOdds}</span>
+                </div>
+              </div>
+              <div className="w-[70px] flex flex-col gap-2 items-center">
+              <span>Money</span>
+                <div className="flex justify-center self-stretch rounded-md border-2 p-2 items-center">
+                  <span>{getAwaySpread(gameBettingInfo?.awayMoneyLine)}</span>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          }
+        </div>
+      </div>
       {boxscore && <TeamStats boxscore={boxscore} />}
     </Box>
   );
