@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE="/home/ec2-user/scraper.log"
-MAX_SIZE_MB=3  # Maximum size in MB
+MAX_SIZE_MB=0.25  # Maximum size in MB
 # Add at the beginning of your script
 LOCK_FILE="/tmp/scraper.lock"
 
@@ -28,11 +28,15 @@ cd /home/ec2-user/nba-boxscore/scraper
 
 # Kill any hanging chrome processes
 pkill -f chrome
+pkill -f "chrome-driver"  # Kill chromedriver processes
+pkill -f "selenium"       # Kill any selenium-related processes
 sleep 2
 # Clear Chrome's temporary files
 rm -rf /tmp/.com.google.Chrome*
 rm -rf /tmp/.org.chromium.Chromium*
 rm -rf /tmp/chrome_*
+rm -rf ~/.cache/selenium  # Selenium cache
+rm -rf ~/.config/google-chrome/Crash\ Reports  # Chrome crash reports
 
 # Check log file size and rotate if necessary
 if [ -f "$LOG_FILE" ]; then
