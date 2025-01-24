@@ -24,7 +24,11 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
 
   function formatMinutes(minutes: string) {
     const match = minutes.match(/[0-9]+/);
-    return match ? (match[0] === "00" ? "—" : match[0]) : "—";
+    return match
+      ? match[0] === "00"
+        ? "—"
+        : match[0].replace(/^0+/, "")
+      : "—";
   }
 
   function formatPlusMinus(plusMinus: number) {
@@ -35,7 +39,7 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
   }
 
   return (
-    <Box w={"full"}>
+    <Box w={"full"} overflowX={"auto"}>
       {/* VStack separating the team name and box score */}
       <VStack w={"full"} spacing={2} align={"start"}>
         <Text fontWeight={"semibold"} letterSpacing={"widest"}>
@@ -51,25 +55,15 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
         >
           <Thead>
             <Tr>
-              <Th>Name</Th>
-              <Th isNumeric display={{ base: "none", xl: "table-cell" }}>
-                Min
-              </Th>
-              <Th isNumeric display={{ base: "none", xl: "table-cell" }}>
-                FG
-              </Th>
-              <Th isNumeric display={{ base: "none", xl: "table-cell" }}>
-                3PT
-              </Th>
-              <Th isNumeric display={{ base: "none", xl: "table-cell" }}>
-                FT
-              </Th>
+              <Th minW={"190px"}>Name</Th>
+              <Th isNumeric>Min</Th>
+              <Th isNumeric>FG</Th>
+              <Th isNumeric>3PT</Th>
+              <Th isNumeric>FT</Th>
               <Th isNumeric>Reb</Th>
               <Th isNumeric>Ast</Th>
               <Th isNumeric>Pts</Th>
-              <Th isNumeric display={{ base: "none", xl: "table-cell" }}>
-                +/-
-              </Th>
+              <Th isNumeric>+/-</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -83,29 +77,32 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
                   {player.firstName} {player.familyName}{" "}
                   {isLive && player.oncourt === "1" && "○"}
                 </Td>
-                <Td display={{ base: "table-cell", xl: "none" }}>
+                <Td
+                  display={{ base: "table-cell", xl: "none" }}
+                  fontSize={player.familyName.length >= 10 ? "small" : "small"}
+                >
                   {player.firstName[0]} {player.familyName}{" "}
                   {isLive && player.oncourt === "1" && "○"}
                 </Td>
-                <Td isNumeric display={{ base: "none", xl: "table-cell" }}>
+                <Td isNumeric>
                   {formatMinutes(player.statistics.minutesCalculated)}
                 </Td>
-                <Td isNumeric display={{ base: "none", xl: "table-cell" }}>
+                <Td isNumeric>
                   {player.statistics.fieldGoalsMade}-
                   {player.statistics.fieldGoalsAttempted}{" "}
                 </Td>
-                <Td isNumeric display={{ base: "none", xl: "table-cell" }}>
+                <Td isNumeric>
                   {player.statistics.threePointersMade}-
                   {player.statistics.threePointersAttempted}{" "}
                 </Td>
-                <Td isNumeric display={{ base: "none", xl: "table-cell" }}>
+                <Td isNumeric>
                   {player.statistics.freeThrowsMade}-
                   {player.statistics.freeThrowsAttempted}{" "}
                 </Td>
                 <Td isNumeric>{player.statistics.reboundsTotal}</Td>
                 <Td isNumeric>{player.statistics.assists}</Td>
                 <Td isNumeric>{player.statistics.points}</Td>
-                <Td isNumeric display={{ base: "none", xl: "table-cell" }}>
+                <Td isNumeric>
                   {formatPlusMinus(player.statistics.plusMinusPoints)}
                 </Td>
               </Tr>

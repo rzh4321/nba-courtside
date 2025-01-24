@@ -8,6 +8,30 @@ export type LiveGameCardProps = {
   game: ParsedGames[0];
 };
 
+function convertISODurationToMMSS(duration: string): string {
+  const trimmedDuration = duration.trim();
+  if (trimmedDuration === "") return "";
+
+  // Check if already in m:ss or mm:ss format, including when minutes is 0
+  if (/^[0-9]{1,2}:[0-9]{2}$/.test(trimmedDuration)) {
+    return trimmedDuration;
+  }
+
+  // Convert from ISO duration
+  const matches = trimmedDuration.match(/PT(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?/);
+
+  if (!matches) {
+    console.log(trimmedDuration);
+    throw new Error("Invalid duration format");
+  }
+
+  const minutes = parseInt(matches[1] || "0");
+  const seconds = matches[2] ? Math.round(parseFloat(matches[2])) : 0;
+  const paddedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${minutes}:${paddedSeconds}`;
+}
+
 export const LiveGameCard = ({ game }: LiveGameCardProps) => {
   const searchParams = useSearchParams();
   const date = searchParams.get("date");
@@ -18,7 +42,10 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
     isLive ? "darkgreen" : "black",
     isLive ? "lightgreen" : "gray.400",
   );
-
+  // console.log('statustext: ', game.gameStatusText)
+  // console.log('gameclock: ', game.gameClock)
+  // console.log('gamestatus: ', game.gameStatus)
+  // console.log('gameperiod: ', game.period)
   return (
     <NextLink
       href={
@@ -48,7 +75,12 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
               game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"
             }
           >
-            {game.gameStatusText}
+            {game.gameStatus === 2 &&
+            game.gameStatusText.trim() != "Halftime" &&
+            !game.gameStatusText.trim().includes("OT") &&
+            !game.gameStatusText.trim().includes("vertime")
+              ? `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
+              : game.gameStatusText}
           </Text>
           <VStack spacing={0} align={"start"}>
             <Text
@@ -57,7 +89,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
               fontSize={game.awayTeam.score > game.homeTeam.score ? "lg" : "md"}
             >
               {game.awayTeam.teamTricode} - {game.awayTeam.score}
-            </Text>
+              </Text>
             <Text
               fontWeight={"semibold"}
               letterSpacing={"wider"}
@@ -87,7 +119,12 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
               game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"
             }
           >
-            {game.gameStatusText}
+            {game.gameStatus === 2 &&
+            game.gameStatusText.trim() != "Halftime" &&
+            !game.gameStatusText.trim().includes("OT") &&
+            !game.gameStatusText.trim().includes("vertime")
+              ? `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
+              : game.gameStatusText}
           </Text>
           <VStack spacing={0} align={"start"}>
             <Text

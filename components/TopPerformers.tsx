@@ -1,7 +1,14 @@
 "use client";
 
 import { VStack, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
-import { format, isToday, parse, isFuture, endOfDay } from "date-fns";
+import {
+  format,
+  isToday,
+  isYesterday,
+  parse,
+  isFuture,
+  endOfDay,
+} from "date-fns";
 import { PerformerCard } from "../components/PerformerCard";
 import { Spinner } from "@chakra-ui/react";
 import startCase from "lodash/startCase";
@@ -91,7 +98,7 @@ export const TopPerformers = () => {
     isValidating: gameIdsLoading,
     error: gameIdsError,
   } = useSWR(
-    date ? `/api/gameIds/${date}` : null,
+    `/api/gameIds/${date}`,
     async (url) => {
       const formattedDate = format(
         parse(date!, "MM-dd-yyyy", new Date()),
@@ -104,7 +111,6 @@ export const TopPerformers = () => {
       revalidateOnReconnect: false,
     },
   );
-
   // get all leaders once date is available
   const {
     pointLeaders,
@@ -122,6 +128,8 @@ export const TopPerformers = () => {
         {date ? (
           isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
             `Today's Top Performers`
+          ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ? (
+            `Top Performers for Yesterday`
           ) : (
             `Top Performers for ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
           )

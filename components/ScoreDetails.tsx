@@ -43,7 +43,7 @@ const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
         </Box>
       </Show>
       <Show below="sm">
-        <Box textAlign={reverse ? "right" : "left"} margin={-2}>
+        <Box textAlign={reverse ? "right" : "left"} margin={-1}>
           <Text fontSize={"md"} fontWeight={"bold"}>
             {team.teamTricode}
           </Text>

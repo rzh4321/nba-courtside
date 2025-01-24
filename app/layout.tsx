@@ -4,6 +4,7 @@ import theme from "@/theme";
 import ChakraProvider from "@/components/ChakraProvider";
 import NavBar from "@/components/NavBar";
 import { Suspense } from "react";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "NBA CourtSide",

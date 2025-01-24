@@ -63,9 +63,9 @@ export default function StandingTable({
               }
               fontWeight={"bold"}
             >
-              <Td>
-                <HStack gap={4}>
-                  <Text>{i + 1}</Text>
+              <Td minW={"190px"}>
+                <HStack gap={5}>
+                  <Text minW={"17px"}>{i + 1}</Text>
                   <Image
                     src={`https://cdn.nba.com/logos/nba/${team.id}/primary/L/logo.svg`}
                     width={30}
@@ -75,15 +75,15 @@ export default function StandingTable({
                   <Text>{team.name}</Text>
                 </HStack>
               </Td>
-              <Td>
+              <Td minW={"95px"}>
                 {team.win} - {team.loss}
               </Td>
               <Td>{team.percentage}%</Td>
               <Td>{team.gamesBehind}</Td>
-              <Td>{team.homeRecord}</Td>
-              <Td>{team.awayRecord}</Td>
+              <Td minW={"75px"}>{team.homeRecord}</Td>
+              <Td minW={"75px"}>{team.awayRecord}</Td>
               <Td>{team.lastTenRecord}</Td>
-              <Td>{team.streak}</Td>
+              <Td textAlign={"center"}>{team.streak}</Td>
             </Tr>
           ))}
         </Tbody>

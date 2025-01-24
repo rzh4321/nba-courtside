@@ -36,7 +36,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   }, [boxscore]);
 
   return (
-    <Box display={"flex"} p={8} flexDirection={"column"} gap={50}>
+    <Box display={"flex"} p={1} flexDirection={"column"} gap={50}>
       <Box>
         <HStack
           cursor={"pointer"}
@@ -55,11 +55,11 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
               <GameSummary game={boxscore} />
               <BoxscoreTable
                 isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-                team={boxscore.homeTeam}
+                team={boxscore.awayTeam}
               />
               <BoxscoreTable
                 isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-                team={boxscore.awayTeam}
+                team={boxscore.homeTeam}
               />
             </VStack>
           ) : null
