@@ -967,3 +967,20 @@ export interface Official {
   jerseyNum: string;
   assignment: string;
 }
+
+
+export type GameBettingInfo = {
+  id: number;
+  gameId: string;
+  homeTeam: string;
+  awayTeam: string;
+  homeSpreadOdds: null | number;
+  awaySpreadOdds: null | number;
+  homeSpread: null | number;
+  openingHomeSpread: number;
+  homeMoneyLine: null | number;
+  awayMoneyLine: null | number;
+  openingOverUnder: number;
+  overUnder: null | number;
+  overOdds: null | number;
+}
