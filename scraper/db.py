@@ -6,6 +6,7 @@ from enum import Enum
 from datetime import date
 import os
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
@@ -14,7 +15,7 @@ PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
-
+SPRING_BOOT_URL = os.getenv("SPRING_BOOT_URL", "http://localhost:8080/api")  # Add this
 
 DATABASE_URL = f"postgresql+psycopg2://{USER}.{HOST}:{PASSWORD}@aws-0-us-east-2.pooler.supabase.com:{PORT}/{DBNAME}"
 
@@ -26,15 +27,13 @@ try:
 except Exception as e:
     print(f"Failed to connect: {e}")
 
-
-
 Base = declarative_base()
 
 class Game(Base):
     __tablename__ = 'games'
 
     id = Column(BigInteger, primary_key=True)
-    game_id = Column(String(255), nullable=False)
+    game_id = Column(String(255), nullable=True)  # Changed to nullable=True
     home_team = Column(String(255), nullable=False)
     away_team = Column(String(255), nullable=False)
     home_spread_odds = Column(Numeric(6,2), nullable=True) 
@@ -64,6 +63,34 @@ class Game(Base):
         return f"<Game(game_id={self.game_id}, home_team={self.home_team}, away_team={self.away_team}, game_date={self.game_date})>"
 
 Session = sessionmaker(bind=engine)
+
+def notify_odds_update(game: Game):
+    """Helper function to notify the Spring Boot server of odds updates"""
+    try:
+        if game.game_id:
+            print(f'GAME ID IS AVAILABLE, CALLING API WITH GAMEID {game.game_id}')
+            # Use game_id endpoint if available
+            response = requests.post(
+                f'{SPRING_BOOT_URL}/notify-odds-update',
+                json={'gameId': game.game_id}
+            )
+        else:
+            print(f'GAMEID IS NULL, CALLING API WITH TEAMS AND DATE')
+            # Use team-based endpoint if no game_id
+            response = requests.post(
+                f'{SPRING_BOOT_URL}/notify-odds-update-by-teams',
+                json={
+                    'homeTeam': game.home_team,
+                    'awayTeam': game.away_team,
+                    'gameDate': game.game_date.isoformat()
+                }
+            )
+        
+        if response.status_code != 200:
+            print(f"Failed to notify odds update. Status code: {response.status_code}")
+            
+    except Exception as e:
+        print(f"Failed to notify odds update: {e}")
 
 def add_game(
              home_team: str,
@@ -101,13 +128,20 @@ def add_game(
 
         if result > 0:
             session.commit()
-            return session.query(Game).filter(
+            
+            # Fetch the updated game
+            updated_game = session.query(Game).filter(
                 and_(
                     Game.home_team == home_team,
                     Game.away_team == away_team,
                     Game.game_date == game_date
                 )
             ).first()
+            
+            # Notify WebSocket server
+            notify_odds_update(updated_game)
+            
+            return updated_game
         else:
             # Create new game with all information
             new_game = Game(
@@ -128,9 +162,14 @@ def add_game(
             
             session.add(new_game)
             session.commit()
+            
+            # Notify WebSocket server
+            notify_odds_update(new_game)
+            
             return new_game
 
     except Exception as e:
         session.rollback()
         raise e
-
+    finally:
+        session.close()

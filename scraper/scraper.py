@@ -13,6 +13,7 @@ from datetime import date, timedelta, datetime
 import pytz # type: ignore
 import sys
 import os
+from websocket_client import OddsWebSocketClient
 
 eastern = pytz.timezone('America/New_York')
 today = datetime.now(eastern).date()

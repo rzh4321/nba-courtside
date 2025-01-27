@@ -978,8 +978,8 @@ export type GameBettingInfo = {
   awaySpreadOdds: null | number;
   homeSpread: null | number;
   openingHomeSpread: number;
-  homeMoneyLine: null | number;
-  awayMoneyLine: null | number;
+  homeMoneyline: null | number;
+  awayMoneyline: null | number;
   openingOverUnder: number;
   overUnder: null | number;
   overOdds: null | number;

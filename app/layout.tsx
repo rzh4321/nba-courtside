@@ -5,6 +5,7 @@ import ChakraProvider from "@/components/ChakraProvider";
 import NavBar from "@/components/NavBar";
 import { Suspense } from "react";
 import "@/app/globals.css";
+import { WebSocketProvider } from "@/contexts/WebSocketContext";
 
 export const metadata: Metadata = {
   title: "NBA CourtSide",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         {/* ChakraProvider to provide Chakra UI context to the children */}
         <ChakraProvider>
+          <WebSocketProvider>
           <Suspense>
             <Box w={"full"} bg="background">
               <NavBar />
@@ -30,6 +32,7 @@ export default function RootLayout({
               </Container>
             </Box>
           </Suspense>
+          </WebSocketProvider>
         </ChakraProvider>
       </body>
     </html>

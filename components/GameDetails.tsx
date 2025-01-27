@@ -29,9 +29,13 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   );
   const awayTeamName = boxscore?.awayTeam.teamCity! + ' ' + boxscore?.awayTeam.teamName;
   const homeTeamName = boxscore?.homeTeam.teamCity! + ' ' + boxscore?.homeTeam.teamName;
-
-  const {gameBettingInfo, error, loading} = useGameBettingInfo('gameid', homeTeamName, awayTeamName);
-
+  const gameDate = boxscore?.gameTimeLocal.toString().split('T')[0];
+  const { gameBettingInfo, loading, error, isConnected } = useGameBettingInfo(
+    gameId,
+    homeTeamName,
+    awayTeamName,
+    gameDate
+);
   const getAwaySpread = (homeSpread: number | null | undefined) => {
     if (homeSpread === null || homeSpread === undefined) return '-';
     return -1 * homeSpread;
@@ -82,6 +86,10 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
         <div className="flex flex-col gap-2">
           {loading ? <Loader className="animate-spin" /> : 
           error ? <span>{error}</span> : 
+          !gameBettingInfo ? <div>No betting information available</div> :
+          !isConnected ? <div className="text-yellow-500">
+          ⚠️ Real-time updates temporarily unavailable
+          </div> :
           <div className="flex justify-between">
             
             <div className="flex flex-col gap-2">
@@ -89,24 +97,24 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
               <div>{gameBettingInfo?.awayTeam}</div>
               </div>
             <div className="flex gap-2">
-              <div className="w-[70px] flex flex-col gap-2 items-center">
+              <div className="flex flex-col gap-2 items-center">
                 <span>Spread</span>
-                <div className="flex flex-col self-stretch  rounded-md border-2 p-2 items-center">
+                <div className="flex w-[80px] h-[68px] flex-col self-stretch  rounded-md border-2 p-2 items-center">
                   <span>{getAwaySpread(gameBettingInfo?.homeSpread)}</span>
                   <span>{gameBettingInfo?.awaySpreadOdds}</span>
                 </div>
               </div>
-              <div className="w-[70px] flex flex-col gap-2 items-center">
+              <div className="flex flex-col gap-2 items-center">
               <span>Total</span>
-                <div className="flex flex-col self-stretch rounded-md border-2 p-2 items-center">
-                  <span>{gameBettingInfo?.overUnder && 'O'} {getAwaySpread(gameBettingInfo?.overUnder)}</span>
+                <div className="flex w-[80px] h-[68px] flex-col self-stretch rounded-md border-2 p-2 items-center">
+                  <span>{gameBettingInfo?.overUnder && 'O'} {gameBettingInfo?.overUnder}</span>
                   <span>{gameBettingInfo?.overOdds}</span>
                 </div>
               </div>
-              <div className="w-[70px] flex flex-col gap-2 items-center">
+              <div className="flex flex-col gap-2 items-center">
               <span>Money</span>
-                <div className="flex justify-center self-stretch rounded-md border-2 p-2 items-center">
-                  <span>{getAwaySpread(gameBettingInfo?.awayMoneyLine)}</span>
+                <div className="flex w-[80px] h-[68px] justify-center self-stretch rounded-md border-2 p-2 items-center">
+                  <span>{gameBettingInfo?.awayMoneyline}</span>
                 </div>
               </div>
               
