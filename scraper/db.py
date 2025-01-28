@@ -67,6 +67,7 @@ Session = sessionmaker(bind=engine)
 def notify_odds_update(game: Game):
     """Helper function to notify the Spring Boot server of odds updates"""
     try:
+        # gameId is available, not first time scraping this game
         if game.game_id:
             print(f'GAME ID IS AVAILABLE, CALLING API WITH GAMEID {game.game_id}')
             # Use game_id endpoint if available
@@ -74,6 +75,7 @@ def notify_odds_update(game: Game):
                 f'{SPRING_BOOT_URL}/notify-odds-update',
                 json={'gameId': game.game_id}
             )
+        # gameId is null, first time scraping this game
         else:
             print(f'GAMEID IS NULL, CALLING API WITH TEAMS AND DATE')
             # Use team-based endpoint if no game_id

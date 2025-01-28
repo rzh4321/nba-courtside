@@ -42,7 +42,7 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
     <Box w={"full"} overflowX={"auto"}>
       {/* VStack separating the team name and box score */}
       <VStack w={"full"} spacing={2} align={"start"}>
-        <Text fontWeight={"semibold"} letterSpacing={"widest"}>
+        <Text fontWeight={"bold"} letterSpacing={"widest"}>
           {team.teamName.toUpperCase()}
         </Text>
         <Table

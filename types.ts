@@ -968,7 +968,6 @@ export interface Official {
   assignment: string;
 }
 
-
 export type GameBettingInfo = {
   id: number;
   gameId: string;
@@ -983,4 +982,4 @@ export type GameBettingInfo = {
   openingOverUnder: number;
   overUnder: null | number;
   overOdds: null | number;
-}
+};

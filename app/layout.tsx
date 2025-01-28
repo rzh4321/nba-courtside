@@ -24,14 +24,14 @@ export default function RootLayout({
         {/* ChakraProvider to provide Chakra UI context to the children */}
         <ChakraProvider>
           <WebSocketProvider>
-          <Suspense>
-            <Box w={"full"} bg="background">
-              <NavBar />
-              <Container maxW={"container.lg"} pt={"10px"}>
-                {children}
-              </Container>
-            </Box>
-          </Suspense>
+            <Suspense>
+              <Box w={"full"} bg="background">
+                <NavBar />
+                <Container maxW={"container.lg"} pt={"10px"}>
+                  {children}
+                </Container>
+              </Box>
+            </Suspense>
           </WebSocketProvider>
         </ChakraProvider>
       </body>
