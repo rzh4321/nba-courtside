@@ -6,7 +6,7 @@ import { teamColors, colorsTooSimilar } from "@/theme";
 
 export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
   return (
-    <VStack gap={5}>
+    <VStack gap={5} className="mb-7">
       <HStack w={"full"} justifyContent={"space-between"}>
         <Image
           src={`https://cdn.nba.com/logos/nba/${boxscore.awayTeam.teamId}/primary/L/logo.svg`}

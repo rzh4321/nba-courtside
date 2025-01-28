@@ -47,6 +47,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     else if (type === "away") {
       let opposite = -1 * homeSpread;
       if (opposite > 0) return "+" + homeSpread.toString().slice(1);
+      return opposite.toString();
     } else {
       if (homeSpread > 0) return "+" + homeSpread.toString();
       return homeSpread.toString();
@@ -105,7 +106,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           {loading ? (
             <Loader className="animate-spin" />
           ) : error ? (
-            <span>{error}. Try reloading the page or try again later.</span>
+            <span>Try reloading the page or try again later. If the issue persists, betting information may not be available for this game.</span>
           ) : !gameBettingInfo ? (
             <div>No betting information available</div>
           ) : !isConnected ? (

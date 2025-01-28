@@ -13,6 +13,7 @@ import {
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
 import { ScheduleBar } from "./ScheduleBar";
+import Image from "next/image";
 
 export type NavBarProps = {};
 
@@ -41,9 +42,10 @@ const NavBar = () => {
             alignItems={"center"}
             height={"100%"}
           >
-            <Link href={"/"} _hover={{ textDecoration: "none" }}>
+            <Link href={"/"} _hover={{ textDecoration: "none" }} className="flex gap-2 items-center">
+            <Image alt='icon' src={'/icon.ico'} width={100} height={100} className="w-[40px] hidden sm:block" />
               <Text fontSize={24} fontWeight={"bold"} color={"white"}>
-                NBA CourtSide
+              NBA CourtSide
               </Text>
             </Link>
             <Flex gap={5}>
