@@ -22,7 +22,6 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
       if (sockjs.current) {
         sockjs.current.close();
       }
-
       const wsUrl =
         process.env.NEXT_PUBLIC_WS_URL || "http://localhost:8080/ws/odds";
       sockjs.current = new SockJS(wsUrl);

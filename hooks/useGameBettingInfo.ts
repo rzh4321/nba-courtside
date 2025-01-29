@@ -19,7 +19,7 @@ export default function useGameBettingInfo(
     try {
       let data;
       try {
-        console.log("FIRST TRYING WITH GAMID....");
+        console.log("FIRST TRYING WITH GAMID ", gameId, "....");
         // First try with gameId
         data = await bettingService.getGameByGameId(gameId);
       } catch (error) {

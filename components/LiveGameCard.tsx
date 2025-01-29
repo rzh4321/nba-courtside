@@ -42,6 +42,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
     isLive ? "darkgreen" : "black",
     isLive ? "lightgreen" : "gray.400",
   );
+
   // console.log('statustext: ', game.gameStatusText)
   // console.log('gameclock: ', game.gameClock)
   // console.log('gamestatus: ', game.gameStatus)
@@ -80,7 +81,12 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
             !game.gameStatusText.trim().includes("OT") &&
             !game.gameStatusText.trim().includes("vertime")
               ? `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
-              : game.gameStatusText}
+              : game.gameStatusText.trim().includes("OT") ||
+                  game.gameStatusText.trim().includes("vertime")
+                ? game.gameStatusText +
+                  " " +
+                  convertISODurationToMMSS(game.gameClock)
+                : game.gameStatusText}
           </Text>
           <VStack spacing={0} align={"start"}>
             <Text

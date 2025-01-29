@@ -106,7 +106,10 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           {loading ? (
             <Loader className="animate-spin" />
           ) : error ? (
-            <span>Try reloading the page or try again later. If the issue persists, betting information may not be available for this game.</span>
+            <span>
+              Try reloading the page or try again later. If the issue persists,
+              betting information may not be available for this game.
+            </span>
           ) : !gameBettingInfo ? (
             <div>No betting information available</div>
           ) : !isConnected ? (
