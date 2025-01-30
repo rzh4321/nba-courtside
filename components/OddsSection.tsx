@@ -102,7 +102,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
       <div className="flex flex-col gap-2">
         {isAwayTeam && <div className="invisible">s</div>}
         <div className="tracking-tight leading-4 flex gap-2">
-          <div className="w-[65px]">
+          <div className={`w-[112px]`}>
             <span className="text-sm">
               {
                 nbaTeams[
