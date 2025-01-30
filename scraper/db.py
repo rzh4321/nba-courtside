@@ -66,6 +66,7 @@ Session = sessionmaker(bind=engine)
 
 def notify_odds_update(game: Game):
     """Helper function to notify the Spring Boot server of odds updates"""
+    game_date_str = game.game_date.strftime('%Y-%m-%d')
     try:
         # gameId is available, not first time scraping this game
         if game.game_id:
@@ -84,7 +85,7 @@ def notify_odds_update(game: Game):
                 json={
                     'homeTeam': game.home_team,
                     'awayTeam': game.away_team,
-                    'gameDate': game.game_date.isoformat()
+                    'gameDate': game_date_str
                 }
             )
         
