@@ -22,6 +22,8 @@ export default function useGameBettingInfo(
         console.log("FIRST TRYING WITH GAMID ", gameId, "....");
         // First try with gameId
         data = await bettingService.getGameByGameId(gameId);
+        console.log("GAMEID WORKED");
+        setGameBettingInfo(data);
       } catch (error) {
         console.log("GAMEID FAILED :", error, " SO NOW TRYING BY TEAMS");
         // If gameId fails, try with team names
@@ -31,6 +33,7 @@ export default function useGameBettingInfo(
           gameDate!,
         );
         console.log("TEAMS WORKED. DATA IS : ", data);
+        setGameBettingInfo(data);
         // If we got data but no gameId is set, set it
         if (data && !data.gameId) {
           console.log("THE DATA HAS NO GAMEID, SO SETTING IT NOW.....");
@@ -38,12 +41,10 @@ export default function useGameBettingInfo(
         }
       }
       console.log("EVERYTHING SUCCESSFUL. FINAL DATA IS: ", data);
-      setGameBettingInfo(data);
       setError(null);
     } catch (err) {
       console.log("ERROR : ", err);
       setError((err as Error).message);
-      setGameBettingInfo(null);
     } finally {
       setLoading(false);
     }

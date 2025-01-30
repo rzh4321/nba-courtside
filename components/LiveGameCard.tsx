@@ -80,7 +80,11 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
             game.gameStatusText.trim() != "Halftime" &&
             !game.gameStatusText.trim().includes("OT") &&
             !game.gameStatusText.trim().includes("vertime")
-              ? `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
+              ? convertISODurationToMMSS(game.gameClock) === "0:00"
+                ? game.period === 2
+                  ? "Halftime"
+                  : `End Q${game.period}`
+                : `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
               : game.gameStatusText.trim().includes("OT") ||
                   game.gameStatusText.trim().includes("vertime")
                 ? game.gameStatusText +
