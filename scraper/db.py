@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, text, Column, BigInteger, String, Numeric,
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, validates
 from sqlalchemy.sql import func
+from sqlalchemy.pool import QueuePool
 from enum import Enum
 from datetime import date
 import os
@@ -19,7 +20,14 @@ SPRING_BOOT_URL = os.getenv("SPRING_BOOT_URL", "http://localhost:8080/api")  # A
 
 DATABASE_URL = f"postgresql+psycopg2://{USER}.{HOST}:{PASSWORD}@aws-0-us-east-2.pooler.supabase.com:{PORT}/{DBNAME}"
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,
+    poolclass=QueuePool,
+    pool_size=5,  # Set maximum number of permanent connections
+    max_overflow=10,  # Allow up to 10 connections to overflow temporarily
+    pool_timeout=30,  # Wait up to 30 seconds for a connection
+    pool_recycle=1800  # Recycle connections after 30 minutes
+)
 
 try:
     with engine.connect() as connection:
@@ -108,71 +116,70 @@ def add_game(
              under_odds: float,
              game_date: date) -> Game:
     session = Session()
+    with Session() as session:
     
-    try:
-        # Check if game exists and update in one step
-        result = session.query(Game).filter(
-            and_(
-                Game.home_team == home_team,
-                Game.away_team == away_team,
-                Game.game_date == game_date
-            )
-        ).update({
-            Game.home_spread_odds: home_spread_odds,
-            Game.away_spread_odds: away_spread_odds,
-            Game.home_spread: home_spread,
-            Game.home_moneyline: home_moneyline,
-            Game.away_moneyline: away_moneyline,
-            Game.over_under: over_under,
-            Game.over_odds: over_odds,
-            Game.under_odds: under_odds,
-            Game.updated_at: func.now()  # Force update to change updated_at
-        }, synchronize_session=False)
-
-        if result > 0:
-            session.commit()
-            
-            # Fetch the updated game
-            updated_game = session.query(Game).filter(
+        try:
+            # Check if game exists and update in one step
+            result = session.query(Game).filter(
                 and_(
                     Game.home_team == home_team,
                     Game.away_team == away_team,
                     Game.game_date == game_date
                 )
-            ).first()
-            
-            # Notify WebSocket server
-            notify_odds_update(updated_game)
-            
-            return updated_game
-        else:
-            # Create new game with all information
-            new_game = Game(
-                home_team=home_team,
-                away_team=away_team,
-                home_spread_odds=home_spread_odds,
-                away_spread_odds=away_spread_odds,
-                home_spread=home_spread,
-                opening_home_spread=home_spread,  # Set opening spread
-                home_moneyline=home_moneyline,
-                away_moneyline=away_moneyline,
-                over_under=over_under,
-                opening_over_under=over_under,    # Set opening over/under
-                over_odds=over_odds,
-                under_odds=under_odds,
-                game_date=game_date
-            )
-            
-            session.add(new_game)
-            session.commit()
-            
-            # Notify WebSocket server
-            notify_odds_update(new_game)
-            
-            return new_game
+            ).update({
+                Game.home_spread_odds: home_spread_odds,
+                Game.away_spread_odds: away_spread_odds,
+                Game.home_spread: home_spread,
+                Game.home_moneyline: home_moneyline,
+                Game.away_moneyline: away_moneyline,
+                Game.over_under: over_under,
+                Game.over_odds: over_odds,
+                Game.under_odds: under_odds,
+                Game.updated_at: func.now()  # Force update to change updated_at
+            }, synchronize_session=False)
 
-    except Exception as e:
-        session.rollback()
-        raise e
-    finally:
-        session.close()
+            if result > 0:
+                session.commit()
+                
+                # Fetch the updated game
+                updated_game = session.query(Game).filter(
+                    and_(
+                        Game.home_team == home_team,
+                        Game.away_team == away_team,
+                        Game.game_date == game_date
+                    )
+                ).first()
+                
+                # Notify WebSocket server
+                notify_odds_update(updated_game)
+                
+                return updated_game
+            else:
+                # Create new game with all information
+                new_game = Game(
+                    home_team=home_team,
+                    away_team=away_team,
+                    home_spread_odds=home_spread_odds,
+                    away_spread_odds=away_spread_odds,
+                    home_spread=home_spread,
+                    opening_home_spread=home_spread,  # Set opening spread
+                    home_moneyline=home_moneyline,
+                    away_moneyline=away_moneyline,
+                    over_under=over_under,
+                    opening_over_under=over_under,    # Set opening over/under
+                    over_odds=over_odds,
+                    under_odds=under_odds,
+                    game_date=game_date
+                )
+                
+                session.add(new_game)
+                session.commit()
+                
+                # Notify WebSocket server
+                notify_odds_update(new_game)
+                
+                return new_game
+
+        except Exception as e:
+            session.rollback()
+            raise e
