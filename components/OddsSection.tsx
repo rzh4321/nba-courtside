@@ -57,12 +57,13 @@ export default function OddsSection({ boxscore, gameId }: OddsSectionProps) {
           </span>
         ) : !gameBettingInfo ? (
           <div>No betting information available</div>
-        ) : !isConnected ? (
-          <div className="text-yellow-500">
-            ⚠️ Real-time updates temporarily unavailable
-          </div>
         ) : (
           <>
+          {!isConnected && (
+            <div className="text-yellow-500">
+            ⚠️ Real-time updates temporarily unavailable
+          </div>
+          )}
             <div className="flex justify-between items-center">
               <OddsRow
                 gameBettingInfo={gameBettingInfo}

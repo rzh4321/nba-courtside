@@ -115,7 +115,6 @@ def add_game(
              over_odds: float,
              under_odds: float,
              game_date: date) -> Game:
-    session = Session()
     with Session() as session:
     
         try:
@@ -183,3 +182,4 @@ def add_game(
         except Exception as e:
             session.rollback()
             raise e
+        
