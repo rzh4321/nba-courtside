@@ -155,7 +155,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                     isAwayTeam ? "away" : "home",
                   )}
                 </span>
-                <span>{spreadOdds}</span>
+                <span>{spreadOdds.toString().replace(/\.?0+$/, "")}</span>
               </div>
             )}
           </Box>
@@ -177,9 +177,9 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
               <div className="font-semibold tracking-wide flex flex-col items-center justify-center">
                 <span>
                   {gameBettingInfo.overUnder && overUnderSymbol}{" "}
-                  {gameBettingInfo.overUnder}
+                  {gameBettingInfo.overUnder.toString().replace(/\.?0+$/, "")}
                 </span>
-                <span>{gameBettingInfo.overOdds}</span>
+                <span>{gameBettingInfo.overOdds.toString().replace(/\.?0+$/, "")}</span>
               </div>
             )}
           </Box>
@@ -199,7 +199,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                 isAwayTeam
                   ? gameBettingInfo.awayMoneyline
                   : gameBettingInfo.homeMoneyline,
-              )}
+              ).toString().replace(/\.?0+$/, "")}
             </span>
           </Box>
         </div>
