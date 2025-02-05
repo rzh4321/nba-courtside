@@ -16,7 +16,7 @@ PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
-SPRING_BOOT_URL = os.getenv("SPRING_BOOT_URL", "http://localhost:8080/api")  # Add this
+FAST_API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/api")  # Add this
 
 DATABASE_URL = f"postgresql+psycopg2://{USER}.{HOST}:{PASSWORD}@aws-0-us-east-2.pooler.supabase.com:{PORT}/{DBNAME}"
 
@@ -81,7 +81,7 @@ def notify_odds_update(game: Game):
             print(f'GAME ID IS AVAILABLE, CALLING API WITH GAMEID {game.game_id}')
             # Use game_id endpoint if available
             response = requests.post(
-                f'{SPRING_BOOT_URL}/notify-odds-update',
+                f'{FAST_API_URL}/notify-odds-update',
                 json={'gameId': game.game_id}
             )
         # gameId is null, first time scraping this game
@@ -89,7 +89,7 @@ def notify_odds_update(game: Game):
             print(f'GAMEID IS NULL, CALLING API WITH TEAMS AND DATE')
             # Use team-based endpoint if no game_id
             response = requests.post(
-                f'{SPRING_BOOT_URL}/notify-odds-update-by-teams',
+                f'{FAST_API_URL}/notify-odds-update-by-teams',
                 json={
                     'homeTeam': game.home_team,
                     'awayTeam': game.away_team,
@@ -181,5 +181,5 @@ def add_game(
 
         except Exception as e:
             session.rollback()
-            raise e
+
         

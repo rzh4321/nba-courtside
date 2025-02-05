@@ -4,7 +4,7 @@ import threading
 import time
 
 class OddsWebSocketClient:
-    def __init__(self, url="ws://localhost:8080/ws/odds"):
+    def __init__(self, url="ws://127.0.0.1:8000//ws/odds"):
         self.url = url
         self.ws = None
         self.connected = False

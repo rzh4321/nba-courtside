@@ -153,7 +153,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                   {getSpread(
                     gameBettingInfo.homeSpread,
                     isAwayTeam ? "away" : "home",
-                  )}
+                  ).toString().replace(/\.?0+$/, "")}
                 </span>
                 <span>{spreadOdds.toString().replace(/\.?0+$/, "")}</span>
               </div>
