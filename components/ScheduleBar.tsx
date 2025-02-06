@@ -32,19 +32,14 @@ export const ScheduleBar = () => {
 
   const bg = useColorModeValue("gray.700", "gray.900");
 
-  const arrowColors = useColorModeValue("white", "black");
-
   const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
   const nextLink = pathname + (nextDay === today ? "?" : `?date=${nextDay}`);
 
   return (
-    // overall box for the schedule bar
     <div className="relative">
       <Box bg={bg} w={"full"} h={isLoading ? "157px" : "auto"} hidden={hidden}>
         <Container maxW={"container.lg"}>
-          {/* VStack for separaing the "Games for ..." and game cards */}
           <VStack w={"full"} p={4}>
-            {/* horizontal stack for the "Games for ..." */}
             <HStack w={"full"}>
               {data && (
                 <Text color={"white"} fontWeight={"semibold"}>
@@ -75,7 +70,6 @@ export const ScheduleBar = () => {
                   There was an error when fetching today{"'"}s schedule
                 </Text>
               ) : data.length > 0 ? (
-                // all the game cards are in an HStack with a gap of 8
                 <HStack spacing={8}>
                   {data.map((game) => (
                     <LiveGameCard key={game.gameId} game={game} />

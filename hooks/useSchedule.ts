@@ -16,9 +16,19 @@ export function useSchedule(date: string) {
       revalidateOnFocus: isToday,
       revalidateOnReconnect: isToday,
       revalidateIfStale: isToday,
+      // Don't show cached data while revalidating
+      keepPreviousData: false,
+      // Force revalidation on mount
+      revalidateOnMount: true,
+      // Clear cache when date changes
+      dedupingInterval: 0,
     },
   );
 
   if (error) console.log(error);
-  return { data, error, isLoading: isValidating };
+  return {
+    data: isValidating ? undefined : data,
+    error,
+    isLoading: isValidating,
+  };
 }

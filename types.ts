@@ -982,4 +982,5 @@ export type GameBettingInfo = {
   openingOverUnder: number;
   overUnder: null | number;
   overOdds: null | number;
+  hasEnded: boolean;
 };

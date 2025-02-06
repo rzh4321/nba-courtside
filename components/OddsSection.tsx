@@ -46,7 +46,9 @@ export default function OddsSection({ boxscore, gameId }: OddsSectionProps) {
 
   return (
     <div>
-      <span className="font-bold tracking-widest">ODDS</span>
+      <span className="font-bold tracking-widest">
+        {gameBettingInfo?.hasEnded ? "OPENING" : "LIVE"} ODDS
+      </span>
       <div className="flex flex-col gap-2">
         {loading ? (
           <Loader className="animate-spin" />
@@ -59,11 +61,11 @@ export default function OddsSection({ boxscore, gameId }: OddsSectionProps) {
           <div>No betting information available</div>
         ) : (
           <>
-          {!isConnected && (
-            <div className="text-yellow-500">
-            ⚠️ Real-time updates temporarily unavailable
-          </div>
-          )}
+            {!isConnected && (
+              <div className="text-yellow-500">
+                ⚠️ Real-time updates temporarily unavailable
+              </div>
+            )}
             <div className="flex justify-between items-center">
               <OddsRow
                 gameBettingInfo={gameBettingInfo}
@@ -98,6 +100,13 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
     ? gameBettingInfo.awaySpreadOdds
     : gameBettingInfo.homeSpreadOdds;
   const overUnderSymbol = isAwayTeam ? "O" : "U";
+  const overUnder = gameBettingInfo.hasEnded
+    ? gameBettingInfo.openingOverUnder
+    : gameBettingInfo.overUnder;
+  const homeSpread = gameBettingInfo.hasEnded
+    ? gameBettingInfo.openingHomeSpread
+    : gameBettingInfo.homeSpread;
+
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -130,6 +139,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
             width={30}
             height={30}
             alt={"team logo"}
+            className="hidden sm:block"
           />
         </div>
       </div>
@@ -143,20 +153,22 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
           )}
           <Box
             bg={bg}
-            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center"
+            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
           >
-            {gameBettingInfo.homeSpread === null || spreadOdds === null ? (
+            {homeSpread === null ||
+            (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
               <span className="my-auto">-</span>
             ) : (
-              <div className="font-semibold tracking-wide flex flex-col items-center justify-center">
+              <>
                 <span>
-                  {getSpread(
-                    gameBettingInfo.homeSpread,
-                    isAwayTeam ? "away" : "home",
-                  ).toString().replace(/\.?0+$/, "")}
+                  {getSpread(homeSpread, isAwayTeam ? "away" : "home")
+                    .toString()
+                    .replace(/\.?0+$/, "")}
                 </span>
-                <span>{spreadOdds.toString().replace(/\.?0+$/, "")}</span>
-              </div>
+                {!gameBettingInfo.hasEnded && (
+                  <span>{spreadOdds!.toString().replace(/\.?0+$/, "")}</span>
+                )}
+              </>
             )}
           </Box>
         </div>
@@ -168,41 +180,49 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
           )}
           <Box
             bg={bg}
-            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center"
+            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
           >
-            {gameBettingInfo.overUnder === null ||
-            gameBettingInfo.overOdds === null ? (
+            {overUnder === null ||
+            (!gameBettingInfo.hasEnded && gameBettingInfo.overOdds === null) ? (
               <span className="my-auto">-</span>
             ) : (
-              <div className="font-semibold tracking-wide flex flex-col items-center justify-center">
+              <>
                 <span>
-                  {gameBettingInfo.overUnder && overUnderSymbol}{" "}
-                  {gameBettingInfo.overUnder.toString().replace(/\.?0+$/, "")}
+                  {overUnder && overUnderSymbol}{" "}
+                  {overUnder.toString().replace(/\.?0+$/, "")}
                 </span>
-                <span>{gameBettingInfo.overOdds.toString().replace(/\.?0+$/, "")}</span>
-              </div>
+                {!gameBettingInfo.hasEnded && (
+                  <span>
+                    {gameBettingInfo.overOdds!.toString().replace(/\.?0+$/, "")}
+                  </span>
+                )}
+              </>
             )}
           </Box>
         </div>
-        <div className="flex flex-col gap-2 items-center">
-          {isAwayTeam && (
-            <Text textColor={textColor} className="tracking-tight">
-              Money
-            </Text>
-          )}
-          <Box
-            bg={bg}
-            className="flex w-[81px] h-[68px] justify-center rounded-md p-2 items-center"
-          >
-            <span className="font-semibold tracking-wide">
-              {getMoneyline(
-                isAwayTeam
-                  ? gameBettingInfo.awayMoneyline
-                  : gameBettingInfo.homeMoneyline,
-              ).toString().replace(/\.?0+$/, "")}
-            </span>
-          </Box>
-        </div>
+        {!gameBettingInfo.hasEnded && (
+          <div className="flex flex-col gap-2 items-center">
+            {isAwayTeam && (
+              <Text textColor={textColor} className="tracking-tight">
+                Money
+              </Text>
+            )}
+            <Box
+              bg={bg}
+              className="flex w-[81px] h-[68px] justify-center rounded-md p-2 items-center"
+            >
+              <span className="font-semibold tracking-wide">
+                {getMoneyline(
+                  isAwayTeam
+                    ? gameBettingInfo.awayMoneyline
+                    : gameBettingInfo.homeMoneyline,
+                )
+                  .toString()
+                  .replace(/\.?0+$/, "")}
+              </span>
+            </Box>
+          </div>
+        )}
       </div>
     </>
   );
