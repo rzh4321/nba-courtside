@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException # ty
 from bs4 import BeautifulSoup # type: ignore
 import time
 import utils
-from db import add_game
+from db import add_game, mark_stale_games_as_ended
 import re
 from datetime import date, timedelta, datetime
 import pytz # type: ignore
@@ -158,7 +158,9 @@ def scrape_with_retry(url, max_retries=3):
                 raise Exception(f"Failed after {max_retries} attempts")
 
 
+
 if should_scrape():
+    mark_stale_games_as_ended()
     try:
         url = "https://sportsbook.draftkings.com/leagues/basketball/nba"
         driver, html = scrape_with_retry(url)

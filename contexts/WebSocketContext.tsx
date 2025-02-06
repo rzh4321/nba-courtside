@@ -26,7 +26,6 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
       const wsProtocol = process.env.NODE_ENV === 'production' ? 'wss:' : 'ws:';
       const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 
         `${wsProtocol}//localhost:8000/ws/odds`;
-
       ws.current = new WebSocket(wsUrl);
 
       ws.current.onopen = () => {

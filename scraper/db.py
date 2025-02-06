@@ -1,13 +1,15 @@
-from sqlalchemy import create_engine, text, Column, BigInteger, String, Numeric, DateTime, Date, ForeignKey, and_
+from sqlalchemy import create_engine, text, Column, BigInteger, String, Numeric, DateTime, Date, ForeignKey, and_, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, validates
 from sqlalchemy.sql import func
 from sqlalchemy.pool import QueuePool
 from enum import Enum
-from datetime import date
+from datetime import date, timedelta, datetime
 import os
 from dotenv import load_dotenv
 import requests
+import pytz
+
 
 load_dotenv()
 
@@ -66,6 +68,8 @@ class Game(Base):
         nullable=False
     )
     game_date = Column(Date, nullable=False)
+    has_ended = Column(Boolean, nullable=False, default=False)
+
 
     def __repr__(self):
         return f"<Game(game_id={self.game_id}, home_team={self.home_team}, away_team={self.away_team}, game_date={self.game_date})>"
@@ -73,7 +77,6 @@ class Game(Base):
 Session = sessionmaker(bind=engine)
 
 def notify_odds_update(game: Game):
-    """Helper function to notify the Spring Boot server of odds updates"""
     game_date_str = game.game_date.strftime('%Y-%m-%d')
     try:
         # gameId is available, not first time scraping this game
@@ -89,7 +92,7 @@ def notify_odds_update(game: Game):
             print(f'GAMEID IS NULL, CALLING API WITH TEAMS AND DATE')
             # Use team-based endpoint if no game_id
             response = requests.post(
-                f'{FAST_API_URL}/notify-odds-update-by-teams',
+                f'{FAST_API_URL}/notify-odds-by-teams',
                 json={
                     'homeTeam': game.home_team,
                     'awayTeam': game.away_team,
@@ -183,3 +186,33 @@ def add_game(
             session.rollback()
 
         
+
+def mark_stale_games_as_ended():
+    with Session() as session:
+        try:
+            eastern = pytz.timezone('America/New_York')
+            # Get current time in EST
+            now = datetime.now(eastern)
+            yesterday = (now - timedelta(days=1)).date()
+            
+            # Find games from yesterday or today that haven't ended
+            # and haven't been updated in last 10 minutes
+            stale_games = session.query(Game).filter(
+                and_(
+                    Game.game_date.in_([yesterday, now.date()]),
+                    Game.has_ended == False,
+                    Game.updated_at < now - timedelta(minutes=10)
+                )
+            ).all()
+            
+            if stale_games:
+                # Update the games
+                for game in stale_games:
+                    game.has_ended = True
+                    print(f"Marking game as ended: {game.away_team} @ {game.home_team} on {game.game_date}")
+                
+                session.commit()
+                
+        except Exception as e:
+            print(f"Error marking stale games as ended: {e}")
+            session.rollback()
