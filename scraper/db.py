@@ -18,7 +18,7 @@ PASSWORD = os.getenv("password")
 HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
-FAST_API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/api")  # Add this
+FAST_API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/api")
 
 DATABASE_URL = f"postgresql+psycopg2://{USER}.{HOST}:{PASSWORD}@aws-0-us-east-2.pooler.supabase.com:{PORT}/{DBNAME}"
 
