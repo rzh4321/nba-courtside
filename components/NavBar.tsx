@@ -1,80 +1,49 @@
 "use client";
 
-import {
-  Box,
-  Text,
-  Flex,
-  IconButton,
-  Container,
-  useColorMode,
-  HStack,
-  Button,
-} from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
-import { Link } from "@chakra-ui/next-js";
-import { ScheduleBar } from "./ScheduleBar";
+import React from "react";
+import Link from "next/link";
 import Image from "next/image";
-
-export type NavBarProps = {};
+import { Sun, Moon } from "lucide-react";
+import { ScheduleBar } from "./ScheduleBar";
+import useTheme from "@/hooks/useTheme";
+import { Button } from "./ui/button";
 
 const NavBar = () => {
-  // Using the useColorMode hook to get the current color mode and the function to toggle it
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <>
-      <Box
-        w={"full"}
-        position={"sticky"}
-        shadow={"md"}
-        top={0}
-        left={0}
-        zIndex={"sticky"}
-      >
-        <Box
-          bg={colorMode === "light" ? "gray.700" : "gray.900"}
-          height={65}
-          paddingX={4}
-          paddingY={2}
-        >
-          <Flex
-            justifyContent={"space-between"}
-            alignItems={"center"}
-            height={"100%"}
-          >
-            <Link
-              href={"/"}
-              _hover={{ textDecoration: "none" }}
-              className="flex gap-2 items-center"
-            >
-              <Image
-                alt="icon"
-                src={"/icon.ico"}
-                width={100}
-                height={100}
-                className="w-[40px] hidden sm:block"
-              />
-              <Text fontSize={24} fontWeight={"bold"} color={"white"}>
-                NBA CourtSide
-              </Text>
+    <div className="w-full sticky top-0 left-0 z-50 shadow-md">
+      <div className="bg-gray-800 dark:bg-gray-900 h-[65px] px-4 py-2">
+        <div className="h-full flex justify-between items-center">
+          <Link href="/" className="flex gap-2 items-center hover:no-underline">
+            <Image
+              alt="icon"
+              src="/icon.ico"
+              width={100}
+              height={100}
+              className="w-[40px] hidden sm:block"
+            />
+            <span className="text-2xl font-bold text-white">NBA CourtSide</span>
+          </Link>
+
+          <div className="flex gap-5">
+            <Link href="/standings">
+              <Button className="px-4 py-2 font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                Standings
+              </Button>
             </Link>
-            <Flex gap={5}>
-              <Link href={"/standings"}>
-                <Button>Standings</Button>
-              </Link>
-              <IconButton // toggle color mode
-                icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                aria-label={`Switch to ${
-                  colorMode === "light" ? "dark" : "light"
-                } theme`}
-                onClick={toggleColorMode}
-              />
-            </Flex>
-          </Flex>
-        </Box>
-        <ScheduleBar />
-      </Box>
-    </>
+            <Button
+              onClick={toggleTheme}
+              className="p-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} fill="black" />}
+            </Button>
+          </div>
+        </div>
+      </div>
+      <ScheduleBar />
+    </div>
   );
 };
 

@@ -1,23 +1,15 @@
-import {
-  Flex,
-  VStack,
-  Text,
-  HStack,
-  Container,
-  Box,
-  useColorModeValue,
-} from "@chakra-ui/react";
+"use client";
+
 import { format, parse, isToday } from "date-fns";
 import { useSchedule } from "@/hooks/useSchedule";
 import { LiveGameCard } from "./LiveGameCard";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import getDays from "@/utils/getDays";
 import { DATE_LINK_FORMAT } from "@/constants";
 import Link from "next/link";
 import DatePicker from "./DatePicker";
-import { ChevronDown, ChevronsUp, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowLeft, ArrowRight } from "lucide-react";
 
 export const ScheduleBar = () => {
   const [hidden, setHidden] = useState(false);
@@ -25,78 +17,75 @@ export const ScheduleBar = () => {
   const pathname = usePathname();
   const date = searchParams.get("date");
   const today = format(new Date(), DATE_LINK_FORMAT);
-  // date is in the format of yyyy-MM-dd
   const dateWithDashes = date ? date : new Date().toLocaleDateString("en-CA");
   const { day, prevDay, nextDay } = getDays(dateWithDashes);
   const { data, isLoading, error } = useSchedule(dateWithDashes);
-
-  const bg = useColorModeValue("gray.700", "gray.900");
 
   const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
   const nextLink = pathname + (nextDay === today ? "?" : `?date=${nextDay}`);
 
   return (
     <div className="relative">
-      <Box bg={bg} w={"full"} h={isLoading ? "157px" : "auto"} hidden={hidden}>
-        <Container maxW={"container.lg"}>
-          <VStack w={"full"} p={4}>
-            <HStack w={"full"}>
+      <div
+        className={`w-full bg-gray-800 dark:bg-gray-900 ${hidden ? "hidden" : ""}`}
+        style={{ height: isLoading ? "157px" : "auto" }}
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="w-full p-4 flex flex-col gap-4">
+            <div className="w-full flex">
               {data && (
-                <Text color={"white"} fontWeight={"semibold"}>
+                <p className="text-white font-semibold">
                   Games for{" "}
                   {format(
                     parse(dateWithDashes, "yyyy-MM-dd", new Date()),
                     "EEEE, MMMM do",
                   )}
-                </Text>
+                </p>
               )}
-            </HStack>
-            {/* date picker */}
-            <HStack alignSelf={"start"}>
+            </div>
+
+            <div className="flex items-center gap-2 self-start">
               <Link href={prevLink}>
-                <ArrowBackIcon color={"white"} />
+                <ArrowLeft className="text-white" />
               </Link>
               <DatePicker day={dateWithDashes} />
               <Link href={nextLink}>
-                <ArrowForwardIcon color={"white"} />
+                <ArrowRight className="text-white" />
               </Link>
-            </HStack>
-            {/* scrollable class removes scrollbar, auto overflow makes it scrollable at all */}
-            <HStack w={"full"} className="scrollable" overflow={"auto"}>
+            </div>
+
+            <div className="w-full overflow-auto scrollable">
               {isLoading || data == undefined ? (
-                <Text>Loading</Text>
+                <p>Loading</p>
               ) : error ? (
-                <Text>
-                  There was an error when fetching today{"'"}s schedule
-                </Text>
+                <p>There was an error when fetching today{"'"}s schedule</p>
               ) : data.length > 0 ? (
-                <HStack spacing={8}>
+                <div className="flex gap-8">
                   {data.map((game) => (
                     <LiveGameCard key={game.gameId} game={game} />
                   ))}
-                </HStack>
+                </div>
               ) : (
-                <Flex w={"full"} color={"gray.500"} fontWeight={"semibold"}>
-                  <Text>
+                <div className="w-full text-gray-500 font-semibold">
+                  <p>
                     No games scheduled for{" "}
                     {isToday(parse(dateWithDashes, "yyyy-MM-dd", new Date()))
                       ? "today"
                       : "this date"}
-                  </Text>
-                </Flex>
+                  </p>
+                </div>
               )}
-            </HStack>
-          </VStack>
-        </Container>
-      </Box>
-      <Box
-        bg={"white"}
-        _dark={{ bg: "black" }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
         onClick={() => setHidden((prev) => !prev)}
-        className="absolute cursor-pointer flex items-center justify-center bottom-[-8px] shadow-xl left-1/2 -translate-x-1/2 border-0 rounded-full w-[22px] h-[22px]"
+        className="absolute cursor-pointer flex items-center justify-center -bottom-2 shadow-xl left-1/2 -translate-x-1/2 bg-white dark:bg-black rounded-full w-[22px] h-[22px]"
       >
-        {!hidden ? <ChevronUp width={20} /> : <ChevronDown width={20} />}
-      </Box>
+        {!hidden ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+      </div>
     </div>
   );
 };

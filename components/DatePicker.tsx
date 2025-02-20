@@ -1,16 +1,9 @@
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
-  Button,
-  HStack,
-} from "@chakra-ui/react";
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { useState, useEffect } from "react";
 import { format, parseISO } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -19,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import Calendar from "./Calendar";
 import "react-day-picker/style.css";
+import { Button } from "./ui/button";
 
 export default function DatePicker({ day }: { day: string }) {
   const pathname = usePathname();
@@ -41,11 +35,13 @@ export default function DatePicker({ day }: { day: string }) {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button>
-          <HStack gap={2}>
+        <Button className="dark:bg-gray-700 dark:text-white bg-white text-black">
+          <div className="flex gap-2">
             <CalendarDays width={20} />
-            <span>{date ? format(date, "PPP") : "Pick a date"}</span>
-          </HStack>
+            <span className="font-semibold">
+              {date ? format(date, "PPP") : "Pick a date"}
+            </span>
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="popover">

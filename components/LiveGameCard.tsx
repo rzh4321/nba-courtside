@@ -1,5 +1,6 @@
-import { VStack, Text, useColorModeValue, Show } from "@chakra-ui/react";
-import NextLink from "next/link";
+"use client";
+
+import Link from "next/link";
 import type { ParsedGames } from "@/utils/mappers";
 import { GAME_STATUS } from "@/constants";
 import { useSearchParams } from "next/navigation";
@@ -12,12 +13,10 @@ function convertISODurationToMMSS(duration: string): string {
   const trimmedDuration = duration.trim();
   if (trimmedDuration === "") return "";
 
-  // Check if already in m:ss or mm:ss format, including when minutes is 0
   if (/^[0-9]{1,2}:[0-9]{2}$/.test(trimmedDuration)) {
     return trimmedDuration;
   }
 
-  // Convert from ISO duration
   const matches = trimmedDuration.match(/PT(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?/);
 
   if (!matches) {
@@ -35,20 +34,32 @@ function convertISODurationToMMSS(duration: string): string {
 export const LiveGameCard = ({ game }: LiveGameCardProps) => {
   const searchParams = useSearchParams();
   const date = searchParams.get("date");
-  const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED; // no boxscore if game hasnt started
+  const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED;
   const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
-  const bg = useColorModeValue("white", "gray.700");
-  const quarterColor = useColorModeValue(
-    isLive ? "darkgreen" : "black",
-    isLive ? "lightgreen" : "gray.400",
-  );
 
-  // console.log('statustext: ', game.gameStatusText)
-  // console.log('gameclock: ', game.gameClock)
-  // console.log('gamestatus: ', game.gameStatus)
-  // console.log('gameperiod: ', game.period)
+  const getGameStatusText = () => {
+    if (
+      game.gameStatus === 2 &&
+      game.gameStatusText.trim() !== "Halftime" &&
+      !game.gameStatusText.trim().includes("OT") &&
+      !game.gameStatusText.trim().includes("vertime")
+    ) {
+      if (convertISODurationToMMSS(game.gameClock) === "0:00") {
+        return game.period === 2 ? "Halftime" : `End Q${game.period}`;
+      }
+      return `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`;
+    }
+    if (
+      game.gameStatusText.trim().includes("OT") ||
+      game.gameStatusText.trim().includes("vertime")
+    ) {
+      return `${game.gameStatusText} ${convertISODurationToMMSS(game.gameClock)}`;
+    }
+    return game.gameStatusText;
+  };
+
   return (
-    <NextLink
+    <Link
       href={
         hasBoxscore
           ? `/boxscore/${game.gameId}${date ? "?date=" + date : ""}`
@@ -57,103 +68,83 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
             : "#"
       }
     >
-      {/* in larger screens, make its width bigger */}
-      <Show above="sm">
-        {/* VStack separating the quarter/time and scores */}
-        <VStack
-          align={"start"}
-          spacing={2}
-          w={"135px"}
-          px={4}
-          py={2}
-          bg={bg}
-          rounded={"md"}
-        >
-          <Text
-            fontSize={"md"}
-            color={quarterColor}
-            fontWeight={
-              game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"
-            }
+      {/* Desktop version */}
+      <div className="hidden sm:block">
+        <div className="flex flex-col items-start gap-2 w-[135px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
+          <p
+            className={`text-md ${
+              isLive
+                ? "text-green-800 dark:text-green-300"
+                : "text-black dark:text-gray-400"
+            } ${
+              game.gameStatus === GAME_STATUS.ENDED
+                ? "font-bold"
+                : "font-semibold"
+            }`}
           >
-            {game.gameStatus === 2 &&
-            game.gameStatusText.trim() != "Halftime" &&
-            !game.gameStatusText.trim().includes("OT") &&
-            !game.gameStatusText.trim().includes("vertime")
-              ? convertISODurationToMMSS(game.gameClock) === "0:00"
-                ? game.period === 2
-                  ? "Halftime"
-                  : `End Q${game.period}`
-                : `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
-              : game.gameStatusText.trim().includes("OT") ||
-                  game.gameStatusText.trim().includes("vertime")
-                ? game.gameStatusText +
-                  " " +
-                  convertISODurationToMMSS(game.gameClock)
-                : game.gameStatusText}
-          </Text>
-          <VStack spacing={0} align={"start"}>
-            <Text
-              fontWeight={"semibold"}
-              letterSpacing={"wider"}
-              fontSize={game.awayTeam.score > game.homeTeam.score ? "lg" : "md"}
+            {getGameStatusText()}
+          </p>
+          <div className="flex flex-col items-start gap-0">
+            <p
+              className={`font-semibold tracking-wider ${
+                game.awayTeam.score > game.homeTeam.score
+                  ? "text-lg"
+                  : "text-md"
+              }`}
             >
               {game.awayTeam.teamTricode} - {game.awayTeam.score}
-            </Text>
-            <Text
-              fontWeight={"semibold"}
-              letterSpacing={"wider"}
-              fontSize={game.homeTeam.score > game.awayTeam.score ? "lg" : "md"}
+            </p>
+            <p
+              className={`font-semibold tracking-wider ${
+                game.homeTeam.score > game.awayTeam.score
+                  ? "text-lg"
+                  : "text-md"
+              }`}
             >
               {game.homeTeam.teamTricode} - {game.homeTeam.score}
-            </Text>
-          </VStack>
-        </VStack>
-      </Show>
-      {/* make width smaller in smaller screens */}
-      <Show below="sm">
-        <VStack
-          align={"start"}
-          spacing={2}
-          w={"120px"}
-          h={"112px"}
-          px={4}
-          py={2}
-          bg={bg}
-          rounded={"md"}
-        >
-          <Text
-            fontSize={"md"}
-            color={quarterColor}
-            fontWeight={
-              game.gameStatus === GAME_STATUS.ENDED ? "bold" : "semibold"
-            }
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile version */}
+      <div className="sm:hidden">
+        <div className="flex flex-col items-start gap-2 w-[120px] h-[112px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
+          <p
+            className={`text-md ${
+              isLive
+                ? "text-green-800 dark:text-green-300"
+                : "text-black dark:text-gray-400"
+            } ${
+              game.gameStatus === GAME_STATUS.ENDED
+                ? "font-bold"
+                : "font-semibold"
+            }`}
           >
-            {game.gameStatus === 2 &&
-            game.gameStatusText.trim() != "Halftime" &&
-            !game.gameStatusText.trim().includes("OT") &&
-            !game.gameStatusText.trim().includes("vertime")
-              ? `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`
-              : game.gameStatusText}
-          </Text>
-          <VStack spacing={0} align={"start"}>
-            <Text
-              fontWeight={"semibold"}
-              letterSpacing={"wide"}
-              fontSize={game.homeTeam.score > game.awayTeam.score ? "md" : "sm"}
+            {getGameStatusText()}
+          </p>
+          <div className="flex flex-col items-start gap-0">
+            <p
+              className={`font-semibold tracking-wide ${
+                game.homeTeam.score > game.awayTeam.score
+                  ? "text-md"
+                  : "text-sm"
+              }`}
             >
               {game.homeTeam.teamTricode} - {game.homeTeam.score}
-            </Text>
-            <Text
-              fontWeight={"semibold"}
-              letterSpacing={"wide"}
-              fontSize={game.awayTeam.score > game.homeTeam.score ? "md" : "sm"}
+            </p>
+            <p
+              className={`font-semibold tracking-wide ${
+                game.awayTeam.score > game.homeTeam.score
+                  ? "text-md"
+                  : "text-sm"
+              }`}
             >
               {game.awayTeam.teamTricode} - {game.awayTeam.score}
-            </Text>
-          </VStack>
-        </VStack>
-      </Show>
-    </NextLink>
+            </p>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 };
