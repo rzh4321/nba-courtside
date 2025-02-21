@@ -27,7 +27,7 @@ export const ScheduleBar = () => {
   return (
     <div className="relative">
       <div
-        className={`w-full bg-gray-800 dark:bg-gray-900 ${hidden ? "hidden" : ""}`}
+        className={`w-full bg-blue-500 dark:bg-gray-900 ${hidden ? "hidden" : ""}`}
         style={{ height: isLoading ? "157px" : "auto" }}
       >
         <div className="max-w-7xl mx-auto px-4">

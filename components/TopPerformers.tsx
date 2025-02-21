@@ -1,6 +1,5 @@
 "use client";
 
-import { VStack, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
 import {
   format,
   isToday,
@@ -10,7 +9,6 @@ import {
   endOfDay,
 } from "date-fns";
 import { PerformerCard } from "../components/PerformerCard";
-import { Spinner } from "@chakra-ui/react";
 import startCase from "lodash/startCase";
 import { useLastPlayedGameDate } from "@/hooks/useLastPlayedGameDate";
 import { useSearchParams } from "next/navigation";
@@ -28,23 +26,16 @@ type SectionProps = {
 
 // display a category and its leaders
 const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
-  const categoryColor = useColorModeValue("gray.700", "gray.400");
   return (
-    <VStack w={"100%"} align={"start"} spacing={4}>
-      <Heading fontSize={"2xl"} color={categoryColor} fontWeight={"normal"}>
+    <div className="w-full flex flex-col items-start gap-4">
+      <h2 className="text-2xl text-gray-700 dark:text-gray-400 font-normal">
         {/* startCase turns string into words starting with uppercase, like hello world to Hello World */}
         {startCase(category).split(" ")[0]}
-      </Heading>
-      {/* put each player card in an HStack that wraps on smaller screens */}
-      <HStack
-        w={"full"}
-        spacing={8}
-        flexWrap={"wrap"}
-        className="flex-performers"
-      >
+      </h2>
+      <div className="w-full flex flex-wrap gap-8 justify-center sm:justify-start">
         {/* display leaders for this category */}
         {isLoading ? (
-          <Spinner />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
         ) : leaders.length > 0 ? (
           leaders.map((leader) => (
             <PerformerCard
@@ -66,8 +57,8 @@ const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
             scheduled for this date
           </div>
         )}
-      </HStack>
-    </VStack>
+      </div>
+    </div>
   );
 };
 
@@ -122,9 +113,8 @@ export const TopPerformers = () => {
   } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
 
   return (
-    // VStack separating the "Top Performers" text and each category section
-    <VStack w={"full"} align={"start"} px={4} py={8} spacing={12}>
-      <Heading fontSize={"3xl"} fontWeight={"normal"} mb={-4}>
+    <div className="w-full flex flex-col items-start px-4 py-8 gap-12">
+      <h1 className="-mb-4 text-3xl font-normal">
         {date ? (
           isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
             `Today's Top Performers`
@@ -136,9 +126,9 @@ export const TopPerformers = () => {
         ) : date === undefined ? (
           `Today's Top Performers`
         ) : (
-          <Spinner />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
         )}
-      </Heading>
+      </h1>
       <Section
         leaders={pointLeaders}
         category={"points"}
@@ -169,6 +159,6 @@ export const TopPerformers = () => {
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-    </VStack>
+    </div>
   );
 };

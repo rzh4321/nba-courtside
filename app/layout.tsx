@@ -19,13 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* ColorModeScript to provide the initial color mode */}
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        {/* ChakraProvider to provide Chakra UI context to the children */}
+        
         <ChakraProvider>
           <WebSocketProvider>
             <Suspense>
-              <Box w={"full"} bg="background">
+              <Box w={"full"}>
                 <NavBar />
                 <Container maxW={"container.lg"} pt={"10px"}>
                   {children}
