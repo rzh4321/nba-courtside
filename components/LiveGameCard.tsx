@@ -44,7 +44,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
       !game.gameStatusText.trim().includes("OT") &&
       !game.gameStatusText.trim().includes("vertime")
     ) {
-      if (convertISODurationToMMSS(game.gameClock) === "0:00") {
+      if (convertISODurationToMMSS(game.gameClock) === "0:00" || !game.gameClock) {
         return game.period === 2 ? "Halftime" : `End Q${game.period}`;
       }
       return `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`;

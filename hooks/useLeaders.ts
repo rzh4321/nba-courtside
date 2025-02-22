@@ -46,7 +46,7 @@ export default function useLeaders(
           const data = await getBoxScore(id);
           return data;
         } catch (e) {
-          console.log("ERROR: ", e, "DATA WAS : ", data);
+          console.log("ERROR: ", e, "ID WAS ", id, " DATA WAS : ", data);
         }
       });
       // return an array of boxscore data

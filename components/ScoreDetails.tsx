@@ -1,13 +1,3 @@
-import {
-  Box,
-  Text,
-  Flex,
-  VStack,
-  HStack,
-  Badge,
-  Show,
-  useColorModeValue,
-} from "@chakra-ui/react";
 import Image from "next/image";
 import type { Boxscore, Team } from "@/types";
 
@@ -17,13 +7,11 @@ type TeamDetailsProps = {
 };
 
 const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
-  const bg = useColorModeValue("white", "gray.600");
-
   return (
-    <Flex
-      direction={reverse ? "row-reverse" : "row"}
-      gap={2}
-      alignItems={"center"}
+    <div
+      className={`flex gap-2 items-center ${
+        reverse ? "flex-row-reverse" : "flex-row"
+      }`}
     >
       <Image
         src={`https://cdn.nba.com/logos/nba/${team.teamId}/primary/L/logo.svg`}
@@ -31,28 +19,23 @@ const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
         height={75}
         alt={team.teamName}
       />
-      {/* display the tricode and score */}
-      <Show above="sm">
-        <Box textAlign={reverse ? "right" : "left"}>
-          <Text fontSize={"lg"} fontWeight={"bold"}>
-            {team.teamTricode}
-          </Text>
-          <Text fontSize={"3xl"} fontWeight={"bold"} mt={-2}>
-            {team.score}
-          </Text>
-        </Box>
-      </Show>
-      <Show below="sm">
-        <Box textAlign={reverse ? "right" : "left"} margin={-1}>
-          <Text fontSize={"md"} fontWeight={"bold"}>
-            {team.teamTricode}
-          </Text>
-          <Text fontSize={"2xl"} fontWeight={"bold"} mt={-2}>
-            {team.score}
-          </Text>
-        </Box>
-      </Show>
-    </Flex>
+      <div className={`hidden sm:block ${reverse ? "text-right" : "text-left"}`}>
+        <p className="text-lg font-bold">
+          {team.teamTricode}
+        </p>
+        <p className="-mt-2 text-3xl font-bold">
+          {team.score}
+        </p>
+      </div>
+      <div className={`sm:hidden -m-1 ${reverse ? "text-right" : "text-left"}`}>
+        <p className="text-md font-bold">
+          {team.teamTricode}
+        </p>
+        <p className="-mt-2 text-2xl font-bold">
+          {team.score}
+        </p>
+      </div>
+    </div>
   );
 };
 
@@ -63,21 +46,20 @@ export type ScoreDetailsProps = {
 export const ScoreDetails = ({ boxscore }: ScoreDetailsProps) => {
   const isLive = boxscore.gameStatus === 2;
 
-  const bg = useColorModeValue("white", "gray.600");
-
   return (
-    <Box p={4} bg={bg} rounded={"lg"} shadow={"lg"} w={"full"} maxW={"480px"}>
-      {/* HStack for separating teamA, the game status, and teamB */}
-      <HStack justify={"space-between"} align={"center"}>
+    <div className="w-full max-w-[480px] p-4 bg-white dark:bg-gray-600 rounded-lg shadow-lg">
+      <div className="flex justify-between items-center">
         <TeamDetails team={boxscore.awayTeam} />
-        {/* VStack for separating the game status and "LIVE" */}
-        <VStack spacing={1}>
-          <Text>{boxscore.gameStatusText}</Text>
-          {isLive && <Badge colorScheme={"red"}>LIVE</Badge>}
-        </VStack>
-        {/* reverse the team details for teamB to make it symmetrical */}
+        <div className="flex flex-col items-center gap-1">
+          <p>{boxscore.gameStatusText}</p>
+          {isLive && (
+            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+              LIVE
+            </span>
+          )}
+        </div>
         <TeamDetails team={boxscore.homeTeam} reverse />
-      </HStack>
-    </Box>
+      </div>
+    </div>
   );
 };

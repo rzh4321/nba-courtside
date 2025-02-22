@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { Box, HStack, VStack } from "@chakra-ui/react";
 import useSWR from "swr";
 import { ScoreDetails } from "./ScoreDetails";
 import { NoGameMessage } from "./NoGameMessage";
@@ -35,22 +34,20 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       document.title = `${awayTeam.teamTricode} (${awayTeam.score}) vs ${homeTeam.teamTricode} (${homeTeam.score})`;
     }
   }, [boxscore]);
+
   return (
-    <Box display={"flex"} p={1} flexDirection={"column"} gap={50}>
-      <Box>
-        <HStack
-          cursor={"pointer"}
-          marginBottom={5}
-          width={"fit-content"}
+    <div className="flex flex-col gap-[50px] p-1">
+      <div>
+        <div 
+          className="flex items-center mb-5 w-fit cursor-pointer"
           onClick={() => router.back()}
         >
           <Undo2 />
-          <span>Go Back</span>
-        </HStack>
+          <span className="ml-2">Go Back</span>
+        </div>
         {gameId ? (
           boxscore ? (
-            // VStack separating score, teamA boxscore, and teamB boxscore
-            <VStack spacing={8}>
+            <div className="flex flex-col items-center gap-8">
               <ScoreDetails boxscore={boxscore} />
               <GameSummary game={boxscore} />
               <BoxscoreTable
@@ -61,14 +58,14 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
                 isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
                 team={boxscore.homeTeam}
               />
-            </VStack>
+            </div>
           ) : null
         ) : (
           <NoGameMessage />
         )}
-      </Box>
+      </div>
       {boxscore && <OddsSection boxscore={boxscore} gameId={gameId} />}
       {boxscore && <TeamStats boxscore={boxscore} />}
-    </Box>
+    </div>
   );
 };

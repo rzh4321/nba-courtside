@@ -35,7 +35,7 @@ export default function DatePicker({ day }: { day: string }) {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button className="dark:bg-gray-700 dark:text-white bg-white text-black">
+        <Button className="dark:bg-gray-700 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-600 bg-white text-black">
           <div className="flex gap-2">
             <CalendarDays width={20} />
             <span className="font-semibold">
