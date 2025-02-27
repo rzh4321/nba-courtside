@@ -1,15 +1,12 @@
 import {
-  Box,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  VStack,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import type { Team } from "@/types";
 
 export type BoxscoreProps = {
@@ -19,8 +16,8 @@ export type BoxscoreProps = {
 
 export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
   // get color values from the current color mode
-  const bg = useColorModeValue("white", "gray.600");
-  const borderColor = useColorModeValue("gray.100", "gray.700");
+  // const bg = useColorModeValue("white", "gray.600");
+  // const borderColor = useColorModeValue("gray.100", "gray.700");
 
   function formatMinutes(minutes: string) {
     const match = minutes.match(/[0-9]+/);
@@ -39,77 +36,69 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
   }
 
   return (
-    <Box w={"full"} overflowX={"auto"}>
-      {/* VStack separating the team name and box score */}
-      <VStack w={"full"} spacing={2} align={"start"}>
-        <Text fontWeight={"bold"} letterSpacing={"widest"}>
+    <div className="w-full overflow-x-auto">
+      <div className="w-full flex flex-col gap-2">
+        <span className="font-bold tracking-widest">
           {team.teamName.toUpperCase()}
-        </Text>
+        </span>
         <Table
-          w={"full"}
-          variant={"simple"}
-          bg={bg}
-          size={"sm"}
-          rounded={"md"}
-          fontFamily={"mono"}
+          className="w-full rounded-md bg-white dark:bg-gray-600 font-mono"
         >
-          <Thead>
-            <Tr>
-              <Th minW={"190px"}>Name</Th>
-              <Th isNumeric>Min</Th>
-              <Th isNumeric>FG</Th>
-              <Th isNumeric>3PT</Th>
-              <Th isNumeric>FT</Th>
-              <Th isNumeric>Reb</Th>
-              <Th isNumeric>Ast</Th>
-              <Th isNumeric>Pts</Th>
-              <Th isNumeric>+/-</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="min-w-[190px] w-[350px]">Name</TableHead>
+              <TableHead>Min</TableHead>
+              <TableHead>FG</TableHead>
+              <TableHead>3PT</TableHead>
+              <TableHead>FT</TableHead>
+              <TableHead>Reb</TableHead>
+              <TableHead>Ast</TableHead>
+              <TableHead>Pts</TableHead>
+              <TableHead>+/-</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {team.players.map((player, i) => (
-              <Tr
+              <TableRow
+                className={`${i === 4 ? 'border-b-[4px]' : 'border-b-[1.5px]'} border-gray-100 dark:border-gray-700`}
                 key={player.personId}
-                borderBottom={i === 4 ? "4px" : "1.5px"}
-                borderColor={borderColor}
               >
-                <Td display={{ base: "none", xl: "table-cell" }}>
+                <TableCell className="hidden sm:block min-w-[190px] max-w-[350px]">
                   {player.firstName} {player.familyName}{" "}
                   {isLive && player.oncourt === "1" && "○"}
-                </Td>
-                <Td
-                  display={{ base: "table-cell", xl: "none" }}
-                  fontSize={player.familyName.length >= 10 ? "small" : "small"}
+                </TableCell>
+                <TableCell
+                  className={`text-sm sm:hidden min-w-[190px] max-w-[350px]`}
                 >
                   {player.firstName[0]} {player.familyName}{" "}
                   {isLive && player.oncourt === "1" && "○"}
-                </Td>
-                <Td isNumeric>
+                </TableCell>
+                <TableCell>
                   {formatMinutes(player.statistics.minutesCalculated)}
-                </Td>
-                <Td isNumeric>
+                </TableCell>
+                <TableCell>
                   {player.statistics.fieldGoalsMade}-
                   {player.statistics.fieldGoalsAttempted}{" "}
-                </Td>
-                <Td isNumeric>
+                </TableCell>
+                <TableCell>
                   {player.statistics.threePointersMade}-
                   {player.statistics.threePointersAttempted}{" "}
-                </Td>
-                <Td isNumeric>
+                </TableCell>
+                <TableCell>
                   {player.statistics.freeThrowsMade}-
                   {player.statistics.freeThrowsAttempted}{" "}
-                </Td>
-                <Td isNumeric>{player.statistics.reboundsTotal}</Td>
-                <Td isNumeric>{player.statistics.assists}</Td>
-                <Td isNumeric>{player.statistics.points}</Td>
-                <Td isNumeric>
+                </TableCell>
+                <TableCell>{player.statistics.reboundsTotal}</TableCell>
+                <TableCell>{player.statistics.assists}</TableCell>
+                <TableCell>{player.statistics.points}</TableCell>
+                <TableCell>
                   {formatPlusMinus(player.statistics.plusMinusPoints)}
-                </Td>
-              </Tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </Tbody>
+          </TableBody>
         </Table>
-      </VStack>
-    </Box>
+      </div>
+    </div>
   );
 };

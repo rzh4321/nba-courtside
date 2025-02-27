@@ -83,6 +83,7 @@ export const TopPerformers = () => {
     // convert it to format of mm-dd-yyyy
     date = format(parse(date, "yyyy-MM-dd", new Date()), "MM-dd-yyyy");
   }
+  // console.log('DATE IS ', date)
   // get all the gameIds once date is available
   const {
     data,

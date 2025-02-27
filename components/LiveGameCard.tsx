@@ -36,7 +36,6 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
   const date = searchParams.get("date");
   const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED;
   const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
-
   const getGameStatusText = () => {
     if (
       game.gameStatus === 2 &&
@@ -44,7 +43,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
       !game.gameStatusText.trim().includes("OT") &&
       !game.gameStatusText.trim().includes("vertime")
     ) {
-      if (convertISODurationToMMSS(game.gameClock) === "0:00" || !game.gameClock) {
+      if (convertISODurationToMMSS(game.gameClock) === "0:00" || !game.gameClock.trim()) {
         return game.period === 2 ? "Halftime" : `End Q${game.period}`;
       }
       return `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`;

@@ -1,20 +1,19 @@
 import { Boxscore, Period } from "@/types";
+
 import {
   Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
+  TableBody,
   TableCaption,
-  TableContainer,
-} from "@chakra-ui/react";
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 
 import { useColorModeValue } from "@chakra-ui/react";
 
 function GameSummary({ game }: { game: Boxscore }) {
-  const bg = useColorModeValue("white", "gray.600");
 
   const renderPeriods = (periods: Period[], isHeader = false) =>
     periods.map(({ period, score }, index: number) => {
@@ -26,38 +25,33 @@ function GameSummary({ game }: { game: Boxscore }) {
         : score;
 
       return isHeader ? (
-        <Th key={index}>{content}</Th>
+        <TableHead className="font-bold p-3 tracking-wider" key={index}>{content}</TableHead>
       ) : (
-        <Td key={index}>{content}</Td>
+        <TableCell key={index} className="p-3 tracking-wider">{content}</TableCell>
       );
     });
 
   return (
-    <div>
+    <div className=" bg-white dark:bg-gray-600 rounded-lg px-3">
       <Table
-        w={"full"}
-        variant={"simple"}
-        bg={bg}
-        size={"sm"}
-        rounded={"md"}
-        fontFamily={"mono"}
+        className="w-full font-mono"
       >
-        <Thead>
-          <Tr>
-            <Th>Team</Th>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="font-montserrat font-bold tracking-wider">TEAM</TableHead>
             {renderPeriods(game.homeTeam.periods, true)}
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Td>{game.awayTeam.teamName}</Td>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>{game.awayTeam.teamName}</TableCell>
             {renderPeriods(game.awayTeam.periods)}
-          </Tr>
-          <Tr>
-            <Td>{game.homeTeam.teamName}</Td>
+          </TableRow>
+          <TableRow>
+            <TableCell>{game.homeTeam.teamName}</TableCell>
             {renderPeriods(game.homeTeam.periods)}
-          </Tr>
-        </Tbody>
+          </TableRow>
+        </TableBody>
       </Table>
     </div>
   );

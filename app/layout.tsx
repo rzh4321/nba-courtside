@@ -25,9 +25,9 @@ export default function RootLayout({
             <Suspense>
               <Box w={"full"}>
                 <NavBar />
-                <Container maxW={"container.lg"} pt={"10px"}>
+                <div className="pt-[10px] px-[16px] max-w-[1024px] w-full mx-auto">
                   {children}
-                </Container>
+                </div>
               </Box>
             </Suspense>
           </WebSocketProvider>

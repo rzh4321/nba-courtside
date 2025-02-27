@@ -10,9 +10,10 @@ export default async function getGameIds(date?: string) {
   } else {
     games = await getScoreboards();
   }
-  const shouldRefreshStats = games.some(
+  const activeOrPastGames = games.filter(game => game.gameStatus !== GAME_STATUS.NOT_STARTED);
+  const shouldRefreshStats = activeOrPastGames.some(
     (game) => game.gameStatus !== GAME_STATUS.ENDED,
   );
-  gameIds = games.map((game) => game.gameId);
+  gameIds = activeOrPastGames.map((game) => game.gameId);
   return { gameIds, shouldRefreshStats };
 }
