@@ -1,5 +1,4 @@
 import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
-import { mode } from "@chakra-ui/theme-tools";
 
 import fonts from "./font";
 
@@ -11,7 +10,7 @@ export function colorsTooSimilar(tricode1: string, tricode2: string): boolean {
   );
 }
 
-const similarTeamColors: [string, string][] = [["DEN", "MIN"]];
+const similarTeamColors: [string, string][] = [["DEN", "MIN"], ["GSW", "ORL"]];
 
 export const teamColors: Record<string, string> = {
   ATL: "#e03a3e",
@@ -46,25 +45,25 @@ export const teamColors: Record<string, string> = {
   WAS: "#002b5c",
 };
 
-const config: ThemeConfig = {
-  initialColorMode: "dark",
-  useSystemColorMode: false,
-};
+// const config: ThemeConfig = {
+//   initialColorMode: "dark",
+//   useSystemColorMode: false,
+// };
 
-const theme = extendTheme({
-  config,
-  fonts,
-  colors: {
-    ...teamColors,
-  },
-  semanticTokens: {
-    colors: {
-      background: {
-        default: "gray.50",
-        _dark: "gray.800",
-      },
-    },
-  },
-});
+// const theme = extendTheme({
+//   config,
+//   fonts,
+//   colors: {
+//     ...teamColors,
+//   },
+//   semanticTokens: {
+//     colors: {
+//       background: {
+//         default: "gray.50",
+//         _dark: "gray.800",
+//       },
+//     },
+//   },
+// });
 
-export default theme;
+// export default theme;

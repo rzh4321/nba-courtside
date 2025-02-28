@@ -1,29 +1,28 @@
 import type { Boxscore } from "@/types";
-import { Box, VStack, HStack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import TeamStatistic from "./TeamStatistic";
 import { teamColors, colorsTooSimilar } from "@/theme";
 
 export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
   return (
-    <VStack gap={5} className="mb-7">
-      <HStack w={"full"} justifyContent={"space-between"}>
+    <div className='flex flex-col gap-5 mb-7'>
+      <div className="flex w-full justify-between">
         <Image
           src={`https://cdn.nba.com/logos/nba/${boxscore.awayTeam.teamId}/primary/L/logo.svg`}
           width={30}
           height={30}
           alt={boxscore.awayTeam.teamName}
         />
-        <Text fontWeight={800} fontSize={20}>
+        <span className="font-extrabold text-xl">
           Team Stats
-        </Text>
+        </span>
         <Image
           src={`https://cdn.nba.com/logos/nba/${boxscore.homeTeam.teamId}/primary/L/logo.svg`}
           width={30}
           height={30}
           alt={boxscore.homeTeam.teamName}
         />
-      </HStack>
+      </div>
       <TeamStatistic
         label="Field Goals"
         leftLabel={`${boxscore.awayTeam.statistics.fieldGoalsMade}/${boxscore.awayTeam.statistics.fieldGoalsAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.fieldGoalsMade) / boxscore.awayTeam.statistics.fieldGoalsAttempted)}%)`}
@@ -68,8 +67,8 @@ export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
       />
       <TeamStatistic
         label="Free Throws"
-        leftLabel={`${boxscore.awayTeam.statistics.freeThrowsMade}/${boxscore.awayTeam.statistics.freeThrowsAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.freeThrowsMade) / boxscore.awayTeam.statistics.freeThrowsAttempted)}%)`}
-        rightLabel={`${boxscore.homeTeam.statistics.freeThrowsMade}/${boxscore.homeTeam.statistics.freeThrowsAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.freeThrowsMade) / boxscore.homeTeam.statistics.freeThrowsAttempted)}%)`}
+        leftLabel={`${boxscore.awayTeam.statistics.freeThrowsMade}/${boxscore.awayTeam.statistics.freeThrowsAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.freeThrowsMade) / (boxscore.awayTeam.statistics.freeThrowsAttempted || 1))}%)`}
+        rightLabel={`${boxscore.homeTeam.statistics.freeThrowsMade}/${boxscore.homeTeam.statistics.freeThrowsAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.freeThrowsMade) / (boxscore.homeTeam.statistics.freeThrowsAttempted || 1))}%)`}
         leftColor={
           colorsTooSimilar(
             boxscore.awayTeam.teamTricode,
@@ -381,6 +380,6 @@ export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
             : teamColors[boxscore.homeTeam.teamTricode]
         }
       />
-    </VStack>
+    </div>
   );
 }

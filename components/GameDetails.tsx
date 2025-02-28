@@ -36,7 +36,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   }, [boxscore]);
 
   return (
-    <div className="flex flex-col gap-[50px] p-1">
+    <div className="flex flex-col gap-[50px] p-1x">
       <div>
         <div 
           className="flex items-center mb-5 w-fit cursor-pointer"
@@ -45,7 +45,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           <Undo2 />
           <span className="ml-2">Go Back</span>
         </div>
-        {gameId ? (
+        {
           boxscore ? (
             <div className="flex flex-col items-center gap-8">
               <ScoreDetails boxscore={boxscore} />
@@ -60,9 +60,8 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
               />
             </div>
           ) : null
-        ) : (
-          <NoGameMessage />
-        )}
+        
+      }
       </div>
       {boxscore && <OddsSection boxscore={boxscore} gameId={gameId} />}
       {boxscore && <TeamStats boxscore={boxscore} />}

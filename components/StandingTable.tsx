@@ -1,16 +1,12 @@
 import {
-  Box,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  VStack,
-  Text,
-  useColorModeValue,
-  HStack,
-} from "@chakra-ui/react";
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import type { Conference } from "@/utils/mappers";
 import Image from "next/image";
 
@@ -23,71 +19,59 @@ export default function StandingTable({
   label,
   conference,
 }: StandingTableProps) {
-  const bg = useColorModeValue("white", "gray.600");
-  const borderColor = useColorModeValue("gray.100", "gray.700");
-  const outlineBorderColor = useColorModeValue("gray.500", "gray.400");
 
   return (
-    <Box w={"full"} overflowX={"auto"}>
+    <div className="w-full overflow-x-auto">
       <Table
-        w={"full"}
-        variant={"simple"}
-        bg={bg}
-        size={"sm"}
-        rounded={"md"}
-        fontFamily={"mono"}
+        className="w-full bg-white dark:bg-gray-600 rounded-md font-mono"
       >
-        <Thead>
-          <Tr>
-            <Th>
-              <Text fontWeight={"semibold"} letterSpacing={"widest"}>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <span className="font-semibold tracking-widest">
                 {label.toUpperCase()}
-              </Text>
-            </Th>
-            <Th minW={20}>W - L</Th>
-            <Th>PCT</Th>
-            <Th>GB</Th>
-            <Th>HOME</Th>
-            <Th>AWAY</Th>
-            <Th>L10</Th>
-            <Th>STRK</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+              </span>
+            </TableHead>
+            <TableHead className="">W - L</TableHead>
+            <TableHead>PCT</TableHead>
+            <TableHead>GB</TableHead>
+            <TableHead>HOME</TableHead>
+            <TableHead>AWAY</TableHead>
+            <TableHead>L10</TableHead>
+            <TableHead>STRK</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {conference.map((team, i) => (
-            <Tr
+            <TableRow
+              className={`font-bold ${i === 5 || i === 9 ? 'border-b-[2px] border-gray-500 dark:border-gray-400' : 'border-b-[1.5px] border-gray-100 dark:border-gray-700'}`}
               key={team.id}
-              borderBottom={i === 5 || i === 9 ? "2px" : "1.5px"}
-              borderColor={
-                i === 5 || i === 9 ? outlineBorderColor : borderColor
-              }
-              fontWeight={"bold"}
             >
-              <Td minW={"190px"}>
-                <HStack gap={5}>
-                  <Text minW={"17px"}>{i + 1}</Text>
+              <TableCell className="min-w-[200px] w-[305px]">
+                <div className="flex gap-5 items-center">
+                  <span className="min-w-[17px]">{i + 1}</span>
                   <Image
                     src={`https://cdn.nba.com/logos/nba/${team.id}/primary/L/logo.svg`}
                     width={30}
                     height={30}
                     alt={team.name}
                   />
-                  <Text>{team.name}</Text>
-                </HStack>
-              </Td>
-              <Td minW={"95px"}>
+                  <span>{team.name}</span>
+                </div>
+              </TableCell>
+              <TableCell className="min-w-[95px]">
                 {team.win} - {team.loss}
-              </Td>
-              <Td>{team.percentage}%</Td>
-              <Td>{team.gamesBehind}</Td>
-              <Td minW={"75px"}>{team.homeRecord}</Td>
-              <Td minW={"75px"}>{team.awayRecord}</Td>
-              <Td>{team.lastTenRecord}</Td>
-              <Td textAlign={"center"}>{team.streak}</Td>
-            </Tr>
+              </TableCell>
+              <TableCell>{team.percentage}%</TableCell>
+              <TableCell>{team.gamesBehind}</TableCell>
+              <TableCell className="min-w-[75px]">{team.homeRecord}</TableCell>
+              <TableCell className="min-w-[75px]">{team.awayRecord}</TableCell>
+              <TableCell>{team.lastTenRecord}</TableCell>
+              <TableCell className="text-center">{team.streak}</TableCell>
+            </TableRow>
           ))}
-        </Tbody>
+        </TableBody>
       </Table>
-    </Box>
+    </div>
   );
 }

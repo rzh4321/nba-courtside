@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ColorModeScript, Box, Container } from "@chakra-ui/react";
-import theme from "@/theme";
 import ChakraProvider from "@/components/ChakraProvider";
 import NavBar from "@/components/NavBar";
 import { Suspense } from "react";

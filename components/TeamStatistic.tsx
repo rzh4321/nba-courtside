@@ -1,4 +1,3 @@
-import { VStack, HStack, Text, Box } from "@chakra-ui/react";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 
 type TeamStatisticProps = {
@@ -47,16 +46,19 @@ export default function TeamStatistic({
   };
 
   const total = leftInt + rightInt;
+  if (label === "Free Throws") {
+    console.log(leftInt, rightInt, total, rightLabel)
+  }
   const leftWidth = total === 0 ? "50%" : `${(leftInt / total) * 100}%`;
   const rightWidth = total === 0 ? "50%" : `${(rightInt / total) * 100}%`;
 
   return (
-    <VStack gap={2} w={"full"}>
-      <HStack w={"full"} justifyContent={"space-between"}>
-        <Text>{leftLabel}</Text>
-        <Text>{label}</Text>
-        <Text>{rightLabel}</Text>
-      </HStack>
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex w-full justify-between">
+        <span>{leftLabel}</span>
+        <span>{label}</span>
+        <span>{rightLabel}</span>
+      </div>
       <div className="bar-container" ref={ref}>
         <div
           className="left-bar"
@@ -67,6 +69,6 @@ export default function TeamStatistic({
           style={{ width: getWidth(rightWidth), backgroundColor: rightColor }}
         />
       </div>
-    </VStack>
+    </div>
   );
 }
