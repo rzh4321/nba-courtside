@@ -24,13 +24,11 @@ export const ScheduleBar = () => {
   const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
   const nextLink = pathname + (nextDay === today ? "?" : `?date=${nextDay}`);
 
-  const loadingSkeleton = Array.from({length: 10}).map((num, i) => (
+  const loadingSkeleton = Array.from({ length: 10 }).map((num, i) => (
     <div key={i} className="">
-        <div className="w-[135px] h-[100px] bg-white dark:bg-gray-700 rounded-md">
-        </div>
-        </div>)
-)
-
+      <div className="w-[135px] h-[100px] bg-white dark:bg-gray-700 rounded-md"></div>
+    </div>
+  ));
 
   return (
     <div className="relative">
@@ -64,7 +62,7 @@ export const ScheduleBar = () => {
             <div className="w-full overflow-auto scrollable">
               {isLoading || data == undefined ? (
                 <div className="flex gap-8 animate-pulse">
-                {loadingSkeleton}
+                  {loadingSkeleton}
                 </div>
               ) : error ? (
                 <p>There was an error when fetching today{"'"}s schedule</p>
