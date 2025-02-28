@@ -10,7 +10,9 @@ export default async function getGameIds(date?: string) {
   } else {
     games = await getScoreboards();
   }
-  const activeOrPastGames = games.filter(game => game.gameStatus !== GAME_STATUS.NOT_STARTED);
+  const activeOrPastGames = games.filter(
+    (game) => game.gameStatus !== GAME_STATUS.NOT_STARTED,
+  );
   const shouldRefreshStats = activeOrPastGames.some(
     (game) => game.gameStatus !== GAME_STATUS.ENDED,
   );

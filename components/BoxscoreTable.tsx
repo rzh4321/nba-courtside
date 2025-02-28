@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import type { Team } from "@/types";
 
 export type BoxscoreProps = {
@@ -41,9 +41,7 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
         <span className="font-bold tracking-widest">
           {team.teamName.toUpperCase()}
         </span>
-        <Table
-          className="w-full rounded-md bg-white dark:bg-gray-600 font-mono"
-        >
+        <Table className="w-full rounded-md bg-white dark:bg-gray-600 font-mono">
           <TableHeader>
             <TableRow>
               <TableHead className="min-w-[190px] w-[350px]">Name</TableHead>
@@ -60,7 +58,7 @@ export const BoxscoreTable = ({ isLive, team }: BoxscoreProps) => {
           <TableBody>
             {team.players.map((player, i) => (
               <TableRow
-                className={`${i === 4 ? 'border-b-[4px]' : 'border-b-[1.5px]'} border-gray-100 dark:border-gray-700`}
+                className={`${i === 4 ? "border-b-[4px]" : "border-b-[1.5px]"} border-gray-100 dark:border-gray-700`}
                 key={player.personId}
               >
                 <TableCell className="hidden sm:block min-w-[190px] max-w-[350px]">

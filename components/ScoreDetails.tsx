@@ -19,21 +19,15 @@ const TeamDetails = ({ team, reverse = false }: TeamDetailsProps) => {
         height={75}
         alt={team.teamName}
       />
-      <div className={`hidden sm:block ${reverse ? "text-right" : "text-left"}`}>
-        <p className="text-lg font-bold">
-          {team.teamTricode}
-        </p>
-        <p className="-mt-2 text-3xl font-bold">
-          {team.score}
-        </p>
+      <div
+        className={`hidden sm:block ${reverse ? "text-right" : "text-left"}`}
+      >
+        <p className="text-lg font-bold">{team.teamTricode}</p>
+        <p className="-mt-2 text-3xl font-bold">{team.score}</p>
       </div>
       <div className={`sm:hidden -m-1 ${reverse ? "text-right" : "text-left"}`}>
-        <p className="text-md font-bold">
-          {team.teamTricode}
-        </p>
-        <p className="-mt-2 text-2xl font-bold">
-          {team.score}
-        </p>
+        <p className="text-md font-bold">{team.teamTricode}</p>
+        <p className="-mt-2 text-2xl font-bold">{team.score}</p>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { teamColors, colorsTooSimilar } from "@/theme";
 
 export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
   return (
-    <div className='flex flex-col gap-5 mb-7'>
+    <div className="flex flex-col gap-5 mb-7">
       <div className="flex w-full justify-between">
         <Image
           src={`https://cdn.nba.com/logos/nba/${boxscore.awayTeam.teamId}/primary/L/logo.svg`}
@@ -13,9 +13,7 @@ export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
           height={30}
           alt={boxscore.awayTeam.teamName}
         />
-        <span className="font-extrabold text-xl">
-          Team Stats
-        </span>
+        <span className="font-extrabold text-xl">Team Stats</span>
         <Image
           src={`https://cdn.nba.com/logos/nba/${boxscore.homeTeam.teamId}/primary/L/logo.svg`}
           width={30}

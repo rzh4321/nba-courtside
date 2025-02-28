@@ -1,5 +1,4 @@
-import { Button } from "@chakra-ui/react";
-
+import { Button } from "./ui/button";
 type ConferenceButtonProps = {
   label: string;
   active: boolean;
@@ -11,5 +10,12 @@ export default function ConferenceButton({
   active,
   onClick,
 }: ConferenceButtonProps) {
-  return <Button onClick={onClick}>{label}</Button>;
+  return (
+    <Button
+      className="px-4 py-2 font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+      onClick={onClick}
+    >
+      {label}
+    </Button>
+  );
 }

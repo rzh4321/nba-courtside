@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import type { Conference } from "@/utils/mappers";
 import Image from "next/image";
 
@@ -19,12 +19,9 @@ export default function StandingTable({
   label,
   conference,
 }: StandingTableProps) {
-
   return (
     <div className="w-full overflow-x-auto">
-      <Table
-        className="w-full bg-white dark:bg-gray-600 rounded-md font-mono"
-      >
+      <Table className="w-full bg-white dark:bg-gray-600 rounded-md font-mono">
         <TableHeader>
           <TableRow>
             <TableHead>
@@ -44,7 +41,7 @@ export default function StandingTable({
         <TableBody>
           {conference.map((team, i) => (
             <TableRow
-              className={`font-bold ${i === 5 || i === 9 ? 'border-b-[2px] border-gray-500 dark:border-gray-400' : 'border-b-[1.5px] border-gray-100 dark:border-gray-700'}`}
+              className={`font-bold ${i === 5 || i === 9 ? "border-b-[2px] border-gray-500 dark:border-gray-400" : "border-b-[1.5px] border-gray-100 dark:border-gray-700"}`}
               key={team.id}
             >
               <TableCell className="min-w-[200px] w-[305px]">

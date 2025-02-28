@@ -2,9 +2,7 @@ import { Loader } from "lucide-react";
 import { nbaTeams } from "@/utils/getTeamNames";
 import Image from "next/image";
 import useGameBettingInfo from "@/hooks/useGameBettingInfo";
-import { Text, useColorModeValue } from "@chakra-ui/react";
 import { Boxscore, GameBettingInfo } from "@/types";
-import { Box } from "@chakra-ui/react";
 import { fullNbaTeams } from "@/utils/getTeamNames";
 
 type OddsSectionProps = {
@@ -94,8 +92,6 @@ type OddsRowProps = {
 };
 
 function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
-  const bg = useColorModeValue("gray.100", "gray.700");
-  const textColor = useColorModeValue("gray.500", "gray.400");
   const spreadOdds = isAwayTeam
     ? gameBettingInfo.awaySpreadOdds
     : gameBettingInfo.homeSpreadOdds;
@@ -147,14 +143,11 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
       <div className="flex gap-2">
         <div className="flex flex-col gap-2 items-center">
           {isAwayTeam && (
-            <Text textColor={textColor} className="tracking-tight">
+            <span className="tracking-tight text-gray-500 dark:text-gray-400">
               Spread
-            </Text>
+            </span>
           )}
-          <Box
-            bg={bg}
-            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
-          >
+          <div className="bg-gray-200 dark:bg-gray-700 flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center">
             {homeSpread === null ||
             (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
               <span className="my-auto">-</span>
@@ -170,18 +163,15 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                 )}
               </>
             )}
-          </Box>
+          </div>
         </div>
         <div className="flex flex-col gap-2 items-center">
           {isAwayTeam && (
-            <Text textColor={textColor} className="tracking-tight">
+            <span className="tracking-tight text-gray-500 dark:text-gray-400">
               Total
-            </Text>
+            </span>
           )}
-          <Box
-            bg={bg}
-            className="flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
-          >
+          <div className="bg-gray-200 dark:bg-gray-700 flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center">
             {overUnder === null ||
             (!gameBettingInfo.hasEnded && gameBettingInfo.overOdds === null) ? (
               <span className="my-auto">-</span>
@@ -198,19 +188,16 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                 )}
               </>
             )}
-          </Box>
+          </div>
         </div>
         {!gameBettingInfo.hasEnded && (
           <div className="flex flex-col gap-2 items-center">
             {isAwayTeam && (
-              <Text textColor={textColor} className="tracking-tight">
+              <span className="text-gray-500 dark:text-gray-400 tracking-tight">
                 Money
-              </Text>
+              </span>
             )}
-            <Box
-              bg={bg}
-              className="flex w-[81px] h-[68px] justify-center rounded-md p-2 items-center"
-            >
+            <div className="bg-gray-200 dark:bg-gray-700 flex w-[81px] h-[68px] justify-center rounded-md p-2 items-center">
               <span className="font-semibold tracking-wide">
                 {getMoneyline(
                   isAwayTeam
@@ -220,7 +207,7 @@ function OddsRow({ gameBettingInfo, teamId, isAwayTeam }: OddsRowProps) {
                   .toString()
                   .replace(/\.?0+$/, "")}
               </span>
-            </Box>
+            </div>
           </div>
         )}
       </div>

@@ -1,8 +1,8 @@
 import type { PlayerStatistics } from "@/types";
-import { AspectRatio, Box, Text, useColorModeValue } from "@chakra-ui/react";
 import Image from "next/image";
 import { useState } from "react";
 import useLeaders from "@/hooks/useLeaders";
+import { teamColors } from "@/theme";
 
 function categoryDisplay(category: string) {
   switch (category) {
@@ -30,56 +30,38 @@ export const PerformerCard = ({ player, category }: PerformerCardProps) => {
   const [imageUrl, setImageUrl] = useState(
     `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.personId}.png`,
   );
-  const cardColor = useColorModeValue("gray.700", "gray.900");
-  const textColor = useColorModeValue("gray.300", "gray.400");
-
+  const teamColor = teamColors[player.team];
   return (
-    <Box
-      maxW={"216px"}
-      minW={"150px"}
-      w={"216px"}
-      position={"relative"}
-      className="performer-card"
-      zIndex={0}
-    >
-      {/* a Box for player team's colors */}
-      <Box
-        bg={player.team}
-        w={"full"}
-        h={"80%"}
-        position={"absolute"}
-        roundedTop={"lg"}
-        bottom={4}
-        zIndex={-1}
+    <div className="performer-card max-w-[216px] min-w-[150px] w-[216px] relative z-0">
+      <div
+        style={{ backgroundColor: teamColor }}
+        className={`w-full h-4/5 absolute rounded-t-lg bottom-[4px] z-[-1]`}
       />
-      <AspectRatio ratio={1040 / 760}>
-        <Image
-          src={imageUrl}
-          alt={player.familyName}
-          height={216}
-          width={216}
-          onError={() =>
-            setImageUrl(
-              "https://cdn.nba.com/headshots/nba/latest/1040x760/fallback.png",
-            )
-          }
-        />
-      </AspectRatio>
-      {/* display player stats and name */}
-      <Box bg={cardColor} px={4} py={2} roundedBottom={"lg"}>
-        <Text fontWeight={"semibold"} color={"white"}>
+      <Image
+        src={imageUrl}
+        alt={player.familyName}
+        height={216}
+        width={216}
+        onError={() =>
+          setImageUrl(
+            "https://cdn.nba.com/headshots/nba/latest/1040x760/fallback.png",
+          )
+        }
+      />
+      <div className="bg-gray-700 dark:bg-gray-900 px-4 py-2 rounded-b-lg">
+        <span className="font-semibold text-white">
           {player.statistics[category]}{" "}
-          <Box as={"span"} color={textColor}>
+          <span className="text-gray-300 dark:text-gray-400">
             {categoryDisplay(category)}
-          </Box>
-        </Text>
-        <Text color={"white"} className="player-name">
+          </span>
+        </span>
+        <div className="text-white player-name font-montserrat">
           {player.firstName}{" "}
           {player.familyName.length >= 12
             ? player.familyName.slice(0, 1) + "."
             : player.familyName}
-        </Text>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };

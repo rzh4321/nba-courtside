@@ -38,30 +38,27 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   return (
     <div className="flex flex-col gap-[50px] p-1x">
       <div>
-        <div 
+        <div
           className="flex items-center mb-5 w-fit cursor-pointer"
           onClick={() => router.back()}
         >
           <Undo2 />
           <span className="ml-2">Go Back</span>
         </div>
-        {
-          boxscore ? (
-            <div className="flex flex-col items-center gap-8">
-              <ScoreDetails boxscore={boxscore} />
-              <GameSummary game={boxscore} />
-              <BoxscoreTable
-                isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-                team={boxscore.awayTeam}
-              />
-              <BoxscoreTable
-                isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
-                team={boxscore.homeTeam}
-              />
-            </div>
-          ) : null
-        
-      }
+        {boxscore ? (
+          <div className="flex flex-col items-center gap-8">
+            <ScoreDetails boxscore={boxscore} />
+            <GameSummary game={boxscore} />
+            <BoxscoreTable
+              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+              team={boxscore.awayTeam}
+            />
+            <BoxscoreTable
+              isLive={boxscore.gameStatus !== GAME_STATUS.ENDED}
+              team={boxscore.homeTeam}
+            />
+          </div>
+        ) : null}
       </div>
       {boxscore && <OddsSection boxscore={boxscore} gameId={gameId} />}
       {boxscore && <TeamStats boxscore={boxscore} />}

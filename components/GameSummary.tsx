@@ -3,18 +3,13 @@ import { Boxscore, Period } from "@/types";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-
-
-import { useColorModeValue } from "@chakra-ui/react";
+} from "@/components/ui/table";
 
 function GameSummary({ game }: { game: Boxscore }) {
-
   const renderPeriods = (periods: Period[], isHeader = false) =>
     periods.map(({ period, score }, index: number) => {
       const key = isHeader ? period : score;
@@ -25,20 +20,24 @@ function GameSummary({ game }: { game: Boxscore }) {
         : score;
 
       return isHeader ? (
-        <TableHead className="font-bold p-3 tracking-wider" key={index}>{content}</TableHead>
+        <TableHead className="font-bold p-3 tracking-wider" key={index}>
+          {content}
+        </TableHead>
       ) : (
-        <TableCell key={index} className="p-3 tracking-wider">{content}</TableCell>
+        <TableCell key={index} className="p-3 tracking-wider">
+          {content}
+        </TableCell>
       );
     });
 
   return (
     <div className=" bg-white dark:bg-gray-600 rounded-lg px-3">
-      <Table
-        className="w-full font-mono"
-      >
+      <Table className="w-full font-mono">
         <TableHeader>
           <TableRow>
-            <TableHead className="font-montserrat font-bold tracking-wider">TEAM</TableHead>
+            <TableHead className="font-montserrat font-bold tracking-wider">
+              TEAM
+            </TableHead>
             {renderPeriods(game.homeTeam.periods, true)}
           </TableRow>
         </TableHeader>

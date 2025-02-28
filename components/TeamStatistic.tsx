@@ -46,9 +46,7 @@ export default function TeamStatistic({
   };
 
   const total = leftInt + rightInt;
-  if (label === "Free Throws") {
-    console.log(leftInt, rightInt, total, rightLabel)
-  }
+
   const leftWidth = total === 0 ? "50%" : `${(leftInt / total) * 100}%`;
   const rightWidth = total === 0 ? "50%" : `${(rightInt / total) * 100}%`;
 

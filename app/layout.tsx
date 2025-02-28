@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { ColorModeScript, Box, Container } from "@chakra-ui/react";
-import ChakraProvider from "@/components/ChakraProvider";
 import NavBar from "@/components/NavBar";
 import { Suspense } from "react";
 import "@/app/globals.css";
@@ -18,19 +16,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        
-        <ChakraProvider>
-          <WebSocketProvider>
-            <Suspense>
-              <Box w={"full"}>
-                <NavBar />
-                <div className="pt-[10px] px-[16px] max-w-[1024px] w-full mx-auto">
-                  {children}
-                </div>
-              </Box>
-            </Suspense>
-          </WebSocketProvider>
-        </ChakraProvider>
+        <WebSocketProvider>
+          <Suspense>
+            <div className="w-full">
+              <NavBar />
+              <div className="pt-[10px] px-[16px] max-w-[1024px] w-full mx-auto">
+                {children}
+              </div>
+            </div>
+          </Suspense>
+        </WebSocketProvider>
       </body>
     </html>
   );
