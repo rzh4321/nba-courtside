@@ -7,6 +7,7 @@ import { Sun, Moon } from "lucide-react";
 import { ScheduleBar } from "./ScheduleBar";
 import useTheme from "@/hooks/useTheme";
 import { Button } from "./ui/button";
+import LogInDialog from "./LogInDialog";
 
 const NavBar = () => {
   const { isDark, toggleTheme } = useTheme();
@@ -27,6 +28,7 @@ const NavBar = () => {
           </Link>
 
           <div className="flex gap-5 items-center">
+            <LogInDialog />
             <Button
               asChild
               className="px-4 py-2 font-semibold bg-white dark:bg-gray-800 text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
