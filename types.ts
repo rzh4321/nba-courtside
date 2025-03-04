@@ -984,3 +984,8 @@ export type GameBettingInfo = {
   overOdds: null | number;
   hasEnded: boolean;
 };
+
+export type User = {
+  username: string;
+  id: number;
+};

@@ -7,9 +7,11 @@ import { Sun, Moon } from "lucide-react";
 import { ScheduleBar } from "./ScheduleBar";
 import useTheme from "@/hooks/useTheme";
 import { Button } from "./ui/button";
-import LogInDialog from "./LogInDialog";
+import AuthDialog from "./AuthDialog";
+import useAuth from "@/hooks/useAuth";
 
 const NavBar = () => {
+  const { isAuthenticated, loading, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
   return (
@@ -28,14 +30,24 @@ const NavBar = () => {
           </Link>
 
           <div className="flex gap-5 items-center">
-            <LogInDialog />
+            {loading ? (
+              <span className="animate-pulse bg-blue-300 rounded-full w-[40px] h-[20px]"></span>
+            ) : isAuthenticated ? (
+              <Button
+                className="text-white font-semibold tracking-tight"
+                variant={"link"}
+              >
+                Log out
+              </Button>
+            ) : (
+              <AuthDialog />
+            )}
             <Button
               asChild
-              className="px-4 py-2 font-semibold bg-white dark:bg-gray-800 text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              variant={"link"}
+              className="font-semibold text-white"
             >
-              <Link href="/standings" className="contents">
-                Standings
-              </Link>
+              <Link href="/standings">Standings</Link>
             </Button>
 
             {isDark !== undefined && (
