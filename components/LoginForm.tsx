@@ -54,18 +54,11 @@ export default function LoginForm() {
     });
     if (response.ok) {
       const { token, user } = await response.json();
-      toast(`Welcome back, ${user.username}`, {
-        type: "success",
-        description: ``,
-        duration: 1000,
-      });
-      console.log("TOKEN IS ", token);
+      toast.success(`Welcome back, ${user.username}`);
       login(token);
     } else {
-      const { message } = await response.json();
-      toast("Log in failed", {
-        description: message,
-      });
+      const { detail } = await response.json();
+      toast.error(detail);
       setPending(false);
     }
   }

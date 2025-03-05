@@ -58,10 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = (token: string): void => {
-    console.log(
-      "login called.  token stored to localstorage. TOKEN IS ",
-      token,
-    );
+    console.log("login called.  token stored to localstorage.");
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
     verifyToken();

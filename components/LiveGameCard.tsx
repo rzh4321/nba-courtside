@@ -72,7 +72,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
     >
       {/* Desktop version */}
       <div className="hidden sm:block">
-        <div className="flex flex-col items-start gap-2 w-[135px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
+        <div className="flex flex-col items-start gap-2 w-[135px] h-[100px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
           <p
             className={`text-md ${
               isLive
@@ -111,7 +111,7 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
 
       {/* Mobile version */}
       <div className="sm:hidden">
-        <div className="flex flex-col items-start gap-2 w-[120px] h-[112px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
+        <div className="flex flex-col items-start gap-2 w-[120px] h-[95px] px-4 py-2 bg-white dark:bg-gray-700 rounded-md">
           <p
             className={`text-md ${
               isLive

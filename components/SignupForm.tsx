@@ -20,7 +20,6 @@ import {
 import { useState } from "react";
 import { API_URL } from "@/config";
 import useAuth from "@/hooks/useAuth";
-import { time } from "console";
 
 const formSchema = z.object({
   username: z.string().min(1, {
@@ -65,18 +64,11 @@ export default function SignupForm() {
     });
     if (response.ok) {
       const { token, user } = await response.json();
-      toast(`Welcome, ${user.username}`, {
-        type: "success",
-        description: ``,
-        duration: 1000,
-      });
+      toast.success(`Welcome, ${user.username}`);
       login(token);
     } else {
-      const { message } = await response.json();
-      toast("Sign up failed", {
-        type: "error",
-        description: message,
-      });
+      const { detail } = await response.json();
+      toast.error(detail);
       setPending(false);
     }
   }
