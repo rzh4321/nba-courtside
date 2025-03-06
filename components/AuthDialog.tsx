@@ -21,6 +21,7 @@ export default function AuthDialog() {
         <Button
           className="text-white font-semibold tracking-tight"
           variant="link"
+          id="logInButton"
         >
           Log In
         </Button>
