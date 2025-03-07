@@ -6,31 +6,11 @@ import { Boxscore, GameBettingInfo } from "@/types";
 import { fullNbaTeams } from "@/utils/getTeamNames";
 import React from "react";
 import OddsBox from "./OddsBox";
+import { getMoneyline, getSpread } from "@/utils/formatOdds";
 
 type OddsSectionProps = {
   boxscore: Boxscore;
   gameId: string;
-};
-
-const getSpread = (
-  homeSpread: number | null | undefined,
-  type: "home" | "away",
-) => {
-  if (homeSpread === null || homeSpread === undefined) return "-";
-  else if (type === "away") {
-    let opposite = -1 * homeSpread;
-    if (opposite > 0) return "+" + homeSpread.toString().slice(1);
-    return opposite.toString();
-  } else {
-    if (homeSpread > 0) return "+" + homeSpread.toString();
-    return homeSpread.toString();
-  }
-};
-
-const getMoneyline = (moneyline: number | null | undefined) => {
-  if (moneyline === null || moneyline === undefined) return "-";
-  if (moneyline > 0) return "+" + moneyline.toString();
-  return moneyline;
 };
 
 export default function OddsSection({ boxscore, gameId }: OddsSectionProps) {
@@ -179,9 +159,7 @@ function OddsRow({
               ) : (
                 <div className="flex flex-col justify-center items-center">
                   <span>
-                    {getSpread(homeSpread, isAwayTeam ? "away" : "home")
-                      .toString()
-                      .replace(/\.?0+$/, "")}
+                    {getSpread(homeSpread, isAwayTeam ? "away" : "home")}
                   </span>
                   {!gameBettingInfo.hasEnded && (
                     <span>{spreadOdds!.toString().replace(/\.?0+$/, "")}</span>
@@ -256,9 +234,7 @@ function OddsRow({
                     isAwayTeam
                       ? gameBettingInfo.awayMoneyline
                       : gameBettingInfo.homeMoneyline,
-                  )
-                    .toString()
-                    .replace(/\.?0+$/, "")}
+                  )}
                 </span>
               </div>
             </OddsBox>

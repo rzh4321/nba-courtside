@@ -21,9 +21,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { API_URL } from "@/config";
 import useAuth from "@/hooks/useAuth";
+import { getMoneyline, getSpread } from "@/utils/formatOdds";
 
 const formSchema = z.object({
   wager: z.number().min(1, {
@@ -55,15 +56,16 @@ export default function OddsBox({
   teams,
 }: Props) {
   const [pending, setPending] = useState(false);
+  const [wager, setWager] = useState();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const token = localStorage.getItem("token");
   const betTypeToString = {
     SPREAD_HOME: {
-      title: `${teams.home} ${bettingLine}`,
+      title: `${teams.home} ${getSpread(bettingLine, "home")}`,
       desc: "SPREAD BETTING",
     },
     SPREAD_AWAY: {
-      title: `${teams.away} ${bettingLine}`,
+      title: `${teams.away} ${getSpread(bettingLine, "away")}`,
       desc: "SPREAD BETTING",
     },
     OVER: { title: `Over ${bettingLine}`, desc: "TOTAL POINTS" },
@@ -95,7 +97,7 @@ export default function OddsBox({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      wager: 0,
+      wager: undefined,
     },
   });
 
@@ -146,61 +148,58 @@ export default function OddsBox({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-1"
           >
-            <DialogHeader className="flex justify-between">
-              <span className="font-bold text-blue-400 tracking-tight">
-                Betslip
-              </span>
-              <span className="text-sm tracking-tight">
-                $10 wins ${calculateOddsAndPayout(odds!)}
-              </span>
+            <DialogHeader>
+              <div className="flex justify-between mt-4">
+                <span className="font-semibold text-blue-400 tracking-tight">
+                  Betslip
+                </span>
+                <span className="text-sm tracking-tight font-thin">
+                  $10 wins ${calculateOddsAndPayout(odds!)}
+                </span>
+              </div>
             </DialogHeader>
 
-            <div className="">
-              <div className="justify-between">
-                <div>
-                  <span>{betTypeToString[type].title}</span>
-                  <span>{betTypeToString[type].desc}</span>
+            <div className="flex flex-col gap-1">
+              <div className="flex justify-between">
+                <div className="flex flex-col">
+                  <span className="font-semibold">
+                    {betTypeToString[type].title}
+                  </span>
+                  <span className="text-[11px] text-gray-400 tracking-wide">
+                    {betTypeToString[type].desc}
+                  </span>
                 </div>
-                <div>{odds! > 0 ? `+${odds}` : odds}</div>
+                <div>
+                  {odds! > 0
+                    ? `+${odds!.toString().replace(/\.?0+$/, "")}`
+                    : odds!.toString().replace(/\.?0+$/, "")}
+                </div>
               </div>
-              <FormField
-                control={form.control}
-                name="wager"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      htmlFor="wager"
-                      className="mb-3 mt-5 block text-xs font-medium"
-                    >
-                      Wager
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          {...field}
-                          className="peer text-base w-full block rounded-md border bg-zinc-50 px-2 py-[9px] sm:text-sm outline-none placeholder:text-zinc-500"
-                          id="wager"
-                          type="number"
-                          name="wager"
-                          required
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                className="my-6 flex sm:h-10 border-blue-600 w-full flex-row items-center justify-center rounded-md bg-[#6366f1] px-8 text-sm font-medium text-white shadow transition-colors hover:bg-[#4f46e5] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                aria-disabled={pending}
-                disabled={pending}
-              >
-                {pending ? (
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
-                ) : (
-                  "Log in"
-                )}
-              </Button>{" "}
+              <div className="flex items-center gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="wager"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2 flex-1">
+                      <FormControl>
+                        <WagerInput field={field} setWager={setWager} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className={`h-14 p-0 rounded-sm self-start tracking-wide flex flex-1 w-1/2 flex-row items-center justify-center ${pending || wager === undefined || wager <= 0 ? "bg-slate-500 text-black font-light" : "bg-green-600 hover:bg-green-700 text-white"} text-sm shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50`}
+                  aria-disabled={pending || wager === undefined || wager <= 0}
+                  disabled={pending || wager === undefined || wager <= 0}
+                >
+                  {pending ? (
+                    <div className="animate-spin rounded-full h-8 border-b-2 border-gray-900 dark:border-white" />
+                  ) : (
+                    "Enter wage amount"
+                  )}
+                </Button>{" "}
+              </div>
             </div>
           </form>
         </Form>
@@ -208,3 +207,73 @@ export default function OddsBox({
     </Dialog>
   );
 }
+
+const WagerInput = ({
+  field,
+  setWager,
+}: {
+  field: any;
+  setWager: React.Dispatch<React.SetStateAction<undefined>>;
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    setWager(field.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field.value]);
+  console.log(field.value);
+
+  const handleContainerClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  return (
+    <div
+      className="relative inline-block w-full"
+      onClick={handleContainerClick}
+    >
+      <div
+        className={`relative rounded-sm ${isFocused ? "ring-1 ring-blue-500" : ""}`}
+      >
+        <div
+          className={`border ${isFocused ? "border-blue-500" : "border-gray-600"} rounded-sm h-14 relative transition-colors duration-200`}
+        >
+          <span
+            className={`absolute text-xs cursor-default ${isFocused ? "text-blue-500" : "text-white"} font-light left-3 top-2`}
+          >
+            WAGER
+          </span>
+
+          <span
+            className={`absolute cursor-default text-white font-light left-3 top-[22px] text-md pointer-events-none`}
+          >
+            $
+          </span>
+
+          <Input
+            {...field}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            ref={inputRef}
+            id="wager"
+            type="number"
+            name="wager"
+            required
+            className="absolute bottom-0 focus-visible:ring-0 border-none focus:ring-0 focus:border-none focus:outline-none dark:text-white active:outline-none left-[-7px] w-full h-9 pl-8 pb-2 bg-transparent outline-none text-lg"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
