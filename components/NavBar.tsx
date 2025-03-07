@@ -32,10 +32,12 @@ const NavBar = () => {
               height={100}
               className="w-[40px] hidden sm:block"
             />
-            <span className="text-2xl font-bold text-white">NBA CourtSide</span>
+            <span className="sm:text-2xl text-xl font-bold text-white">
+              NBA CourtSide
+            </span>
           </Link>
 
-          <div className="flex gap-5 items-center">
+          <div className="flex sm:gap-5 gap-1 items-center">
             <Button
               asChild
               variant={"link"}

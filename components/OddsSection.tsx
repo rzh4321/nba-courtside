@@ -151,7 +151,7 @@ function OddsRow({
           >
             <div
               data-clickable="true"
-              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
+              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center"
             >
               {homeSpread === null ||
               (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
@@ -184,7 +184,7 @@ function OddsRow({
           >
             <div
               data-clickable="true"
-              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex w-[81px] h-[68px] flex-col rounded-md p-2 items-center font-semibold tracking-wide justify-center"
+              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center"
             >
               {overUnder === null ||
               (!gameBettingInfo.hasEnded &&
@@ -227,7 +227,7 @@ function OddsRow({
             >
               <div
                 data-clickable="true"
-                className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex w-[81px] h-[68px] justify-center rounded-md p-2 items-center"
+                className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide justify-center rounded-md p-2 items-center"
               >
                 <span className="font-semibold tracking-wide">
                   {getMoneyline(

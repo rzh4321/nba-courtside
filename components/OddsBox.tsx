@@ -27,7 +27,7 @@ import useAuth from "@/hooks/useAuth";
 import { getMoneyline, getSpread } from "@/utils/formatOdds";
 
 const formSchema = z.object({
-  wager: z.number().min(1, {
+  wager: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
     message: "Required",
   }),
 });
@@ -90,8 +90,6 @@ export default function OddsBox({
       e.stopPropagation();
       return;
     }
-
-    console.log("wager dialog");
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -102,7 +100,16 @@ export default function OddsBox({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setPending(true);
+    // setPending(true);
+    console.log(values);
+    console.log({
+      gameId: gameId,
+      betType: type,
+      amountToPlace: values.wager,
+      odds: odds,
+      ...(bettingLine !== undefined && { bettingLine }),
+    });
+    return;
     const response = await fetch(`${API_URL}/bets`, {
       method: "POST",
       headers: {
@@ -128,10 +135,10 @@ export default function OddsBox({
     }
   }
 
-  function calculateOddsAndPayout(odds: number): number {
+  function calculateOddsAndPayout(wager: number, odds: number): number {
     const decimalOdds = odds > 0 ? odds / 100 + 1 : 100 / Math.abs(odds) + 1;
 
-    const totalPayout = 10 * decimalOdds;
+    const totalPayout = wager * decimalOdds;
     return Number(totalPayout.toFixed(2));
   }
 
@@ -154,7 +161,7 @@ export default function OddsBox({
                   Betslip
                 </span>
                 <span className="text-sm tracking-tight font-thin">
-                  $10 wins ${calculateOddsAndPayout(odds!)}
+                  $10 wins ${calculateOddsAndPayout(10, odds!)}
                 </span>
               </div>
             </DialogHeader>
@@ -165,7 +172,7 @@ export default function OddsBox({
                   <span className="font-semibold">
                     {betTypeToString[type].title}
                   </span>
-                  <span className="text-[11px] text-gray-400 tracking-wide">
+                  <span className="text-[11px] dark:text-gray-400 text-gray-500 tracking-wide">
                     {betTypeToString[type].desc}
                   </span>
                 </div>
@@ -184,19 +191,27 @@ export default function OddsBox({
                       <FormControl>
                         <WagerInput field={field} setWager={setWager} />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <Button
-                  className={`h-14 p-0 rounded-sm self-start tracking-wide flex flex-1 w-1/2 flex-row items-center justify-center ${pending || wager === undefined || wager <= 0 ? "bg-slate-500 text-black font-light" : "bg-green-600 hover:bg-green-700 text-white"} text-sm shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50`}
+                  className={`h-14 p-0 rounded-sm self-start tracking-wide flex flex-1 w-1/2 flex-row items-center justify-center ${pending || wager === undefined || wager <= 0 ? "bg-slate-500 text-black font-light" : "bg-green-600/80 hover:bg-green-800 text-white"} text-sm shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50`}
                   aria-disabled={pending || wager === undefined || wager <= 0}
                   disabled={pending || wager === undefined || wager <= 0}
                 >
                   {pending ? (
                     <div className="animate-spin rounded-full h-8 border-b-2 border-gray-900 dark:border-white" />
+                  ) : !wager || wager < 0 ? (
+                    "Enter wager amount"
                   ) : (
-                    "Enter wage amount"
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="text-sm font-[400]">
+                        Accept and place bet
+                      </span>
+                      <span className="tracking-tight text-xs font-light">
+                        TO WIN: ${calculateOddsAndPayout(wager, odds!)}
+                      </span>
+                    </div>
                   )}
                 </Button>{" "}
               </div>
@@ -222,7 +237,16 @@ const WagerInput = ({
     setWager(field.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.value]);
-  console.log(field.value);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (regex.test(inputValue) || inputValue === "") {
+      field.onChange(e);
+    }
+  };
 
   const handleContainerClick = () => {
     if (inputRef.current) {
@@ -250,19 +274,20 @@ const WagerInput = ({
           className={`border ${isFocused ? "border-blue-500" : "border-gray-600"} rounded-sm h-14 relative transition-colors duration-200`}
         >
           <span
-            className={`absolute text-xs cursor-default ${isFocused ? "text-blue-500" : "text-white"} font-light left-3 top-2`}
+            className={`absolute text-xs cursor-default ${isFocused ? "text-blue-500" : "dark:text-white text-black"} font-light left-3 top-2`}
           >
             WAGER
           </span>
 
           <span
-            className={`absolute cursor-default text-white font-light left-3 top-[22px] text-md pointer-events-none`}
+            className={`absolute cursor-default dark:text-white text-black font-light left-3 top-[22px] text-md pointer-events-none`}
           >
             $
           </span>
 
           <Input
             {...field}
+            onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
             ref={inputRef}
