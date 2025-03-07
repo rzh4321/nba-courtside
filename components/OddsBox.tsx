@@ -61,11 +61,11 @@ export default function OddsBox({
   const token = localStorage.getItem("token");
   const betTypeToString = {
     SPREAD_HOME: {
-      title: `${teams.home} ${getSpread(bettingLine, "home")}`,
+      title: `${teams.home} ${bettingLine! > 0 ? '+' : ''}${bettingLine}`,
       desc: "SPREAD BETTING",
     },
     SPREAD_AWAY: {
-      title: `${teams.away} ${getSpread(bettingLine, "away")}`,
+      title: `${teams.away} ${bettingLine! > 0 ? '+' : ''}${bettingLine}`,
       desc: "SPREAD BETTING",
     },
     OVER: { title: `Over ${bettingLine}`, desc: "TOTAL POINTS" },
@@ -100,16 +100,14 @@ export default function OddsBox({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // setPending(true);
-    console.log(values);
+    setPending(true);
     console.log({
       gameId: gameId,
       betType: type,
-      amountToPlace: values.wager,
-      odds: odds,
+      amountToPlace: +values.wager,
+      odds: +odds!,
       ...(bettingLine !== undefined && { bettingLine }),
     });
-    return;
     const response = await fetch(`${API_URL}/bets`, {
       method: "POST",
       headers: {
@@ -126,13 +124,12 @@ export default function OddsBox({
     });
     if (response.ok) {
       const res = await response.json();
-      console.log("RES AFTER PLACING BET: ", res);
       toast.success(`success`);
     } else {
       const { detail } = await response.json();
       toast.error(detail);
-      setPending(false);
     }
+    setPending(false);
   }
 
   function calculateOddsAndPayout(wager: number, odds: number): number {

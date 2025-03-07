@@ -145,7 +145,7 @@ function OddsRow({
           <OddsBox
             type={`SPREAD_${isAwayTeam ? "AWAY" : "HOME"}`}
             odds={spreadOdds}
-            bettingLine={homeSpread}
+            bettingLine={isAwayTeam ? +getSpread(homeSpread, 'away') : +getSpread(homeSpread, 'home')}
             gameId={gameId}
             teams={teamNames}
           >
