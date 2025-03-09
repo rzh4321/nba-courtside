@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import useSWR from "swr";
 import { ScoreDetails } from "./ScoreDetails";
-import { NoGameMessage } from "./NoGameMessage";
 import { BoxscoreTable } from "./BoxscoreTable";
 import { useRouter } from "next/navigation";
 import { Undo2 } from "lucide-react";
