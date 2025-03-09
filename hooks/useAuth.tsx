@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (response.ok) {
           console.log("token authenticated. ur now authenticated");
           const userData: User = await response.json();
+          console.log(userData);
           setIsAuthenticated(true);
           setUser(userData);
         } else {
@@ -54,7 +55,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     verifyToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = (token: string): void => {

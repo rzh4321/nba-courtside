@@ -988,4 +988,11 @@ export type GameBettingInfo = {
 export type User = {
   username: string;
   id: number;
+  amount_deposited: number;
+  amount_placed: number;
+  amount_won: number;
+  balance: number;
+  bets_placed: number;
+  bets_won: number;
+  created_at: Date;
 };

@@ -50,7 +50,7 @@ export default function OddsBox({
   const [payout, setPayout] = useState<undefined | string>();
   const [prevWager, setPrevWager] = useState<undefined | string>();
   const [wager, setWager] = useState<undefined | string>();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const token = localStorage.getItem("token");
   const betTypeToString = {
     SPREAD_HOME: {
@@ -94,37 +94,42 @@ export default function OddsBox({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setPending(true);
-    console.log({
-      gameId: gameId,
-      betType: type,
-      amountToPlace: +values.wager,
-      odds: +odds!,
-      ...(bettingLine !== undefined && { bettingLine }),
-    });
-    const response = await fetch(`${API_URL}/bets`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
+    if (user && user.balance >= +values.wager) {
+      console.log({
         gameId: gameId,
         betType: type,
-        amountToPlace: values.wager,
-        odds: odds,
+        amountToPlace: +values.wager,
+        odds: +odds!,
         ...(bettingLine !== undefined && { bettingLine }),
-      }),
-    });
-    if (response.ok) {
-      const res = await response.json();
-      console.log(res);
-      toast.success(`success`);
-      setPrevWager(values.wager);
-      setPayout(res.totalPayout);
-      setIsBetPlaced(true);
-    } else {
-      const { detail } = await response.json();
-      toast.error(detail);
+      });
+      const response = await fetch(`${API_URL}/bets`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          gameId: gameId,
+          betType: type,
+          amountToPlace: values.wager,
+          odds: odds,
+          ...(bettingLine !== undefined && { bettingLine }),
+        }),
+      });
+      if (response.ok) {
+        const res = await response.json();
+        console.log(res);
+        setPrevWager(values.wager);
+        setPayout(res.totalPayout);
+        setIsBetPlaced(true);
+      } else {
+        const { detail } = await response.json();
+        toast.error(detail);
+      }
+    } else if (user) {
+      toast.error(
+        "Insufficient balance. Visit your profile to deposit more money.",
+      );
     }
     setPending(false);
   }
