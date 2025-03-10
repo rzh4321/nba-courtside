@@ -3,6 +3,7 @@ import json
 import threading
 import time
 
+
 class OddsWebSocketClient:
     def __init__(self, url="ws://127.0.0.1:8000//ws/odds"):
         self.url = url
@@ -31,9 +32,9 @@ class OddsWebSocketClient:
             on_message=self.on_message,
             on_error=self.on_error,
             on_close=self.on_close,
-            on_open=self.on_open
+            on_open=self.on_open,
         )
-        
+
         # Start WebSocket connection in a separate thread
         wst = threading.Thread(target=self.ws.run_forever)
         wst.daemon = True

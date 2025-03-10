@@ -2,7 +2,7 @@ nba_teams_full = {
     "76ers": "Philadelphia 76ers",
     "Bucks": "Milwaukee Bucks",
     "Bulls": "Chicago Bulls",
-    "Cavaliers": "Cleveland Cavaliers", 
+    "Cavaliers": "Cleveland Cavaliers",
     "Celtics": "Boston Celtics",
     "Clippers": "Los Angeles Clippers",
     "Grizzlies": "Memphis Grizzlies",
@@ -28,18 +28,20 @@ nba_teams_full = {
     "Timberwolves": "Minnesota Timberwolves",
     "Blazers": "Portland Trail Blazers",
     "Warriors": "Golden State Warriors",
-    "Wizards": "Washington Wizards"
+    "Wizards": "Washington Wizards",
 }
+
 
 def convert_odds(odds_str: str) -> float:
     """Convert odds string to decimal number"""
     odds_str = odds_str.strip()
-    if odds_str.startswith('−'):  # Handle minus sign
-        odds_str = '-' + odds_str[1:]
+    if odds_str.startswith("−"):  # Handle minus sign
+        odds_str = "-" + odds_str[1:]
     return float(odds_str)
+
 
 def convert_spread(spread_str: str) -> float:
     """Convert spread string to decimal number"""
-    if spread_str.startswith('−'):  # Handle minus sign
-        spread_str = '-' + spread_str[1:]
+    if spread_str.startswith("−"):  # Handle minus sign
+        spread_str = "-" + spread_str[1:]
     return float(spread_str)
