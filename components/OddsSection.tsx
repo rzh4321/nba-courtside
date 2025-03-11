@@ -159,14 +159,14 @@ function OddsRow({
             >
               {homeSpread === null ||
               (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
-                <span className="my-auto">-</span>
+                <span data-clickable="true" className="my-auto">-</span>
               ) : (
-                <div className="flex flex-col justify-center items-center">
-                  <span>
+                <div data-clickable="true" className="flex flex-col justify-center items-center">
+                  <span data-clickable="true">
                     {getSpread(homeSpread, isAwayTeam ? "away" : "home")}
                   </span>
                   {!gameBettingInfo.hasEnded && (
-                    <span>{spreadOdds!.toString().replace(/\.?0+$/, "")}</span>
+                    <span data-clickable="true">{spreadOdds! > 0 && '+'}{spreadOdds!.toString().replace(/\.?0+$/, "")}</span>
                   )}
                 </div>
               )}
@@ -202,7 +202,7 @@ function OddsRow({
                   </span>
                   {!gameBettingInfo.hasEnded && (
                     <span>
-                      {gameBettingInfo
+                      {gameBettingInfo.overOdds! > 0 && '+'}{gameBettingInfo
                         .overOdds!.toString()
                         .replace(/\.?0+$/, "")}
                     </span>

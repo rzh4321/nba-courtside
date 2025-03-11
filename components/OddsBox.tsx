@@ -79,7 +79,7 @@ export default function OddsBox({
       return;
     }
 
-    if ((odds === null || bettingLine === null) && isClickableElement) {
+    if ((odds === null || bettingLine === null || bettingLine === undefined) && isClickableElement) {
       e.stopPropagation();
       return;
     }
@@ -144,7 +144,7 @@ export default function OddsBox({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div onClick={handleClickOdds} onClickCapture={handleClickOdds}>
+        <div data-clickable="true" onClick={handleClickOdds} onClickCapture={handleClickOdds}>
           {children}
         </div>
       </DialogTrigger>
@@ -187,9 +187,9 @@ export default function OddsBox({
                     </span>
                   </div>
                   <div>
-                    {odds! > 0
+                    {odds && odds > 0
                       ? `+${odds!.toString().replace(/\.?0+$/, "")}`
-                      : odds!.toString().replace(/\.?0+$/, "")}
+                      : odds && odds.toString().replace(/\.?0+$/, "")}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 w-full">
