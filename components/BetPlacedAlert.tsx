@@ -96,7 +96,8 @@ export default function BetPlacedAlert({
           </div>
         </div>
         <div className="font-semibold">
-          {odds > 0 && '+'}{odds!.toString().replace(/\.?0+$/, "")}
+          {odds > 0 && "+"}
+          {odds!.toString().replace(/\.?0+$/, "")}
         </div>
       </div>
       {/* rows for wager, odds, to win, total payout */}
@@ -108,7 +109,10 @@ export default function BetPlacedAlert({
         <Separator />
         <div className="flex justify-between py-3">
           <span className="font-semibold">Odds</span>
-          <span>{odds > 0 && '+'}{odds.toString().replace(/\.?0+$/, "")}</span>
+          <span>
+            {odds > 0 && "+"}
+            {odds.toString().replace(/\.?0+$/, "")}
+          </span>
         </div>
         <Separator />
 

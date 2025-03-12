@@ -37,15 +37,15 @@ export default function RootLayout({
         <WebSocketProvider>
           <AuthProvider>
             <QueryProvider>
-            <Suspense>
-              <Toaster />
-              <div className="w-full">
-                <NavBar />
-                <div className="pt-[10px] px-[16px] max-w-[1024px] w-full mx-auto">
-                  {children}
+              <Suspense>
+                <Toaster />
+                <div className="w-full">
+                  <NavBar />
+                  <div className="pt-[10px] px-[16px] max-w-[1024px] w-full mx-auto">
+                    {children}
+                  </div>
                 </div>
-              </div>
-            </Suspense>
+              </Suspense>
             </QueryProvider>
           </AuthProvider>
         </WebSocketProvider>

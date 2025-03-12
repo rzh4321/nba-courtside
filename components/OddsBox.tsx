@@ -79,7 +79,10 @@ export default function OddsBox({
       return;
     }
 
-    if ((odds === null || bettingLine === null || bettingLine === undefined) && isClickableElement) {
+    if (
+      (odds === null || bettingLine === null || bettingLine === undefined) &&
+      isClickableElement
+    ) {
       e.stopPropagation();
       return;
     }
@@ -144,7 +147,11 @@ export default function OddsBox({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div data-clickable="true" onClick={handleClickOdds} onClickCapture={handleClickOdds}>
+        <div
+          data-clickable="true"
+          onClick={handleClickOdds}
+          onClickCapture={handleClickOdds}
+        >
           {children}
         </div>
       </DialogTrigger>

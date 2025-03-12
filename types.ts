@@ -1006,9 +1006,11 @@ export type CurrentGameBettingInfos = {
 } & {
   // This ensures at least one key exists
   [K in string]: CurrentGameBettingInfo[];
-} extends { [date: string]: never } ? never : {
-  [key: string]: CurrentGameBettingInfo[];
-};
+} extends { [date: string]: never }
+  ? never
+  : {
+      [key: string]: CurrentGameBettingInfo[];
+    };
 
 export type User = {
   username: string;
