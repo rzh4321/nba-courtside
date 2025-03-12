@@ -985,6 +985,31 @@ export type GameBettingInfo = {
   hasEnded: boolean;
 };
 
+// type for the odds boxes on home page
+export type CurrentGameBettingInfo = {
+  id: number;
+  gameId: string | undefined;
+  homeTeam: string;
+  awayTeam: string;
+  homeSpreadOdds: null | number;
+  awaySpreadOdds: null | number;
+  homeSpread: null | number;
+  homeMoneyline: null | number;
+  awayMoneyline: null | number;
+  overUnder: null | number;
+  overOdds: null | number;
+};
+
+// type of data fetched for displaying current odds on home page
+export type CurrentGameBettingInfos = {
+  [date: string]: CurrentGameBettingInfo[];
+} & {
+  // This ensures at least one key exists
+  [K in string]: CurrentGameBettingInfo[];
+} extends { [date: string]: never } ? never : {
+  [key: string]: CurrentGameBettingInfo[];
+};
+
 export type User = {
   username: string;
   id: number;

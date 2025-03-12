@@ -5,6 +5,7 @@ import "@/app/globals.css";
 import { WebSocketProvider } from "@/contexts/WebSocketContext";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/useAuth";
+import QueryProvider from "@/components/QueryProvider";
 
 export const metadata: Metadata = {
   title: "NBA CourtSide",
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body>
         <WebSocketProvider>
           <AuthProvider>
+            <QueryProvider>
             <Suspense>
               <Toaster />
               <div className="w-full">
@@ -44,6 +46,7 @@ export default function RootLayout({
                 </div>
               </div>
             </Suspense>
+            </QueryProvider>
           </AuthProvider>
         </WebSocketProvider>
       </body>

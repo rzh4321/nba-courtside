@@ -231,9 +231,8 @@ def mark_stale_games_as_ended():
             eastern = pytz.timezone("America/New_York")
             # Get current time in EST
             now = datetime.now(eastern)
-            yesterday = (now - timedelta(days=1)).date()
 
-            # Find games from yesterday or today that haven't ended
+            # Find games that haven't ended
             # and haven't been updated in last 10 minutes
             stale_games = (
                 session.query(Game)
