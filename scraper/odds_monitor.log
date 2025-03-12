@@ -1,0 +1,12 @@
+2025-03-11 23:46:58,200 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-11 23:46:58,200 - src.monitor - INFO - Starting scheduler...
+2025-03-11 23:46:58,200 - src.monitor - INFO - Running initial check...
+2025-03-11 23:47:21,099 - apscheduler.scheduler - INFO - Added job "scrape_odds" to job store "default"
+2025-03-11 23:47:21,099 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-11 23:47:28,206 - apscheduler.executors.default - INFO - Running job "scrape_odds (trigger: interval[0:00:30], next run at: 2025-03-11 23:47:28 EDT)" (scheduled at 2025-03-11 23:47:28.200318-04:00)
+2025-03-11 23:47:46,989 - apscheduler.executors.default - INFO - Job "scrape_odds (trigger: interval[0:00:30], next run at: 2025-03-11 23:47:58 EDT)" executed successfully
+2025-03-11 23:47:58,208 - apscheduler.executors.default - INFO - Running job "scrape_odds (trigger: interval[0:00:30], next run at: 2025-03-11 23:48:28 EDT)" (scheduled at 2025-03-11 23:47:58.200318-04:00)
+2025-03-11 23:48:03,420 - src.monitor - INFO - Scheduler stopped
+2025-03-11 23:48:03,434 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba180>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
+2025-03-11 23:48:03,435 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba2a0>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
+2025-03-11 23:48:03,437 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba420>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
