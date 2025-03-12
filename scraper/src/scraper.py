@@ -13,6 +13,9 @@ from datetime import date, timedelta, datetime
 import pytz  # type: ignore
 import sys
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 eastern = pytz.timezone("America/New_York")
 today = datetime.now(eastern).date()
@@ -23,7 +26,7 @@ def should_scrape():
     # Check if it's during typical NBA game hours (e.g., 11 AM - 2 AM ET)
     if current_time.hour >= 11 or current_time.hour < 2:
         return True
-    print(f"its not beween 11 am and 2 am, not running scraper")
+    logger.error(f"its not beween 11 am and 2 am, not running scraper")
     return False
 
 
@@ -98,7 +101,7 @@ def setup_driver(max_attempts=3):
             return driver
 
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {str(e)}")
+            logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
             if "driver" in locals():
                 try:
                     driver.quit()
@@ -148,7 +151,7 @@ def scrape_with_retry(url, max_retries=3):
             return driver, html
 
         except Exception as e:
-            print(f"Error on attempt {attempt + 1}: {str(e)}")
+            logger.error(f"Error on attempt {attempt + 1}: {str(e)}")
             if driver:
                 try:
                     driver.quit()
@@ -171,7 +174,7 @@ def scrape_with_retry(url, max_retries=3):
 
 def scrape_odds():
     if should_scrape():
-        print(f"CALLING MARK GAME AS STALE ....")
+        logger.info(f"CALLING MARK GAME AS STALE ....")
         mark_stale_games_as_ended()
         try:
             url = "https://sportsbook.draftkings.com/leagues/basketball/nba"
@@ -196,10 +199,10 @@ def scrape_odds():
             # Determine game date based on thead text
             if date_th == "today":
                 game_date = today
-                print("date is today. game_date is set to ", game_date)
+                logger.info("date is today. game_date is set to ", game_date)
             elif date_th == "tomorrow":
                 game_date = today + timedelta(days=1)
-                print("date is tomorrow. game_date is set to ", game_date)
+                logger.info("date is tomorrow. game_date is set to ", game_date)
             else:
                 # Extract month and day from format like 'WED DEC 25TH'
                 date_parts = date_th.split()[1:]  # Skip the day of week
@@ -208,7 +211,7 @@ def scrape_odds():
                 month_day = re.sub(r"(?:ST|ND|RD|TH|st|nd|rd|th)$", "", month_day)
                 # Convert month to proper case (DEC -> Dec) for strptime
                 month_day = month_day.title()
-                print(f"date is not today or tomorrow, its {month_day}")
+                logger.info(f"date is not today or tomorrow, its {month_day}")
 
                 try:
                     # Parse the date string
@@ -226,20 +229,19 @@ def scrape_odds():
                         # If it's just the day that's behind (midnight transition), keep the same month/year
                         else:
                             game_date = game_date
-                    print(f"game date is set to {game_date}")
+                    logger.info(f"game date is set to {game_date}")
 
                 except ValueError as e:
-                    print(f"Error parsing date: {e}")
-                    print(f"Input date string was: '{month_day} {date.today().year}'")
+                    logger.error(f"Error parsing date: {e}")
+                    logger.error(f"Input date string was: '{month_day} {date.today().year}'")
                     raise
 
-            print(f"no of games is {len(games)/2}")
+            logger.info(f"no of games is {len(games)/2}")
             # Iterate through pairs of tr elements
             for i in range(0, len(tr_elements), 2):
                 try:
                     # Process first tr (away team)
                     away_team_row = tr_elements[i]
-                    # print(utils.nba_teams_full[away_team_row.find('a').find('div').find_all('div', recursive=False)[1].find('div').text.strip().split()[-1]])
                     away_team_name = utils.nba_teams_full[
                         away_team_row.find("a")
                         .find("div")
@@ -317,18 +319,18 @@ def scrape_odds():
                     home_moneyline_td = home_team_row.find_all("td")[2]
                     home_moneyline = home_moneyline_td.find("div").text.strip()
 
-                    print(f"Away: {away_team_name}")
-                    print(f"Away Spread: {away_spread}")
-                    print(f"Away Spread Odds: {away_spread_odds}")
-                    print(f"Away Moneyline: {away_moneyline}")
-                    print(f"Home: {home_team_name}")
-                    print(f"Home Spread: {home_spread}")
-                    print(f"Home Spread Odds: {home_spread_odds}")
-                    print(f"Home Moneyline: {home_moneyline}")
-                    print(f"Over/Under Number: {over_under_number}")
-                    print(f"Over Odds: {over_odds}")
-                    print(f"Under Odds: {under_odds}")
-                    print("---")
+                    logger.info(f"Away: {away_team_name}")
+                    logger.info(f"Away Spread: {away_spread}")
+                    logger.info(f"Away Spread Odds: {away_spread_odds}")
+                    logger.info(f"Away Moneyline: {away_moneyline}")
+                    logger.info(f"Home: {home_team_name}")
+                    logger.info(f"Home Spread: {home_spread}")
+                    logger.info(f"Home Spread Odds: {home_spread_odds}")
+                    logger.info(f"Home Moneyline: {home_moneyline}")
+                    logger.info(f"Over/Under Number: {over_under_number}")
+                    logger.info(f"Over Odds: {over_odds}")
+                    logger.info(f"Under Odds: {under_odds}")
+                    logger.info("---\n")
 
                     home_spread_num = (
                         utils.convert_spread(home_spread) if home_spread else None
@@ -360,7 +362,7 @@ def scrape_odds():
                         utils.convert_odds(under_odds) if under_odds else None
                     )
                 except Exception as e:
-                    print(f"Error: {e}")
+                    logger.error(f"Error: {e}")
                     continue  # Skip this game and continue with the next one
 
                 # Add or update game
@@ -378,7 +380,7 @@ def scrape_odds():
                     game_date=game_date,
                 )
         except Exception as e:
-            print(f"Fatal error: {e}")
+            logger.error(f"Fatal error: {e}")
             sys.exit(1)
         finally:
             if "driver" in locals():
