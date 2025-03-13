@@ -21,6 +21,9 @@ import os
 from dotenv import load_dotenv
 import requests
 import pytz
+import logging
+
+logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
@@ -95,9 +98,9 @@ engine = create_engine(
 
 try:
     with engine.connect() as connection:
-        print("Connection successful!")
+        logger.info("Connection successful!")
 except Exception as e:
-    print(f"Failed to connect: {e}")
+    logger.error(f"Failed to connect: {e}")
 
 Session = sessionmaker(bind=engine)
 
@@ -107,14 +110,14 @@ def notify_odds_update(game):
     try:
         # gameId is available, not first time scraping this game
         if game.game_id:
-            print(f"GAME ID IS AVAILABLE, CALLING API WITH GAMEID {game.game_id}")
+            logger.info(f"GAME ID IS AVAILABLE, CALLING API WITH GAMEID {game.game_id}")
             # Use game_id endpoint if available
             response = requests.post(
                 f"{FAST_API_URL}/notify-odds-update", json={"gameId": game.game_id}
             )
         # gameId is null, first time scraping this game
         else:
-            print(f"GAMEID IS NULL, CALLING API WITH TEAMS AND DATE")
+            logger.info(f"GAMEID IS NULL, CALLING API WITH TEAMS AND DATE")
             # Use team-based endpoint if no game_id
             response = requests.post(
                 f"{FAST_API_URL}/notify-odds-by-teams",
@@ -126,10 +129,10 @@ def notify_odds_update(game):
             )
 
         if response.status_code != 200:
-            print(f"Failed to notify odds update. Status code: {response.status_code}")
+            logger.error(f"Failed to notify odds update. Status code: {response.status_code}")
 
     except Exception as e:
-        print(f"Failed to notify odds update: {e}")
+        logger.info(f"Failed to notify odds update: {e}")
 
 
 def add_game(
@@ -158,7 +161,7 @@ def add_game(
                     )
                 )
                 .count() > 0)
-            print(f'GAME EXISTS FOR {away_team} AT {home_team} ', game_exists)
+            logger.info(f'GAME EXISTS FOR {away_team} AT {home_team}: {game_exists}')
             # Check if game exists and update in one step
             result = (
                 session.query(Game)
@@ -236,7 +239,7 @@ def add_game(
 
 
 def mark_stale_games_as_ended():
-    print(f"IN MARK STALE GAMES")
+    logger.info(f"IN MARK STALE GAMES")
     with Session() as session:
         try:
             eastern = pytz.timezone("America/New_York")
@@ -261,7 +264,7 @@ def mark_stale_games_as_ended():
             if stale_games:
                 # Update the games
                 for game in stale_games:
-                    print(
+                    logging.info(
                         f"Marking game as ended: gameID is {game.game_id}, {game.away_team} @ {game.home_team} on {game.game_date}. SENDING IT TO FASTAPI TO PROCESS BETS...."
                     )
                     response = requests.post(
@@ -270,16 +273,18 @@ def mark_stale_games_as_ended():
                     )
                     if response.status_code == 200:
                         game.has_ended = True
+                        session.commit()
                         result = response.json()
-                        print(f"Success: {result['success']}")
-                        print(f"Message: {result['message']}")
-                        print(f"Game ID: {result['game_id']}")
+                        logger.info(f"Success: {result['success']}")
+                        logger.info(f"Message: {result['message']}")
+                        logger.info(f"Game ID: {result['game_id']}")
+                        notify_odds_update(game)
                     else:
-                        print(f"Error: Status code {response.status_code}")
-                        print(response.text)
+                        logger.error(f"Error: Status code {response.status_code}")
+                        logger.error(response.text)
 
-                session.commit()
+                # session.commit()
 
         except Exception as e:
-            print(f"Error marking stale games as ended: {e}")
+            logger.error(f"Error marking stale games as ended: {e}")
             session.rollback()

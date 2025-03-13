@@ -150,28 +150,21 @@ function OddsRow({
                 ? +getSpread(homeSpread, "away")
                 : +getSpread(homeSpread, "home")
             }
+            gameEnded={gameBettingInfo.hasEnded}
             gameId={gameId}
             teams={teamNames}
           >
-            <div
-              data-clickable="true"
-              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center"
-            >
+            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
               {homeSpread === null ||
               (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
-                <span data-clickable="true" className="my-auto">
-                  -
-                </span>
+                <span className="my-auto">-</span>
               ) : (
-                <div
-                  data-clickable="true"
-                  className="flex flex-col justify-center items-center"
-                >
-                  <span data-clickable="true">
+                <div className="flex flex-col justify-center items-center">
+                  <span>
                     {getSpread(homeSpread, isAwayTeam ? "away" : "home")}
                   </span>
                   {!gameBettingInfo.hasEnded && (
-                    <span data-clickable="true">
+                    <span>
                       {spreadOdds! > 0 && "+"}
                       {spreadOdds!.toString().replace(/\.?0+$/, "")}
                     </span>
@@ -193,11 +186,9 @@ function OddsRow({
             bettingLine={overUnder}
             gameId={gameId}
             teams={teamNames}
+            gameEnded={gameBettingInfo.hasEnded}
           >
-            <div
-              data-clickable="true"
-              className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center"
-            >
+            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
               {overUnder === null ||
               (!gameBettingInfo.hasEnded &&
                 gameBettingInfo.overOdds === null) ? (
@@ -237,11 +228,9 @@ function OddsRow({
               }
               gameId={gameId}
               teams={teamNames}
+              gameEnded={gameBettingInfo.hasEnded}
             >
-              <div
-                data-clickable="true"
-                className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide justify-center rounded-md p-2 items-center"
-              >
+              <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide justify-center rounded-md p-2 items-center">
                 <span className="font-semibold tracking-wide">
                   {getMoneyline(
                     isAwayTeam

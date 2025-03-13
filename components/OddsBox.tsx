@@ -35,6 +35,7 @@ type Props = {
   bettingLine?: number | undefined | null;
   gameId: string;
   teams: { home: string; away: string };
+  gameEnded: boolean;
 };
 
 export default function OddsBox({
@@ -44,6 +45,7 @@ export default function OddsBox({
   bettingLine,
   gameId,
   teams,
+  gameEnded,
 }: Props) {
   const [pending, setPending] = useState(false);
   const [isBetPlaced, setIsBetPlaced] = useState(false);
@@ -71,17 +73,18 @@ export default function OddsBox({
     if (authLoading) return;
 
     const target = e.target as HTMLElement;
-    const isClickableElement = target.getAttribute("data-clickable") === "true";
 
     if (!isAuthenticated) {
       document.getElementById("logInButton")?.click();
       e.stopPropagation();
       return;
     }
-
+    // console.log(odds, bettingLine, hasEnded)
     if (
-      (odds === null || bettingLine === null || bettingLine === undefined) &&
-      isClickableElement
+      odds === null ||
+      bettingLine === null ||
+      bettingLine === undefined ||
+      gameEnded
     ) {
       e.stopPropagation();
       return;
