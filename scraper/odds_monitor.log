@@ -10,3 +10,506 @@
 2025-03-11 23:48:03,434 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba180>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
 2025-03-11 23:48:03,435 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba2a0>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
 2025-03-11 23:48:03,437 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x100aba420>: Failed to establish a new connection: [Errno 61] Connection refused')': /session/e19918bfeccfa9d4740f2659b264a38e
+2025-03-12 21:26:03,466 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-12 21:26:03,466 - src.monitor - INFO - Starting scheduler...
+2025-03-12 21:26:03,466 - src.monitor - INFO - Running initial check...
+2025-03-12 21:26:03,466 - src.scraper - INFO - CALLING MARK GAME AS STALE ....
+2025-03-12 21:26:27,473 - src.scraper - INFO - no of games is 9.0
+2025-03-12 21:26:27,474 - src.scraper - INFO - Away: Charlotte Hornets
+2025-03-12 21:26:27,474 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:26:27,474 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:26:27,474 - src.scraper - INFO - Away Moneyline: +550
+2025-03-12 21:26:27,474 - src.scraper - INFO - Home: Atlanta Hawks
+2025-03-12 21:26:27,474 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:26:27,474 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:26:27,474 - src.scraper - INFO - Home Moneyline: −920
+2025-03-12 21:26:27,474 - src.scraper - INFO - Over/Under Number: 225.5
+2025-03-12 21:26:27,474 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:26:27,474 - src.scraper - INFO - Under Odds: −120
+2025-03-12 21:26:27,474 - src.scraper - INFO - ---
+
+2025-03-12 21:26:28,560 - src.scraper - INFO - Away: Oklahoma City Thunder
+2025-03-12 21:26:28,560 - src.scraper - INFO - Away Spread: +1.5
+2025-03-12 21:26:28,560 - src.scraper - INFO - Away Spread Odds: −135
+2025-03-12 21:26:28,560 - src.scraper - INFO - Away Moneyline: −115
+2025-03-12 21:26:28,560 - src.scraper - INFO - Home: Boston Celtics
+2025-03-12 21:26:28,561 - src.scraper - INFO - Home Spread: -1.5
+2025-03-12 21:26:28,561 - src.scraper - INFO - Home Spread Odds: +105
+2025-03-12 21:26:28,561 - src.scraper - INFO - Home Moneyline: −115
+2025-03-12 21:26:28,561 - src.scraper - INFO - Over/Under Number: 237.5
+2025-03-12 21:26:28,561 - src.scraper - INFO - Over Odds: −105
+2025-03-12 21:26:28,561 - src.scraper - INFO - Under Odds: −125
+2025-03-12 21:26:28,561 - src.scraper - INFO - ---
+
+2025-03-12 21:26:28,930 - src.scraper - INFO - Away: Philadelphia 76ers
+2025-03-12 21:26:28,930 - src.scraper - INFO - Away Spread: +6.5
+2025-03-12 21:26:28,930 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:26:28,930 - src.scraper - INFO - Away Moneyline: +350
+2025-03-12 21:26:28,930 - src.scraper - INFO - Home: Toronto Raptors
+2025-03-12 21:26:28,930 - src.scraper - INFO - Home Spread: -6.5
+2025-03-12 21:26:28,930 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:26:28,930 - src.scraper - INFO - Home Moneyline: −520
+2025-03-12 21:26:28,930 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:26:28,930 - src.scraper - INFO - Over Odds: −105
+2025-03-12 21:26:28,930 - src.scraper - INFO - Under Odds: −125
+2025-03-12 21:26:28,930 - src.scraper - INFO - ---
+
+2025-03-12 21:26:29,281 - src.scraper - INFO - Away: Utah Jazz
+2025-03-12 21:26:29,282 - src.scraper - INFO - Away Spread: +12.5
+2025-03-12 21:26:29,282 - src.scraper - INFO - Away Spread Odds: −120
+2025-03-12 21:26:29,282 - src.scraper - INFO - Away Moneyline: +850
+2025-03-12 21:26:29,282 - src.scraper - INFO - Home: Memphis Grizzlies
+2025-03-12 21:26:29,282 - src.scraper - INFO - Home Spread: -12.5
+2025-03-12 21:26:29,282 - src.scraper - INFO - Home Spread Odds: −110
+2025-03-12 21:26:29,282 - src.scraper - INFO - Home Moneyline: −1750
+2025-03-12 21:26:29,282 - src.scraper - INFO - Over/Under Number: 241.5
+2025-03-12 21:26:29,282 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:26:29,282 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:26:29,282 - src.scraper - INFO - ---
+
+2025-03-12 21:26:30,472 - src.scraper - INFO - Away: Phoenix Suns
+2025-03-12 21:26:30,473 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:26:30,473 - src.scraper - INFO - Away Spread Odds: −120
+2025-03-12 21:26:30,473 - src.scraper - INFO - Away Moneyline: +280
+2025-03-12 21:26:30,473 - src.scraper - INFO - Home: Houston Rockets
+2025-03-12 21:26:30,473 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:26:30,473 - src.scraper - INFO - Home Spread Odds: −110
+2025-03-12 21:26:30,473 - src.scraper - INFO - Home Moneyline: −395
+2025-03-12 21:26:30,473 - src.scraper - INFO - Over/Under Number: 226.5
+2025-03-12 21:26:30,474 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:26:30,474 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:26:30,474 - src.scraper - INFO - ---
+
+2025-03-12 21:26:30,879 - src.scraper - INFO - Away: Dallas Mavericks
+2025-03-12 21:26:30,880 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:26:30,880 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:26:30,880 - src.scraper - INFO - Away Moneyline: +300
+2025-03-12 21:26:30,880 - src.scraper - INFO - Home: San Antonio Spurs
+2025-03-12 21:26:30,880 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:26:30,880 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:26:30,880 - src.scraper - INFO - Home Moneyline: −425
+2025-03-12 21:26:30,880 - src.scraper - INFO - Over/Under Number: 238.5
+2025-03-12 21:26:30,880 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:26:30,881 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:26:30,881 - src.scraper - INFO - ---
+
+2025-03-12 21:26:31,283 - src.scraper - INFO - Away: Los Angeles Clippers
+2025-03-12 21:26:31,285 - src.scraper - INFO - Away Spread: -1.5
+2025-03-12 21:26:31,285 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:26:31,285 - src.scraper - INFO - Away Moneyline: −140
+2025-03-12 21:26:31,285 - src.scraper - INFO - Home: Miami Heat
+2025-03-12 21:26:31,285 - src.scraper - INFO - Home Spread: +1.5
+2025-03-12 21:26:31,286 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:26:31,286 - src.scraper - INFO - Home Moneyline: +110
+2025-03-12 21:26:31,286 - src.scraper - INFO - Over/Under Number: 214.5
+2025-03-12 21:26:31,286 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:26:31,286 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:26:31,286 - src.scraper - INFO - ---
+
+2025-03-12 21:26:31,692 - src.scraper - INFO - Away: New York Knicks
+2025-03-12 21:26:31,692 - src.scraper - INFO - Away Spread: -4
+2025-03-12 21:26:31,692 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:26:31,692 - src.scraper - INFO - Away Moneyline: −185
+2025-03-12 21:26:31,692 - src.scraper - INFO - Home: Portland Trail Blazers
+2025-03-12 21:26:31,692 - src.scraper - INFO - Home Spread: +4
+2025-03-12 21:26:31,692 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:26:31,692 - src.scraper - INFO - Home Moneyline: +154
+2025-03-12 21:26:31,692 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:26:31,693 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:26:31,693 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:26:31,693 - src.scraper - INFO - ---
+
+2025-03-12 21:26:32,132 - src.scraper - INFO - Away: Minnesota Timberwolves
+2025-03-12 21:26:32,133 - src.scraper - INFO - Away Spread: +2.5
+2025-03-12 21:26:32,133 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:26:32,133 - src.scraper - INFO - Away Moneyline: +120
+2025-03-12 21:26:32,133 - src.scraper - INFO - Home: Denver Nuggets
+2025-03-12 21:26:32,133 - src.scraper - INFO - Home Spread: -2.5
+2025-03-12 21:26:32,133 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:26:32,133 - src.scraper - INFO - Home Moneyline: −142
+2025-03-12 21:26:32,133 - src.scraper - INFO - Over/Under Number: 233
+2025-03-12 21:26:32,133 - src.scraper - INFO - Over Odds: −108
+2025-03-12 21:26:32,133 - src.scraper - INFO - Under Odds: −112
+2025-03-12 21:26:32,133 - src.scraper - INFO - ---
+
+2025-03-12 21:26:32,678 - apscheduler.scheduler - INFO - Added job "scrape_odds" to job store "default"
+2025-03-12 21:26:32,678 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-12 21:26:37,168 - src.monitor - INFO - Scheduler stopped
+2025-03-12 21:36:02,594 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-12 21:36:02,594 - src.monitor - INFO - Starting scheduler...
+2025-03-12 21:36:02,595 - src.monitor - INFO - Running initial check...
+2025-03-12 21:36:02,595 - src.scraper - INFO - CALLING MARK GAME AS STALE ....
+2025-03-12 21:36:20,250 - src.scraper - INFO - date is today. game_date is set to 2025-03-12
+2025-03-12 21:36:20,253 - src.scraper - INFO - no of games is 9.0
+2025-03-12 21:36:20,253 - src.scraper - INFO - Away: Charlotte Hornets
+2025-03-12 21:36:20,253 - src.scraper - INFO - Away Spread: +9.5
+2025-03-12 21:36:20,253 - src.scraper - INFO - Away Spread Odds: −130
+2025-03-12 21:36:20,253 - src.scraper - INFO - Away Moneyline: +1300
+2025-03-12 21:36:20,253 - src.scraper - INFO - Home: Atlanta Hawks
+2025-03-12 21:36:20,253 - src.scraper - INFO - Home Spread: -9.5
+2025-03-12 21:36:20,253 - src.scraper - INFO - Home Spread Odds: +100
+2025-03-12 21:36:20,254 - src.scraper - INFO - Home Moneyline: −3200
+2025-03-12 21:36:20,254 - src.scraper - INFO - Over/Under Number: 226.5
+2025-03-12 21:36:20,254 - src.scraper - INFO - Over Odds: −125
+2025-03-12 21:36:20,254 - src.scraper - INFO - Under Odds: −105
+2025-03-12 21:36:20,254 - src.scraper - INFO - ---
+
+2025-03-12 21:36:20,670 - src.scraper - INFO - Away: Oklahoma City Thunder
+2025-03-12 21:36:20,670 - src.scraper - INFO - Away Spread: +1.5
+2025-03-12 21:36:20,670 - src.scraper - INFO - Away Spread Odds: −130
+2025-03-12 21:36:20,670 - src.scraper - INFO - Away Moneyline: −105
+2025-03-12 21:36:20,670 - src.scraper - INFO - Home: Boston Celtics
+2025-03-12 21:36:20,670 - src.scraper - INFO - Home Spread: -1.5
+2025-03-12 21:36:20,670 - src.scraper - INFO - Home Spread Odds: +100
+2025-03-12 21:36:20,670 - src.scraper - INFO - Home Moneyline: −125
+2025-03-12 21:36:20,670 - src.scraper - INFO - Over/Under Number: 233.5
+2025-03-12 21:36:20,670 - src.scraper - INFO - Over Odds: −125
+2025-03-12 21:36:20,671 - src.scraper - INFO - Under Odds: −105
+2025-03-12 21:36:20,671 - src.scraper - INFO - ---
+
+2025-03-12 21:36:21,047 - src.scraper - INFO - Away: Philadelphia 76ers
+2025-03-12 21:36:21,051 - src.scraper - INFO - Away Spread: +8.5
+2025-03-12 21:36:21,051 - src.scraper - INFO - Away Spread Odds: −120
+2025-03-12 21:36:21,051 - src.scraper - INFO - Away Moneyline: +850
+2025-03-12 21:36:21,051 - src.scraper - INFO - Home: Toronto Raptors
+2025-03-12 21:36:21,051 - src.scraper - INFO - Home Spread: -8.5
+2025-03-12 21:36:21,051 - src.scraper - INFO - Home Spread Odds: −110
+2025-03-12 21:36:21,051 - src.scraper - INFO - Home Moneyline: −1750
+2025-03-12 21:36:21,051 - src.scraper - INFO - Over/Under Number: 222.5
+2025-03-12 21:36:21,051 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:36:21,051 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:36:21,052 - src.scraper - INFO - ---
+
+2025-03-12 21:36:21,407 - src.scraper - INFO - Away: Utah Jazz
+2025-03-12 21:36:21,408 - src.scraper - INFO - Away Spread: +11.5
+2025-03-12 21:36:21,408 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:36:21,408 - src.scraper - INFO - Away Moneyline: +750
+2025-03-12 21:36:21,408 - src.scraper - INFO - Home: Memphis Grizzlies
+2025-03-12 21:36:21,408 - src.scraper - INFO - Home Spread: -11.5
+2025-03-12 21:36:21,408 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:36:21,408 - src.scraper - INFO - Home Moneyline: −1450
+2025-03-12 21:36:21,408 - src.scraper - INFO - Over/Under Number: 238.5
+2025-03-12 21:36:21,408 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:36:21,408 - src.scraper - INFO - Under Odds: −120
+2025-03-12 21:36:21,408 - src.scraper - INFO - ---
+
+2025-03-12 21:36:21,755 - src.scraper - INFO - Away: Phoenix Suns
+2025-03-12 21:36:21,755 - src.scraper - INFO - Away Spread: +4.5
+2025-03-12 21:36:21,755 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:36:21,755 - src.scraper - INFO - Away Moneyline: +200
+2025-03-12 21:36:21,755 - src.scraper - INFO - Home: Houston Rockets
+2025-03-12 21:36:21,755 - src.scraper - INFO - Home Spread: -4.5
+2025-03-12 21:36:21,755 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:36:21,755 - src.scraper - INFO - Home Moneyline: −270
+2025-03-12 21:36:21,755 - src.scraper - INFO - Over/Under Number: 230.5
+2025-03-12 21:36:21,755 - src.scraper - INFO - Over Odds: −115
+2025-03-12 21:36:21,755 - src.scraper - INFO - Under Odds: −115
+2025-03-12 21:36:21,755 - src.scraper - INFO - ---
+
+2025-03-12 21:36:22,112 - src.scraper - INFO - Away: Dallas Mavericks
+2025-03-12 21:36:22,112 - src.scraper - INFO - Away Spread: +8.5
+2025-03-12 21:36:22,113 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:36:22,113 - src.scraper - INFO - Away Moneyline: +400
+2025-03-12 21:36:22,113 - src.scraper - INFO - Home: San Antonio Spurs
+2025-03-12 21:36:22,113 - src.scraper - INFO - Home Spread: -8.5
+2025-03-12 21:36:22,113 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:36:22,113 - src.scraper - INFO - Home Moneyline: −620
+2025-03-12 21:36:22,113 - src.scraper - INFO - Over/Under Number: 243.5
+2025-03-12 21:36:22,113 - src.scraper - INFO - Over Odds: −105
+2025-03-12 21:36:22,113 - src.scraper - INFO - Under Odds: −125
+2025-03-12 21:36:22,113 - src.scraper - INFO - ---
+
+2025-03-12 21:36:22,467 - src.scraper - INFO - Away: Los Angeles Clippers
+2025-03-12 21:36:22,467 - src.scraper - INFO - Away Spread: -5.5
+2025-03-12 21:36:22,467 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:36:22,467 - src.scraper - INFO - Away Moneyline: −270
+2025-03-12 21:36:22,467 - src.scraper - INFO - Home: Miami Heat
+2025-03-12 21:36:22,467 - src.scraper - INFO - Home Spread: +5.5
+2025-03-12 21:36:22,467 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:36:22,467 - src.scraper - INFO - Home Moneyline: +200
+2025-03-12 21:36:22,467 - src.scraper - INFO - Over/Under Number: 221.5
+2025-03-12 21:36:22,467 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:36:22,467 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:36:22,468 - src.scraper - INFO - ---
+
+2025-03-12 21:36:22,854 - src.scraper - INFO - Away: New York Knicks
+2025-03-12 21:36:22,854 - src.scraper - INFO - Away Spread: -4
+2025-03-12 21:36:22,854 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:36:22,854 - src.scraper - INFO - Away Moneyline: −185
+2025-03-12 21:36:22,855 - src.scraper - INFO - Home: Portland Trail Blazers
+2025-03-12 21:36:22,855 - src.scraper - INFO - Home Spread: +4
+2025-03-12 21:36:22,855 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:36:22,855 - src.scraper - INFO - Home Moneyline: +154
+2025-03-12 21:36:22,855 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:36:22,855 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:36:22,855 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:36:22,855 - src.scraper - INFO - ---
+
+2025-03-12 21:36:23,210 - src.scraper - INFO - Away: Minnesota Timberwolves
+2025-03-12 21:36:23,210 - src.scraper - INFO - Away Spread: +2.5
+2025-03-12 21:36:23,210 - src.scraper - INFO - Away Spread Odds: −112
+2025-03-12 21:36:23,210 - src.scraper - INFO - Away Moneyline: +114
+2025-03-12 21:36:23,210 - src.scraper - INFO - Home: Denver Nuggets
+2025-03-12 21:36:23,210 - src.scraper - INFO - Home Spread: -2.5
+2025-03-12 21:36:23,211 - src.scraper - INFO - Home Spread Odds: −108
+2025-03-12 21:36:23,211 - src.scraper - INFO - Home Moneyline: −135
+2025-03-12 21:36:23,211 - src.scraper - INFO - Over/Under Number: 233
+2025-03-12 21:36:23,211 - src.scraper - INFO - Over Odds: −108
+2025-03-12 21:36:23,211 - src.scraper - INFO - Under Odds: −112
+2025-03-12 21:36:23,211 - src.scraper - INFO - ---
+
+2025-03-12 21:36:23,688 - apscheduler.scheduler - INFO - Added job "scrape_odds" to job store "default"
+2025-03-12 21:36:23,688 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-12 21:37:22,526 - src.monitor - INFO - Scheduler stopped
+2025-03-12 21:38:17,278 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-12 21:38:17,279 - src.monitor - INFO - Starting scheduler...
+2025-03-12 21:38:17,279 - src.monitor - INFO - Running initial check...
+2025-03-12 21:38:17,279 - src.scraper - INFO - CALLING MARK GAME AS STALE ....
+2025-03-12 21:38:35,510 - src.scraper - INFO - date is today. game_date is set to 2025-03-12
+2025-03-12 21:38:35,511 - src.scraper - INFO - no of games is 9.0
+2025-03-12 21:38:35,511 - src.scraper - INFO - Away: Charlotte Hornets
+2025-03-12 21:38:35,511 - src.scraper - INFO - Away Spread: +9.5
+2025-03-12 21:38:35,511 - src.scraper - INFO - Away Spread Odds: −110
+2025-03-12 21:38:35,511 - src.scraper - INFO - Away Moneyline: +1800
+2025-03-12 21:38:35,511 - src.scraper - INFO - Home: Atlanta Hawks
+2025-03-12 21:38:35,511 - src.scraper - INFO - Home Spread: -9.5
+2025-03-12 21:38:35,512 - src.scraper - INFO - Home Spread Odds: −120
+2025-03-12 21:38:35,512 - src.scraper - INFO - Home Moneyline: −6500
+2025-03-12 21:38:35,512 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:38:35,512 - src.scraper - INFO - Over Odds: −105
+2025-03-12 21:38:35,512 - src.scraper - INFO - Under Odds: −125
+2025-03-12 21:38:35,512 - src.scraper - INFO - ---
+
+2025-03-12 21:38:35,898 - src.scraper - INFO - Away: Oklahoma City Thunder
+2025-03-12 21:38:35,898 - src.scraper - INFO - Away Spread: -2.5
+2025-03-12 21:38:35,898 - src.scraper - INFO - Away Spread Odds: +100
+2025-03-12 21:38:35,899 - src.scraper - INFO - Away Moneyline: −166
+2025-03-12 21:38:35,899 - src.scraper - INFO - Home: Boston Celtics
+2025-03-12 21:38:35,899 - src.scraper - INFO - Home Spread: +2.5
+2025-03-12 21:38:35,899 - src.scraper - INFO - Home Spread Odds: −130
+2025-03-12 21:38:35,899 - src.scraper - INFO - Home Moneyline: +130
+2025-03-12 21:38:35,899 - src.scraper - INFO - Over/Under Number: 234.5
+2025-03-12 21:38:35,899 - src.scraper - INFO - Over Odds: −130
+2025-03-12 21:38:35,899 - src.scraper - INFO - Under Odds: +100
+2025-03-12 21:38:35,899 - src.scraper - INFO - ---
+
+2025-03-12 21:38:36,246 - src.scraper - INFO - Away: Philadelphia 76ers
+2025-03-12 21:38:36,246 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:38:36,246 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:38:36,246 - src.scraper - INFO - Away Moneyline: +700
+2025-03-12 21:38:36,246 - src.scraper - INFO - Home: Toronto Raptors
+2025-03-12 21:38:36,246 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:38:36,246 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:38:36,246 - src.scraper - INFO - Home Moneyline: −1300
+2025-03-12 21:38:36,246 - src.scraper - INFO - Over/Under Number: 222.5
+2025-03-12 21:38:36,246 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:38:36,247 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:38:36,247 - src.scraper - INFO - ---
+
+2025-03-12 21:38:36,613 - src.scraper - INFO - Away: Utah Jazz
+2025-03-12 21:38:36,613 - src.scraper - INFO - Away Spread: +11.5
+2025-03-12 21:38:36,613 - src.scraper - INFO - Away Spread Odds: −110
+2025-03-12 21:38:36,614 - src.scraper - INFO - Away Moneyline: +850
+2025-03-12 21:38:36,614 - src.scraper - INFO - Home: Memphis Grizzlies
+2025-03-12 21:38:36,614 - src.scraper - INFO - Home Spread: -11.5
+2025-03-12 21:38:36,614 - src.scraper - INFO - Home Spread Odds: −120
+2025-03-12 21:38:36,614 - src.scraper - INFO - Home Moneyline: −1750
+2025-03-12 21:38:36,614 - src.scraper - INFO - Over/Under Number: 235.5
+2025-03-12 21:38:36,614 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:38:36,614 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:38:36,614 - src.scraper - INFO - ---
+
+2025-03-12 21:38:36,962 - src.scraper - INFO - Away: Phoenix Suns
+2025-03-12 21:38:36,962 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:38:36,962 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:38:36,962 - src.scraper - INFO - Away Moneyline: +380
+2025-03-12 21:38:36,962 - src.scraper - INFO - Home: Houston Rockets
+2025-03-12 21:38:36,962 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:38:36,962 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:38:36,962 - src.scraper - INFO - Home Moneyline: −580
+2025-03-12 21:38:36,962 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:38:36,962 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:38:36,962 - src.scraper - INFO - Under Odds: −120
+2025-03-12 21:38:36,962 - src.scraper - INFO - ---
+
+2025-03-12 21:38:37,312 - src.scraper - INFO - Away: Dallas Mavericks
+2025-03-12 21:38:37,313 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:38:37,313 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:38:37,313 - src.scraper - INFO - Away Moneyline: +420
+2025-03-12 21:38:37,313 - src.scraper - INFO - Home: San Antonio Spurs
+2025-03-12 21:38:37,313 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:38:37,313 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:38:37,313 - src.scraper - INFO - Home Moneyline: −660
+2025-03-12 21:38:37,313 - src.scraper - INFO - Over/Under Number: 241.5
+2025-03-12 21:38:37,313 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:38:37,313 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:38:37,313 - src.scraper - INFO - ---
+
+2025-03-12 21:38:37,676 - src.scraper - INFO - Away: Los Angeles Clippers
+2025-03-12 21:38:37,676 - src.scraper - INFO - Away Spread: -4.5
+2025-03-12 21:38:37,676 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:38:37,676 - src.scraper - INFO - Away Moneyline: −270
+2025-03-12 21:38:37,676 - src.scraper - INFO - Home: Miami Heat
+2025-03-12 21:38:37,676 - src.scraper - INFO - Home Spread: +4.5
+2025-03-12 21:38:37,676 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:38:37,676 - src.scraper - INFO - Home Moneyline: +200
+2025-03-12 21:38:37,676 - src.scraper - INFO - Over/Under Number: 223.5
+2025-03-12 21:38:37,676 - src.scraper - INFO - Over Odds: −115
+2025-03-12 21:38:37,676 - src.scraper - INFO - Under Odds: −115
+2025-03-12 21:38:37,676 - src.scraper - INFO - ---
+
+2025-03-12 21:38:38,018 - src.scraper - INFO - Away: New York Knicks
+2025-03-12 21:38:38,018 - src.scraper - INFO - Away Spread: -4
+2025-03-12 21:38:38,018 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:38:38,018 - src.scraper - INFO - Away Moneyline: −185
+2025-03-12 21:38:38,018 - src.scraper - INFO - Home: Portland Trail Blazers
+2025-03-12 21:38:38,018 - src.scraper - INFO - Home Spread: +4
+2025-03-12 21:38:38,018 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:38:38,018 - src.scraper - INFO - Home Moneyline: +154
+2025-03-12 21:38:38,018 - src.scraper - INFO - Over/Under Number: 227.5
+2025-03-12 21:38:38,019 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:38:38,019 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:38:38,019 - src.scraper - INFO - ---
+
+2025-03-12 21:38:38,361 - src.scraper - INFO - Away: Minnesota Timberwolves
+2025-03-12 21:38:38,361 - src.scraper - INFO - Away Spread: +2.5
+2025-03-12 21:38:38,361 - src.scraper - INFO - Away Spread Odds: −112
+2025-03-12 21:38:38,361 - src.scraper - INFO - Away Moneyline: +114
+2025-03-12 21:38:38,361 - src.scraper - INFO - Home: Denver Nuggets
+2025-03-12 21:38:38,361 - src.scraper - INFO - Home Spread: -2.5
+2025-03-12 21:38:38,361 - src.scraper - INFO - Home Spread Odds: −108
+2025-03-12 21:38:38,361 - src.scraper - INFO - Home Moneyline: −135
+2025-03-12 21:38:38,361 - src.scraper - INFO - Over/Under Number: 233
+2025-03-12 21:38:38,361 - src.scraper - INFO - Over Odds: −108
+2025-03-12 21:38:38,361 - src.scraper - INFO - Under Odds: −112
+2025-03-12 21:38:38,361 - src.scraper - INFO - ---
+
+2025-03-12 21:38:38,859 - apscheduler.scheduler - INFO - Added job "scrape_odds" to job store "default"
+2025-03-12 21:38:38,859 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-12 21:38:52,310 - src.monitor - INFO - Scheduler stopped
+2025-03-12 21:42:13,278 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-12 21:42:13,279 - src.monitor - INFO - Starting scheduler...
+2025-03-12 21:42:13,279 - src.monitor - INFO - Running initial check...
+2025-03-12 21:42:13,279 - src.scraper - INFO - CALLING MARK GAME AS STALE ....
+2025-03-12 21:42:29,787 - src.scraper - INFO - date is today. game_date is set to 2025-03-12
+2025-03-12 21:42:29,788 - src.scraper - INFO - no of games is 9.0
+2025-03-12 21:42:29,788 - src.scraper - INFO - Away: Charlotte Hornets
+2025-03-12 21:42:29,788 - src.scraper - INFO - Away Spread: +9.5
+2025-03-12 21:42:29,788 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:42:29,788 - src.scraper - INFO - Away Moneyline: +2000
+2025-03-12 21:42:29,788 - src.scraper - INFO - Home: Atlanta Hawks
+2025-03-12 21:42:29,788 - src.scraper - INFO - Home Spread: -9.5
+2025-03-12 21:42:29,788 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:42:29,788 - src.scraper - INFO - Home Moneyline: −8500
+2025-03-12 21:42:29,788 - src.scraper - INFO - Over/Under Number: 226.5
+2025-03-12 21:42:29,788 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:42:29,788 - src.scraper - INFO - Under Odds: −120
+2025-03-12 21:42:29,788 - src.scraper - INFO - ---
+
+2025-03-12 21:42:30,238 - src.scraper - INFO - Away: Oklahoma City Thunder
+2025-03-12 21:42:30,238 - src.scraper - INFO - Away Spread: -4.5
+2025-03-12 21:42:30,238 - src.scraper - INFO - Away Spread Odds: −120
+2025-03-12 21:42:30,238 - src.scraper - INFO - Away Moneyline: −445
+2025-03-12 21:42:30,238 - src.scraper - INFO - Home: Boston Celtics
+2025-03-12 21:42:30,238 - src.scraper - INFO - Home Spread: +4.5
+2025-03-12 21:42:30,238 - src.scraper - INFO - Home Spread Odds: −110
+2025-03-12 21:42:30,238 - src.scraper - INFO - Home Moneyline: +310
+2025-03-12 21:42:30,238 - src.scraper - INFO - Over/Under Number: 230.5
+2025-03-12 21:42:30,238 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:42:30,238 - src.scraper - INFO - Under Odds: −120
+2025-03-12 21:42:30,238 - src.scraper - INFO - ---
+
+2025-03-12 21:42:30,715 - src.scraper - INFO - Away: Philadelphia 76ers
+2025-03-12 21:42:30,716 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:42:30,716 - src.scraper - INFO - Away Spread Odds: +105
+2025-03-12 21:42:30,716 - src.scraper - INFO - Away Moneyline: +1200
+2025-03-12 21:42:30,716 - src.scraper - INFO - Home: Toronto Raptors
+2025-03-12 21:42:30,716 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:42:30,716 - src.scraper - INFO - Home Spread Odds: −135
+2025-03-12 21:42:30,716 - src.scraper - INFO - Home Moneyline: −2800
+2025-03-12 21:42:30,716 - src.scraper - INFO - Over/Under Number: 226.5
+2025-03-12 21:42:30,716 - src.scraper - INFO - Over Odds: −115
+2025-03-12 21:42:30,717 - src.scraper - INFO - Under Odds: −115
+2025-03-12 21:42:30,717 - src.scraper - INFO - ---
+
+2025-03-12 21:42:31,166 - src.scraper - INFO - Away: Utah Jazz
+2025-03-12 21:42:31,167 - src.scraper - INFO - Away Spread: +9.5
+2025-03-12 21:42:31,167 - src.scraper - INFO - Away Spread Odds: −110
+2025-03-12 21:42:31,167 - src.scraper - INFO - Away Moneyline: +575
+2025-03-12 21:42:31,167 - src.scraper - INFO - Home: Memphis Grizzlies
+2025-03-12 21:42:31,167 - src.scraper - INFO - Home Spread: -9.5
+2025-03-12 21:42:31,167 - src.scraper - INFO - Home Spread Odds: −120
+2025-03-12 21:42:31,167 - src.scraper - INFO - Home Moneyline: −950
+2025-03-12 21:42:31,167 - src.scraper - INFO - Over/Under Number: 236.5
+2025-03-12 21:42:31,167 - src.scraper - INFO - Over Odds: −120
+2025-03-12 21:42:31,167 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:42:31,167 - src.scraper - INFO - ---
+
+2025-03-12 21:42:31,558 - src.scraper - INFO - Away: Phoenix Suns
+2025-03-12 21:42:31,559 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:42:31,559 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:42:31,559 - src.scraper - INFO - Away Moneyline: +420
+2025-03-12 21:42:31,559 - src.scraper - INFO - Home: Houston Rockets
+2025-03-12 21:42:31,560 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:42:31,560 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:42:31,560 - src.scraper - INFO - Home Moneyline: −660
+2025-03-12 21:42:31,560 - src.scraper - INFO - Over/Under Number: 226.5
+2025-03-12 21:42:31,560 - src.scraper - INFO - Over Odds: −125
+2025-03-12 21:42:31,560 - src.scraper - INFO - Under Odds: −105
+2025-03-12 21:42:31,560 - src.scraper - INFO - ---
+
+2025-03-12 21:42:31,956 - src.scraper - INFO - Away: Dallas Mavericks
+2025-03-12 21:42:31,956 - src.scraper - INFO - Away Spread: +7.5
+2025-03-12 21:42:31,956 - src.scraper - INFO - Away Spread Odds: −105
+2025-03-12 21:42:31,956 - src.scraper - INFO - Away Moneyline: +450
+2025-03-12 21:42:31,956 - src.scraper - INFO - Home: San Antonio Spurs
+2025-03-12 21:42:31,956 - src.scraper - INFO - Home Spread: -7.5
+2025-03-12 21:42:31,956 - src.scraper - INFO - Home Spread Odds: −125
+2025-03-12 21:42:31,956 - src.scraper - INFO - Home Moneyline: −720
+2025-03-12 21:42:31,956 - src.scraper - INFO - Over/Under Number: 242.5
+2025-03-12 21:42:31,956 - src.scraper - INFO - Over Odds: −115
+2025-03-12 21:42:31,956 - src.scraper - INFO - Under Odds: −115
+2025-03-12 21:42:31,956 - src.scraper - INFO - ---
+
+2025-03-12 21:42:32,352 - src.scraper - INFO - Away: Los Angeles Clippers
+2025-03-12 21:42:32,353 - src.scraper - INFO - Away Spread: -4.5
+2025-03-12 21:42:32,353 - src.scraper - INFO - Away Spread Odds: −125
+2025-03-12 21:42:32,353 - src.scraper - INFO - Away Moneyline: −280
+2025-03-12 21:42:32,353 - src.scraper - INFO - Home: Miami Heat
+2025-03-12 21:42:32,353 - src.scraper - INFO - Home Spread: +4.5
+2025-03-12 21:42:32,353 - src.scraper - INFO - Home Spread Odds: −105
+2025-03-12 21:42:32,353 - src.scraper - INFO - Home Moneyline: +210
+2025-03-12 21:42:32,354 - src.scraper - INFO - Over/Under Number: 222.5
+2025-03-12 21:42:32,354 - src.scraper - INFO - Over Odds: −105
+2025-03-12 21:42:32,354 - src.scraper - INFO - Under Odds: −125
+2025-03-12 21:42:32,354 - src.scraper - INFO - ---
+
+2025-03-12 21:42:32,759 - src.scraper - INFO - Away: New York Knicks
+2025-03-12 21:42:32,759 - src.scraper - INFO - Away Spread: -4
+2025-03-12 21:42:32,759 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:42:32,759 - src.scraper - INFO - Away Moneyline: −185
+2025-03-12 21:42:32,759 - src.scraper - INFO - Home: Portland Trail Blazers
+2025-03-12 21:42:32,759 - src.scraper - INFO - Home Spread: +4
+2025-03-12 21:42:32,759 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:42:32,759 - src.scraper - INFO - Home Moneyline: +154
+2025-03-12 21:42:32,759 - src.scraper - INFO - Over/Under Number: 228.5
+2025-03-12 21:42:32,759 - src.scraper - INFO - Over Odds: −110
+2025-03-12 21:42:32,760 - src.scraper - INFO - Under Odds: −110
+2025-03-12 21:42:32,760 - src.scraper - INFO - ---
+
+2025-03-12 21:42:33,192 - src.scraper - INFO - Away: Minnesota Timberwolves
+2025-03-12 21:42:33,193 - src.scraper - INFO - Away Spread: +2
+2025-03-12 21:42:33,194 - src.scraper - INFO - Away Spread Odds: −108
+2025-03-12 21:42:33,194 - src.scraper - INFO - Away Moneyline: +110
+2025-03-12 21:42:33,194 - src.scraper - INFO - Home: Denver Nuggets
+2025-03-12 21:42:33,194 - src.scraper - INFO - Home Spread: -2
+2025-03-12 21:42:33,194 - src.scraper - INFO - Home Spread Odds: −112
+2025-03-12 21:42:33,194 - src.scraper - INFO - Home Moneyline: −130
+2025-03-12 21:42:33,194 - src.scraper - INFO - Over/Under Number: 233
+2025-03-12 21:42:33,194 - src.scraper - INFO - Over Odds: −108
+2025-03-12 21:42:33,195 - src.scraper - INFO - Under Odds: −112
+2025-03-12 21:42:33,195 - src.scraper - INFO - ---
+
+2025-03-12 21:42:33,814 - apscheduler.scheduler - INFO - Added job "scrape_odds" to job store "default"
+2025-03-12 21:42:33,814 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-12 21:42:38,700 - src.monitor - INFO - Scheduler stopped

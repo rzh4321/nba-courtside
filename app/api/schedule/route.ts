@@ -5,10 +5,8 @@ import { parseGames } from "@/utils/mappers";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date") || "today";
-
   if (date === "today") {
     const apiUrl = `${API.DETAILS_URL}/scoreboard/todaysScoreboard_00.json`;
-
     try {
       // Use fetch with explicit no-cache options
       const res = await fetch(apiUrl, {
@@ -24,7 +22,26 @@ export async function GET(request: Request) {
       // Use Promise.all to parallelize the updates
       await Promise.all(
         parsedGames.map(async (game) => {
-          if (game.gameStatus == 2) {
+          let gameId;
+          let boxscoreData;
+          try {
+            gameId = game.gameId;
+            boxscoreData = await getBoxScore(gameId);
+          } catch (e) {
+            console.log(
+              "This game hasnt started yet according to boxscore api, skipping...",
+            );
+            return;
+          }
+          console.log(
+            "SCHEDULE API HAS GAMESTATUS ",
+            game.gameStatus,
+            " AND BOXSCORE API HAS STATUS ",
+            boxscoreData.gameStatus,
+          );
+          game.gameStatus = boxscoreData.gameStatus;
+
+          if (boxscoreData.gameStatus == 2) {
             // update the game data using boxscore API
             console.log(
               "LOOKING AT ",
@@ -32,8 +49,7 @@ export async function GET(request: Request) {
               " AT ",
               game.homeTeam.teamName,
             );
-            const gameId = game.gameId;
-            const boxscoreData = await getBoxScore(gameId);
+
             console.log(
               "SCHEDULE API HAS SCORE ",
               game.awayTeam.score,
@@ -65,6 +81,7 @@ export async function GET(request: Request) {
       );
     }
   } else {
+    console.log("NOT TODAY");
     const apiUrl = `${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`;
 
     try {

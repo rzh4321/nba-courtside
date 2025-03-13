@@ -148,6 +148,17 @@ def add_game(
     with Session() as session:
 
         try:
+            game_exists = (
+                session.query(Game)
+                .filter(
+                    and_(
+                        Game.home_team == home_team, 
+                        Game.away_team == away_team,
+                        Game.game_date == game_date
+                    )
+                )
+                .count() > 0)
+            print(f'GAME EXISTS FOR {away_team} AT {home_team} ', game_exists)
             # Check if game exists and update in one step
             result = (
                 session.query(Game)

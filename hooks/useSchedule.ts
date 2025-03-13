@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import type { ScheduleGame } from "@/types";
-import { API_URL } from "@/config";
 
 export function useSchedule(date: string) {
   const todaysDate = new Date().toLocaleDateString("en-CA");
@@ -17,7 +16,7 @@ export function useSchedule(date: string) {
       }
       return res.json();
     },
-    refetchInterval: isToday ? 10000 : false, // Refetch every 10 seconds for today's games
+    refetchInterval: isToday ? 20000 : false, // Refetch every 20 seconds for today's games
     refetchOnWindowFocus: isToday,
     staleTime: isToday ? 10000 : 60 * 60 * 1000, // 10s for today, 1 hour for historical
     gcTime: isToday ? 0 : 24 * 60 * 60 * 1000, // can garbage collect immediately for todays scores

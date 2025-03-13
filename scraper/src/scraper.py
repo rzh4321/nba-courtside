@@ -199,10 +199,10 @@ def scrape_odds():
             # Determine game date based on thead text
             if date_th == "today":
                 game_date = today
-                logger.info("date is today. game_date is set to ", game_date)
+                logger.info(f"date is today. game_date is set to {game_date}")
             elif date_th == "tomorrow":
                 game_date = today + timedelta(days=1)
-                logger.info("date is tomorrow. game_date is set to ", game_date)
+                logger.info(f"date is tomorrow. game_date is set to {game_date}")
             else:
                 # Extract month and day from format like 'WED DEC 25TH'
                 date_parts = date_th.split()[1:]  # Skip the day of week
