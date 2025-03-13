@@ -14,6 +14,14 @@ export default async function getGameIds(date: string) {
   } else {
     games = await getScoreboards(date);
   }
+  let areGamesFromDate = true;
+  if (
+    games.length > 0 &&
+    games.at(0)?.gameTimeUTC.toString().split("T")[0] !== date
+  ) {
+    // if true, its still returning yesterdays games for today (bc its like 2 AM)
+    areGamesFromDate = false;
+  }
   const activeOrPastGames = games.filter(
     (game) => game.gameStatus !== GAME_STATUS.NOT_STARTED,
   );
@@ -21,5 +29,5 @@ export default async function getGameIds(date: string) {
     (game) => game.gameStatus !== GAME_STATUS.ENDED,
   );
   gameIds = activeOrPastGames.map((game) => game.gameId);
-  return { gameIds, shouldRefreshStats };
+  return { gameIds, shouldRefreshStats, areGamesFromDate };
 }

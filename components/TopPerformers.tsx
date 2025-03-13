@@ -17,6 +17,7 @@ import useSWR from "swr";
 import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
 import { DATE_LINK_FORMAT } from "@/constants";
+import { useState } from "react";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
@@ -70,8 +71,9 @@ export const TopPerformers = () => {
     error,
   } = useLastPlayedGameDate();
   const today = format(new Date(), DATE_LINK_FORMAT);
-
+  const [displayLastPlayedGames, setDisplayLastGamesPlayed] = useState(false);
   const searchParams = useSearchParams();
+
   let date: null | string | undefined = searchParams.get("date");
   if (date === null) {
     // get the last game date if user didnt ask for a specific date
@@ -100,8 +102,11 @@ export const TopPerformers = () => {
       );
       // TODO: create an api endpoint that does same thing as getGameIds
       let res = await getGameIds(formattedDate);
+      if (!res.areGamesFromDate) setDisplayLastGamesPlayed(true);
+      else setDisplayLastGamesPlayed(false);
       // if requested date is actually today and today has no games, use last played game date
       if (res.gameIds.length === 0 && formattedDate === today) {
+        setDisplayLastGamesPlayed(true);
         return await getGameIds(lastDate);
       }
       return res;
@@ -120,14 +125,15 @@ export const TopPerformers = () => {
     blockLeaders,
     isLoading: useLeadersLoading,
   } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
-
   return (
     <div className="w-full flex flex-col items-start px-4 py-8 gap-12">
       <h1 className="-mb-4 text-3xl font-normal">
         {date ? (
-          isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
+          isToday(parse(date, "MM-dd-yyyy", new Date())) &&
+          !displayLastPlayedGames ? (
             `Today's Top Performers`
-          ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ? (
+          ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ||
+            (displayLastPlayedGames && isYesterday(new Date(lastDate))) ? (
             `Top Performers from Yesterday`
           ) : (
             `Top Performers from ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
