@@ -72,8 +72,6 @@ export default function OddsBox({
   const handleClickOdds = (e: React.MouseEvent<HTMLDivElement>) => {
     if (authLoading) return;
 
-    const target = e.target as HTMLElement;
-
     if (!isAuthenticated) {
       document.getElementById("logInButton")?.click();
       e.stopPropagation();
@@ -99,6 +97,7 @@ export default function OddsBox({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // TODO: first check game hasnt ended using api. If yes, update db. If not, ensure odds and betting line havent changed (should never be diff)
     setPending(true);
     if (user && user.balance >= +values.wager) {
       console.log({

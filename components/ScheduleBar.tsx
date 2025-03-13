@@ -17,12 +17,20 @@ export const ScheduleBar = () => {
   const pathname = usePathname();
   const date = searchParams.get("date");
   const today = format(new Date(), DATE_LINK_FORMAT);
-  const dateWithDashes = date ? date : new Date().toLocaleDateString("en-CA");
-  const { day, prevDay, nextDay } = getDays(dateWithDashes);
-  const { data, isLoading, error } = useSchedule(dateWithDashes);
+  // dateWithDashes is either specifically requested, or todays date
+  const dateWithDashes = date ? date : today;
+  // get the schedule of requested date, OR today's games (will still show yesterdays games if its like 2 AM)
+  const { data, isLoading, error } = useSchedule(date && date);
+  const calendarDate =
+    data && data.length > 0
+      ? data[0].gameTimeUTC.toString().split("T")[0]
+      : dateWithDashes;
+  const { day, prevDay, nextDay } = getDays(calendarDate);
 
-  const prevLink = pathname + (prevDay === today ? "?" : `?date=${prevDay}`);
-  const nextLink = pathname + (nextDay === today ? "?" : `?date=${nextDay}`);
+  const prevLink =
+    pathname + (prevDay === today ? `?date=${today}` : `?date=${prevDay}`);
+  const nextLink =
+    pathname + (nextDay === today ? `?date=${today}` : `?date=${nextDay}`);
 
   const loadingSkeleton = Array.from({ length: 10 }).map((num, i) => (
     <div key={i} className="">
@@ -43,7 +51,7 @@ export const ScheduleBar = () => {
                 <p className="text-white font-semibold">
                   Games for{" "}
                   {format(
-                    parse(dateWithDashes, "yyyy-MM-dd", new Date()),
+                    parse(calendarDate, "yyyy-MM-dd", new Date()),
                     "EEEE, MMMM do",
                   )}
                 </p>
@@ -54,7 +62,7 @@ export const ScheduleBar = () => {
               <Link href={prevLink}>
                 <ArrowLeft className="text-white" />
               </Link>
-              <DatePicker day={dateWithDashes} />
+              <DatePicker day={calendarDate} />
               <Link href={nextLink}>
                 <ArrowRight className="text-white" />
               </Link>

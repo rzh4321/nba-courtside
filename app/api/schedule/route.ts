@@ -95,7 +95,6 @@ export async function GET(request: Request) {
 
       const data = await res.json();
       const parsedGames = parseGames(data);
-      console.log(parsedGames);
       return Response.json(parsedGames);
     } catch (error) {
       console.error("Error fetching historical NBA data:", error);

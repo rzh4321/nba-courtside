@@ -1,14 +1,18 @@
 "use server";
 import getScoreboards from "./getScoreboards";
 import { GAME_STATUS } from "@/constants";
+import { DATE_LINK_FORMAT } from "@/constants";
+import { format } from "date-fns";
 
-export default async function getGameIds(date?: string) {
+export default async function getGameIds(date: string) {
+  const today = format(new Date(), DATE_LINK_FORMAT);
   let gameIds;
   let games;
-  if (date) {
-    games = await getScoreboards(date);
-  } else {
+  // TODO: use API endpoint instead, delete this function entirely
+  if (date === today) {
     games = await getScoreboards();
+  } else {
+    games = await getScoreboards(date);
   }
   const activeOrPastGames = games.filter(
     (game) => game.gameStatus !== GAME_STATUS.NOT_STARTED,

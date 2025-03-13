@@ -16,6 +16,7 @@ import getGameIds from "@/actions/getGameIds";
 import useSWR from "swr";
 import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
+import { DATE_LINK_FORMAT } from "@/constants";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
@@ -68,6 +69,8 @@ export const TopPerformers = () => {
     dateLoading: isLoading,
     error,
   } = useLastPlayedGameDate();
+  const today = format(new Date(), DATE_LINK_FORMAT);
+
   const searchParams = useSearchParams();
   let date: null | string | undefined = searchParams.get("date");
   if (date === null) {
@@ -83,7 +86,6 @@ export const TopPerformers = () => {
     // convert it to format of mm-dd-yyyy
     date = format(parse(date, "yyyy-MM-dd", new Date()), "MM-dd-yyyy");
   }
-  // console.log('DATE IS ', date)
   // get all the gameIds once date is available
   const {
     data,
@@ -96,7 +98,13 @@ export const TopPerformers = () => {
         parse(date!, "MM-dd-yyyy", new Date()),
         "yyyy-MM-dd",
       );
-      return await getGameIds(formattedDate);
+      // TODO: create an api endpoint that does same thing as getGameIds
+      let res = await getGameIds(formattedDate);
+      // if requested date is actually today and today has no games, use last played game date
+      if (res.gameIds.length === 0 && formattedDate === today) {
+        return await getGameIds(lastDate);
+      }
+      return res;
     },
     {
       revalidateOnFocus: false,
@@ -120,9 +128,9 @@ export const TopPerformers = () => {
           isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
             `Today's Top Performers`
           ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ? (
-            `Top Performers for Yesterday`
+            `Top Performers from Yesterday`
           ) : (
-            `Top Performers for ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
+            `Top Performers from ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
           )
         ) : date === undefined ? (
           `Today's Top Performers`
