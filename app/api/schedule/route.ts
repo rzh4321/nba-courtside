@@ -5,6 +5,7 @@ import { parseGames } from "@/utils/mappers";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date") || "today";
+  const cache = url.searchParams.get("cache") === "true" ? true : false;
   if (date === "today") {
     const apiUrl = `${API.DETAILS_URL}/scoreboard/todaysScoreboard_00.json`;
     try {
@@ -81,13 +82,21 @@ export async function GET(request: Request) {
       );
     }
   } else {
-    console.log("NOT TODAY");
+    console.log("REQUESTED DATE: ", date);
     const apiUrl = `${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`;
 
     try {
-      const res = await fetch(apiUrl, {
-        next: { revalidate: 86400 }, // 24 hours
-      });
+      let res;
+      if (cache) {
+        res = await fetch(apiUrl, {
+          next: { revalidate: 86400 }, // 24 hours
+        });
+      } else {
+        // either the requested date was today or yesterday
+        res = await fetch(apiUrl, {
+          cache: "no-store",
+        });
+      }
 
       if (!res.ok) {
         throw new Error(`NBA API responded with status: ${res.status}`);
