@@ -22,9 +22,9 @@ export const ScheduleBar = () => {
   // get the schedule of requested date, OR today's games (will still show yesterdays games if its like 2 AM)
   const { data, isLoading, error } = useSchedule(date && date);
   const calendarDate =
-    data && data.length > 0
-      ? data[0].gameTimeUTC.toString().split("T")[0]
-      : dateWithDashes;
+  data && data.length > 0
+  ? new Date(data[0].gameTimeUTC).toLocaleDateString('en-CA', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone })
+  : dateWithDashes;
   const { day, prevDay, nextDay } = getDays(calendarDate);
 
   const prevLink =
