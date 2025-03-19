@@ -16,7 +16,7 @@ export function useSchedule(date: string | null) {
     queryKey: ["schedule", date], // Keep stable query key
     queryFn: async () => {
       const res = await fetch(
-        `/api/schedule?date=${!date ? "today" : date}&cache=${!isToday && !wasYesterday && date}`,
+        `/api/schedule?date=${!date || isToday ? "today" : date}&cache=${!isToday && !wasYesterday && date !== null}`,
       );
       if (!res.ok) {
         throw new Error("Failed to fetch schedule");
