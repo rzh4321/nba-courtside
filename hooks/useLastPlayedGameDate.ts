@@ -1,11 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import { LeagueScheduleResponse } from "@/types";
 import { parse } from "date-fns";
-import useSWR from "swr";
 
 function getHasPlayedGames(
   gameDate: LeagueScheduleResponse["leagueSchedule"]["gameDates"][number],
 ) {
-  // returns true if at least one game in this game date is either still playing or has finished
   return gameDate.games.some((game) => game.gameStatus > 1);
 }
 
@@ -16,34 +15,53 @@ export function getDateFromGameDate(
 }
 
 function useFullSchedule() {
-  const result = useSWR("/api/schedule/year", async (url) => {
-    const res = await fetch(url);
-    return await res.json();
-  });
+  const [data, setData] = useState<LeagueScheduleResponse>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<any>();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const result = await fetch("/api/schedule/year", { cache: "no-store" });
+        const d = await result.json();
+        setData(d);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (data) setIsLoading(false);
+  }, [data]);
 
   return {
-    ...result, // dont rename fetch result to 'data' since it has a property
-    // named 'data', so just use spread operator instead
+    data,
+    isLoading,
+    error,
   };
 }
 
 export function useLastPlayedGameDate() {
   const { data, isLoading: fullScheduleLoading, error } = useFullSchedule();
-  let dateLoading = true;
-  let date = null;
-  if (!fullScheduleLoading && data) {
-    const gameDates = data?.leagueSchedule.gameDates;
+  const { date, dateLoading } = useMemo(() => {
+    if (fullScheduleLoading || !data) {
+      return { date: null, dateLoading: true };
+    }
     // gameDates is a large array of objects, each object has gameDate and games array
     // traverse backwards to get most recent game date object
+    const gameDates = data?.leagueSchedule.gameDates;
     for (let i = gameDates.length - 1; i >= 0; i--) {
       const gameDate = gameDates[i];
       if (gameDate && getHasPlayedGames(gameDate)) {
-        date = gameDate.gameDate.split(" ")[0].replace(/\//g, "-");
-        break;
+        const formatted = gameDate.gameDate.split(" ")[0].replace(/\//g, "-");
+        return { date: formatted, dateLoading: false };
       }
     }
-  }
-  dateLoading = false;
+
+    return { date: null, dateLoading: false };
+  }, [data, fullScheduleLoading]);
 
   return { date, dateLoading, error };
 }

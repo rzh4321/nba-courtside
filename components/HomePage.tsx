@@ -8,15 +8,12 @@ import {
   isFuture,
   endOfDay,
 } from "date-fns";
-import { PerformerCard } from "../components/PerformerCard";
+import { PerformerCard } from "./PerformerCard";
 import startCase from "lodash/startCase";
-import { useLastPlayedGameDate } from "@/hooks/useLastPlayedGameDate";
-import { useSearchParams } from "next/navigation";
-import getGameIds from "@/actions/getGameIds";
 import useSWR from "swr";
 import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
-import { DATE_LINK_FORMAT } from "@/constants";
+import useTopPerformersDate from "@/hooks/useTopPerformersDate";
 import { useState } from "react";
 
 type SectionProps = {
@@ -64,30 +61,9 @@ const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
   );
 };
 
-export const TopPerformers = () => {
-  const {
-    date: lastDate,
-    dateLoading: isLoading,
-    error,
-  } = useLastPlayedGameDate();
-  const today = format(new Date(), DATE_LINK_FORMAT);
-  const [displayLastPlayedGames, setDisplayLastGamesPlayed] = useState(false);
-  const searchParams = useSearchParams();
-
-  let date: null | string | undefined = searchParams.get("date");
-  if (date === null) {
-    // get the last game date if user didnt ask for a specific date
-    if (!isLoading && lastDate) {
-      date = lastDate;
-    } else {
-      // lastDate not found
-      date = undefined;
-    }
-  } else {
-    // user asked for a specific date, get it from the url
-    // convert it to format of mm-dd-yyyy
-    date = format(parse(date, "yyyy-MM-dd", new Date()), "MM-dd-yyyy");
-  }
+export default function HomePage() {
+  const { date, error } = useTopPerformersDate();
+  const [showTopPerformers, setShowTopPerformers] = useState(true);
   // get all the gameIds once date is available
   const {
     data,
@@ -100,16 +76,8 @@ export const TopPerformers = () => {
         parse(date!, "MM-dd-yyyy", new Date()),
         "yyyy-MM-dd",
       );
-      // TODO: create an api endpoint that does same thing as getGameIds
-      let res = await getGameIds(formattedDate);
-      if (!res.areGamesFromDate) setDisplayLastGamesPlayed(true);
-      else setDisplayLastGamesPlayed(false);
-      // if requested date is actually today and today has no games, use last played game date
-      if (res.gameIds.length === 0 && formattedDate === today) {
-        setDisplayLastGamesPlayed(true);
-        return await getGameIds(lastDate);
-      }
-      return res;
+      let res = await fetch(url);
+      return await res.json();
     },
     {
       revalidateOnFocus: false,
@@ -127,23 +95,72 @@ export const TopPerformers = () => {
   } = useLeaders(data?.gameIds, data?.shouldRefreshStats);
   return (
     <div className="w-full flex flex-col items-start px-4 py-8 gap-12">
-      <h1 className="-mb-4 text-3xl font-normal">
-        {date ? (
-          isToday(parse(date, "MM-dd-yyyy", new Date())) &&
-          !displayLastPlayedGames ? (
+      <nav className="flex gap-10 items-center">
+        <h1
+          onClick={() => setShowTopPerformers(true)}
+          className={`-mb-4 text-3xl font-normal cursor-pointer ${showTopPerformers ? "" : "text-gray-300 hover:text-white"}`}
+        >
+          {date ? (
+            isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
+              `Today's Top Performers`
+            ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ? (
+              `Top Performers from Yesterday`
+            ) : (
+              `Top Performers from ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
+            )
+          ) : date === undefined ? (
             `Today's Top Performers`
-          ) : isYesterday(parse(date, "MM-dd-yyyy", new Date())) ||
-            (displayLastPlayedGames && isYesterday(new Date(lastDate))) ? (
-            `Top Performers from Yesterday`
           ) : (
-            `Top Performers from ${format(parse(date, "MM-dd-yyyy", new Date()), "MMMM do")}`
-          )
-        ) : date === undefined ? (
-          `Today's Top Performers`
-        ) : (
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
-        )}
-      </h1>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
+          )}
+        </h1>
+        <h1
+          onClick={() => setShowTopPerformers(false)}
+          className={`-mb-4 text-3xl font-normal cursor-pointer ${!showTopPerformers ? "" : "text-gray-300 hover:text-white"}`}
+        >{`Live Odds`}</h1>
+      </nav>
+
+      {showTopPerformers ? (
+        <TopPerformers
+          pointLeaders={pointLeaders}
+          assistLeaders={assistLeaders}
+          reboundLeaders={reboundLeaders}
+          stealLeaders={stealLeaders}
+          blockLeaders={blockLeaders}
+          gameIdsLoading={gameIdsLoading}
+          useLeadersLoading={useLeadersLoading}
+          date={date}
+        />
+      ) : (
+        <>hi</>
+      )}
+    </div>
+  );
+}
+
+type TopPerformersProps = {
+  pointLeaders: ReturnType<typeof useLeaders>["pointLeaders"];
+  assistLeaders: ReturnType<typeof useLeaders>["assistLeaders"];
+  reboundLeaders: ReturnType<typeof useLeaders>["reboundLeaders"];
+  stealLeaders: ReturnType<typeof useLeaders>["stealLeaders"];
+  blockLeaders: ReturnType<typeof useLeaders>["blockLeaders"];
+  gameIdsLoading: boolean;
+  useLeadersLoading: boolean;
+  date: string | null | undefined;
+};
+
+function TopPerformers({
+  pointLeaders,
+  assistLeaders,
+  reboundLeaders,
+  stealLeaders,
+  blockLeaders,
+  gameIdsLoading,
+  useLeadersLoading,
+  date,
+}: TopPerformersProps) {
+  return (
+    <>
       <Section
         leaders={pointLeaders}
         category={"points"}
@@ -174,6 +191,6 @@ export const TopPerformers = () => {
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-    </div>
+    </>
   );
-};
+}
