@@ -36,4 +36,16 @@ export const bettingService = {
     }
     return response.json();
   },
+  async markGameEnded(gameId: string) {
+    const response = await fetch(
+      `${API_BASE_URL}/games/mark-game-ended/${gameId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return await response.json();
+  },
 };

@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +16,8 @@ import { useState, useRef, useEffect } from "react";
 import { API_URL } from "@/config";
 import useAuth from "@/hooks/useAuth";
 import BetPlacedAlert from "./BetPlacedAlert";
+import { GAME_STATUS } from "@/constants";
+import { bettingService } from "@/bettingService";
 
 const formSchema = z.object({
   wager: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
@@ -77,7 +80,6 @@ export default function OddsBox({
       e.stopPropagation();
       return;
     }
-    // console.log(odds, bettingLine, hasEnded)
     if (
       odds === null ||
       bettingLine === null ||
@@ -96,10 +98,23 @@ export default function OddsBox({
     },
   });
 
+  const checkGameEnded = async () => {
+    const res = await fetch(`/api/boxscore/${gameId}`);
+    const data = await res.json();
+    const gameEnded = data.gameStatus === GAME_STATUS.ENDED;
+    if (gameEnded) {
+      const res = await bettingService.markGameEnded(gameId);
+      console.log(res);
+    }
+    return gameEnded;
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: first check game hasnt ended using api. If yes, update db. If not, ensure odds and betting line havent changed (should never be diff)
     setPending(true);
-    if (user && user.balance >= +values.wager) {
+    const gameEnded = await checkGameEnded();
+    if (gameEnded) {
+      toast.error("This game has ended.");
+    } else if (user && user.balance >= +values.wager) {
       console.log({
         gameId: gameId,
         betType: type,
@@ -147,8 +162,8 @@ export default function OddsBox({
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <div
           data-clickable="true"
           onClick={handleClickOdds}
@@ -156,8 +171,10 @@ export default function OddsBox({
         >
           {children}
         </div>
-      </DialogTrigger>
-      <DialogContent className={`${isBetPlaced ? "p-0 font-montserrat" : ""}`}>
+      </AlertDialogTrigger>
+      <AlertDialogContent
+        className={`${isBetPlaced ? "p-0 font-montserrat" : ""}`}
+      >
         {isBetPlaced ? (
           <BetPlacedAlert
             betTypeToString={betTypeToString}
@@ -169,79 +186,84 @@ export default function OddsBox({
             setIsBetPlaced={setIsBetPlaced}
           />
         ) : (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-1"
-            >
-              <DialogHeader>
-                <div className="flex justify-between mt-4">
-                  <span className="font-semibold text-blue-400 tracking-tight">
-                    Betslip
-                  </span>
-                  <span className="text-sm tracking-tight font-thin">
-                    $10 wins ${calculateOddsAndPayout(10, odds!)}
-                  </span>
-                </div>
-              </DialogHeader>
+          <>
+            <AlertDialogCancel className="p-3 cursor-pointer" asChild>
+              <span className="absolute top-1 right-3">X</span>
+            </AlertDialogCancel>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-1"
+              >
+                <AlertDialogHeader>
+                  <div className="flex justify-between mt-4">
+                    <span className="font-semibold text-blue-400 tracking-tight">
+                      Betslip
+                    </span>
+                    <span className="text-sm tracking-tight font-thin">
+                      $10 wins ${calculateOddsAndPayout(10, odds!)}
+                    </span>
+                  </div>
+                </AlertDialogHeader>
 
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between">
-                  <div className="flex flex-col">
-                    <span className="font-semibold">
-                      {betTypeToString[type].title}
-                    </span>
-                    <span className="text-[11px] dark:text-gray-400 text-gray-500 tracking-wide">
-                      {betTypeToString[type].desc}
-                    </span>
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between">
+                    <div className="flex flex-col">
+                      <span className="font-semibold">
+                        {betTypeToString[type].title}
+                      </span>
+                      <span className="text-[11px] dark:text-gray-400 text-gray-500 tracking-wide">
+                        {betTypeToString[type].desc}
+                      </span>
+                    </div>
+                    <div>
+                      {odds && odds > 0
+                        ? `+${odds!.toString().replace(/\.?0+$/, "")}`
+                        : odds && odds.toString().replace(/\.?0+$/, "")}
+                    </div>
                   </div>
-                  <div>
-                    {odds && odds > 0
-                      ? `+${odds!.toString().replace(/\.?0+$/, "")}`
-                      : odds && odds.toString().replace(/\.?0+$/, "")}
+                  <div className="flex items-center gap-2 w-full">
+                    <FormField
+                      control={form.control}
+                      name="wager"
+                      render={({ field }) => (
+                        <FormItem className="w-1/2 flex-1">
+                          <FormControl>
+                            <WagerInput field={field} setWager={setWager} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      className={`h-14 p-0 rounded-sm self-start tracking-wide flex flex-1 w-1/2 flex-row items-center justify-center ${pending || wager === undefined || +wager <= 0 ? "bg-slate-500 text-black font-light" : "bg-green-600/80 hover:bg-green-800 text-white"} text-sm shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50`}
+                      aria-disabled={
+                        pending || wager === undefined || +wager <= 0
+                      }
+                      disabled={pending || wager === undefined || +wager <= 0}
+                    >
+                      {pending ? (
+                        <div className="animate-spin rounded-full h-8 border-b-2 border-gray-900 dark:border-white" />
+                      ) : !wager || +wager < 0 ? (
+                        "Enter wager amount"
+                      ) : (
+                        <div className="flex flex-col items-center justify-center">
+                          <span className="text-sm font-[400]">
+                            Accept and place bet
+                          </span>
+                          <span className="tracking-tight text-xs font-light">
+                            TO WIN: ${calculateOddsAndPayout(+wager, odds!)}
+                          </span>
+                        </div>
+                      )}
+                    </Button>{" "}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 w-full">
-                  <FormField
-                    control={form.control}
-                    name="wager"
-                    render={({ field }) => (
-                      <FormItem className="w-1/2 flex-1">
-                        <FormControl>
-                          <WagerInput field={field} setWager={setWager} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    className={`h-14 p-0 rounded-sm self-start tracking-wide flex flex-1 w-1/2 flex-row items-center justify-center ${pending || wager === undefined || +wager <= 0 ? "bg-slate-500 text-black font-light" : "bg-green-600/80 hover:bg-green-800 text-white"} text-sm shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50`}
-                    aria-disabled={
-                      pending || wager === undefined || +wager <= 0
-                    }
-                    disabled={pending || wager === undefined || +wager <= 0}
-                  >
-                    {pending ? (
-                      <div className="animate-spin rounded-full h-8 border-b-2 border-gray-900 dark:border-white" />
-                    ) : !wager || +wager < 0 ? (
-                      "Enter wager amount"
-                    ) : (
-                      <div className="flex flex-col items-center justify-center">
-                        <span className="text-sm font-[400]">
-                          Accept and place bet
-                        </span>
-                        <span className="tracking-tight text-xs font-light">
-                          TO WIN: ${calculateOddsAndPayout(+wager, odds!)}
-                        </span>
-                      </div>
-                    )}
-                  </Button>{" "}
-                </div>
-              </div>
-            </form>
-          </Form>
+              </form>
+            </Form>
+          </>
         )}
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

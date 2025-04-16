@@ -22,7 +22,7 @@ export const getScoreboard = async () => {
 export const getBoxscore = async (gameId: string) => {
   const res = await fetch(boxscoreUrl(gameId), { next: { revalidate: 20 } });
   const data = await res.json();
-  return data;
+  return data.game;
 };
 
 export const getScoreboards = async (date?: string) => {
@@ -40,8 +40,12 @@ export const getScoreboards = async (date?: string) => {
     const data = await res.json();
     return parseGames(data);
   } else {
+    console.log("getting todays scoreboard....");
     const res = await fetch(
       `${API.DETAILS_URL}/scoreboard/todaysScoreboard_00.json`,
+      {
+        cache: "no-store",
+      },
     );
 
     const data = await res.json();

@@ -17,7 +17,8 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
   const { data: boxscore } = useSWR(
     gameId ? `/api/boxscore/${gameId}` : null,
     async (url) => {
-      return await getBoxScore(gameId);
+      const res = await fetch(url);
+      return await res.json();
     },
     {
       refreshInterval: 1000 * 30, // update boxscore data every 30 seconds,
@@ -25,7 +26,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       refreshWhenOffline: true,
     },
   );
-
+  console.log(boxscore);
   // update document title
   useEffect(() => {
     if (boxscore) {

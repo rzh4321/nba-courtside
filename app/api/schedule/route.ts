@@ -29,41 +29,41 @@ export async function GET(request: Request) {
             gameId = game.gameId;
             boxscoreData = await getBoxScore(gameId);
           } catch (e) {
-            console.log(
-              "This game hasnt started yet according to boxscore api, skipping...",
-            );
+            // console.log(
+            //   "This game hasnt started yet according to boxscore api, skipping...",
+            // );
             return;
           }
-          console.log(
-            "SCHEDULE API HAS GAMESTATUS ",
-            game.gameStatus,
-            " AND BOXSCORE API HAS STATUS ",
-            boxscoreData.gameStatus,
-          );
+          // console.log(
+          //   "SCHEDULE API HAS GAMESTATUS ",
+          //   game.gameStatus,
+          //   " AND BOXSCORE API HAS STATUS ",
+          //   boxscoreData.gameStatus,
+          // );
           game.gameStatus = boxscoreData.gameStatus;
 
           if (boxscoreData.gameStatus == 2) {
             // update the game data using boxscore API
-            console.log(
-              "LOOKING AT ",
-              game.awayTeam.teamName,
-              " AT ",
-              game.homeTeam.teamName,
-            );
+            // console.log(
+            //   "LOOKING AT ",
+            //   game.awayTeam.teamName,
+            //   " AT ",
+            //   game.homeTeam.teamName,
+            // );
 
-            console.log(
-              "SCHEDULE API HAS SCORE ",
-              game.awayTeam.score,
-              " BOXSCORE API HAS SCORE ",
-              boxscoreData.awayTeam.score,
-            );
+            // console.log(
+            //   "SCHEDULE API HAS SCORE ",
+            //   game.awayTeam.score,
+            //   " BOXSCORE API HAS SCORE ",
+            //   boxscoreData.awayTeam.score,
+            // );
             game.awayTeam.score = boxscoreData.awayTeam.score;
-            console.log(
-              "SCHEDULE API HAS SCORE ",
-              game.homeTeam.score,
-              " BOXSCORE API HAS SCORE ",
-              boxscoreData.homeTeam.score,
-            );
+            // console.log(
+            //   "SCHEDULE API HAS SCORE ",
+            //   game.homeTeam.score,
+            //   " BOXSCORE API HAS SCORE ",
+            //   boxscoreData.homeTeam.score,
+            // );
             game.homeTeam.score = boxscoreData.homeTeam.score;
             game.gameClock = boxscoreData.gameClock;
             game.gameStatus = boxscoreData.gameStatus;

@@ -1,6 +1,7 @@
 import { CircleCheck } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { AlertDialogCancel } from "./ui/alert-dialog";
 
 type Props = {
   betTypeToString: {
@@ -135,9 +136,14 @@ export default function BetPlacedAlert({
         >
           Reuse selection
         </Button>
-        <Button className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 rounded-sm">
-          Done
-        </Button>
+        <AlertDialogCancel asChild>
+          <Button
+            onClick={() => setIsBetPlaced(false)}
+            className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 rounded-sm"
+          >
+            Done
+          </Button>
+        </AlertDialogCancel>
       </div>
     </div>
   );

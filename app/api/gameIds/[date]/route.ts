@@ -20,7 +20,6 @@ export async function GET(
   const today = format(new Date(), DATE_LINK_FORMAT);
   let gameIds;
   let games;
-
   if (formattedDate === today) {
     games = await getScoreboards();
   } else {

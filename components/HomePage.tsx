@@ -72,10 +72,6 @@ export default function HomePage() {
   } = useSWR(
     `/api/gameIds/${date}`,
     async (url) => {
-      const formattedDate = format(
-        parse(date!, "MM-dd-yyyy", new Date()),
-        "yyyy-MM-dd",
-      );
       let res = await fetch(url);
       return await res.json();
     },
