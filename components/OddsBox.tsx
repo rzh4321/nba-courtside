@@ -82,8 +82,8 @@ export default function OddsBox({
     }
     if (
       odds === null ||
-      bettingLine === null ||
-      bettingLine === undefined ||
+      (!type.includes("MONEYLINE") && bettingLine === null) ||
+      (!type.includes("MONEYLINE") && bettingLine === undefined) ||
       gameEnded
     ) {
       e.stopPropagation();
@@ -99,12 +99,17 @@ export default function OddsBox({
   });
 
   const checkGameEnded = async () => {
-    const res = await fetch(`/api/boxscore/${gameId}`);
-    const data = await res.json();
-    const gameEnded = data.gameStatus === GAME_STATUS.ENDED;
-    if (gameEnded) {
-      const res = await bettingService.markGameEnded(gameId);
-      console.log(res);
+    let gameEnded = false;
+    try {
+      const res = await fetch(`/api/boxscore/${gameId}`);
+      const data = await res.json();
+      gameEnded = data.gameStatus === GAME_STATUS.ENDED;
+      if (gameEnded) {
+        const res = await bettingService.markGameEnded(gameId);
+        console.log(res);
+      }
+    } catch (e) {
+      // this game has no boxscore yet, so it hasn't even started. OK to place a bet
     }
     return gameEnded;
   };

@@ -4,7 +4,7 @@ import { bettingService } from "@/bettingService";
 import type { GameBettingInfos, GameBettingInfo } from "@/types";
 
 export default function useTodaysOdds() {
-  const [todaysOdds, setTodaysOdds] = useState<GameBettingInfos | null>(null);
+  const [todaysOdds, setTodaysOdds] = useState<GameBettingInfos>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { lastMessage, isConnected } = useWebSocket();
@@ -41,43 +41,36 @@ export default function useTodaysOdds() {
   }, []);
 
   // Handle WebSocket updates
-  //   useEffect(() => {
-  //     if (lastMessage) {
-  //       console.log("LAST MESSAGE IS ", lastMessage);
-  //       const {
-  //         type,
-  //         gameId: msgGameId,
-  //         homeTeam: msgHomeTeam,
-  //         awayTeam: msgAwayTeam,
-  //         gameDate: msgGameDate,
-  //         data: gameData,
-  //       } = lastMessage;
+  useEffect(() => {
+    if (lastMessage) {
+      console.log("ON TODAY PAGE. LAST MESSAGE IS ", lastMessage);
+      const {
+        type,
+        gameId: msgGameId,
+        homeTeam: msgHomeTeam,
+        awayTeam: msgAwayTeam,
+        id: rowId,
 
-  //       const isRelevantUpdate =
-  //         (type === "ODDS_UPDATE" && msgGameId === gameId) ||
-  //         (type === "ODDS_UPDATE_BY_TEAMS" &&
-  //           msgHomeTeam === homeTeam &&
-  //           msgAwayTeam === awayTeam &&
-  //           msgGameDate === gameDate);
+        data: gameData,
+      } = lastMessage;
 
-  //       if (isRelevantUpdate) {
-  //         console.log(
-  //           "LAST MESSAGE FROM SOCKET MATCHES THIS GAME, UPDATED BETTING INFO :)",
-  //         );
-  //         // Directly use the data from the WebSocket message
-  //         setGameBettingInfo(gameData);
-  //         setError(null);
+      const newBettingOdds = todaysOdds.map(([dateStr, gamesArr]) => {
+        const updatedGamesArr = gamesArr.map((game) => {
+          const isRelevantUpdate =
+            (type === "ODDS_UPDATE" && msgGameId === game.gameId) ||
+            (type === "ODDS_UPDATE_BY_TEAMS" &&
+              msgHomeTeam === game.homeTeam &&
+              msgAwayTeam === game.awayTeam &&
+              rowId === game.id);
+          return isRelevantUpdate ? gameData : game;
+        });
+        return [dateStr, updatedGamesArr] as [string, GameBettingInfo[]];
+      });
+      setTodaysOdds(newBettingOdds);
 
-  //         // If we got data but no gameId is set, set it
-  //         if (gameData && !gameData.gameId) {
-  //           console.log("GAMEID IN DB WAS NULL, SETTING IT NOW");
-  //           bettingService
-  //             .setGameId(homeTeam, awayTeam, gameDate!, gameId)
-  //             .catch((error) => console.error("Error setting game ID:", error));
-  //         }
-  //       }
-  //     }
-  //   }, [lastMessage, gameId, homeTeam, awayTeam, gameDate]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+  }, [lastMessage]);
 
   return { todaysOdds, loading, error, isConnected };
 }
