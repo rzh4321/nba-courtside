@@ -9,7 +9,9 @@ export default function useTodaysOdds() {
   const [loading, setLoading] = useState(true);
   const { lastMessage, isConnected } = useWebSocket();
 
-  const sortData = (data: Record<string, GameBettingInfo[]>): [string, GameBettingInfo[]][] => {
+  const sortData = (
+    data: Record<string, GameBettingInfo[]>,
+  ): [string, GameBettingInfo[]][] => {
     const getDateFromLabel = (label: string): Date | null => {
       if (label === "Today") return new Date();
       if (label === "Tomorrow") {
@@ -17,34 +19,37 @@ export default function useTodaysOdds() {
         tomorrow.setDate(tomorrow.getDate() + 1);
         return tomorrow;
       }
-  
+
       // Parse string format "April 22nd" to Date object
       const withSuffixRemoved = label.replace(/(\d+)(st|nd|rd|th)/, "$1");
       const fullDateStr = `${withSuffixRemoved}, ${new Date().getFullYear()}`;
       const parsedDate = new Date(fullDateStr);
       return isNaN(parsedDate.getTime()) ? null : parsedDate;
     };
-  
+
     return Object.entries(data).sort(([keyA], [keyB]) => {
       const priority = { Today: 0, Tomorrow: 1 };
-  
+
       const isAInPriority = keyA in priority;
       const isBInPriority = keyB in priority;
-  
+
       if (isAInPriority && isBInPriority) {
-        return priority[keyA as keyof typeof priority] - priority[keyB as keyof typeof priority];
+        return (
+          priority[keyA as keyof typeof priority] -
+          priority[keyB as keyof typeof priority]
+        );
       }
-  
+
       if (isAInPriority) return -1;
       if (isBInPriority) return 1;
-  
+
       const dateA = getDateFromLabel(keyA);
       const dateB = getDateFromLabel(keyB);
-  
+
       if (dateA && dateB) {
         return dateA.getTime() - dateB.getTime();
       }
-  
+
       return 0; // fallback to no change if parsing fails
     });
   };
@@ -71,7 +76,7 @@ export default function useTodaysOdds() {
   // Initial fetch
   useEffect(() => {
     fetchTodaysOdds();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle WebSocket updates
@@ -102,7 +107,7 @@ export default function useTodaysOdds() {
       });
       setTodaysOdds(newBettingOdds);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastMessage]);
 
   return { todaysOdds, loading, error, isConnected };

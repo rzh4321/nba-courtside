@@ -13,7 +13,9 @@ export default function LiveOddsPage() {
           console.log("Date:", date, "Value:", games);
           return (
             <div key={date} className="flex flex-col gap-1">
-              <div className=" font-montserrat font-bold sm:text-lg">{date.toUpperCase()}</div>
+              <div className=" font-montserrat font-bold sm:text-lg">
+                {date.toUpperCase()}
+              </div>
               <div className="flex flex-col gap-4">
                 {games.map((game: GameBettingInfo) => (
                   <div key={game.id} className="flex flex-col gap-1">

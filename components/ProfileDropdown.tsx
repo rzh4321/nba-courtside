@@ -39,7 +39,10 @@ export default function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500">
+        <Button
+          variant="outline"
+          className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500"
+        >
           ${user?.balance}
         </Button>
       </DropdownMenuTrigger>
