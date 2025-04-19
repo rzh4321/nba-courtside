@@ -27,8 +27,6 @@ import { useRef, useState, useEffect } from "react";
 import DollarInput from "./DollarInput";
 import Link from "next/link";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
-
 export default function ProfileDropdown() {
   const { logout, user } = useAuth();
 
@@ -44,7 +42,7 @@ export default function ProfileDropdown() {
           variant="outline"
           className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500"
         >
-          ${user?.balance}
+          ${user?.balance.toFixed(2)}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
