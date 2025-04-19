@@ -1013,3 +1013,20 @@ export type User = {
   bets_won: number;
   created_at: Date;
 };
+
+export type BetType = {
+  id: number;
+  userId: number;
+  gameId: number;
+  betType: "SPREAD_HOME"
+  | "SPREAD_AWAY"
+  | "MONEYLINE_HOME"
+  | "MONEYLINE_AWAY"
+  | "OVER"
+  | "UNDER";
+  odds: string;
+  amountPlaced: string;
+  totalPayout: string;
+  placedAt: string; // datetime -> ISO string (e.g., "2025-04-19T15:30:00Z")
+  status: string;
+};

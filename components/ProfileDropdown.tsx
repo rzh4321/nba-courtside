@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { useRef, useState, useEffect } from "react";
 import DollarInput from "./DollarInput";
+import Link from "next/link";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -53,7 +54,7 @@ export default function ProfileDropdown() {
         <DepositMoneyForm />
         <DropdownMenuSeparator />
         <DropdownMenuItem className="font-semibold tracking-tight cursor-pointer">
-          My Bets
+            <Link href='/bets'>My Bets</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="font-semibold tracking-tight cursor-pointer"
