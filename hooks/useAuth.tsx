@@ -10,6 +10,7 @@ type AuthContextType = {
   logout: () => void;
   verifyToken: () => Promise<void>;
   loading: boolean;
+  deposit: (amount: number) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -70,6 +71,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
+  const deposit = (amount: number) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        amount_deposited: prev.amount_deposited + amount,
+        balance: prev.balance + amount,
+      };
+    });
+  };
+  // TODO: add more functions for updating the state, like updating bets won
+
   const contextValue: AuthContextType = {
     isAuthenticated,
     user,
@@ -77,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     logout,
     verifyToken,
     loading,
+    deposit,
   };
 
   return (

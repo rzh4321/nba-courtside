@@ -95,7 +95,7 @@ export default function HomePage() {
       <nav className="flex gap-10 items-center">
         <h1
           onClick={() => setShowTopPerformers(true)}
-          className={`-mb-4 text-3xl font-normal cursor-pointer ${showTopPerformers ? "" : "text-gray-300 hover:text-white"}`}
+          className={`-mb-4 text-3xl font-normal cursor-pointer ${showTopPerformers ? "" : "dark:text-gray-300 dark:hover:text-white hover:text-gray-600"}`}
         >
           {date ? (
             isToday(parse(date, "MM-dd-yyyy", new Date())) ? (
@@ -113,7 +113,7 @@ export default function HomePage() {
         </h1>
         <h1
           onClick={() => setShowTopPerformers(false)}
-          className={`-mb-4 text-3xl font-normal cursor-pointer ${!showTopPerformers ? "" : "text-gray-300 hover:text-white"}`}
+          className={`-mb-4 text-3xl font-normal cursor-pointer ${!showTopPerformers ? "" : "dark:text-gray-300 dark:hover:text-white hover:text-gray-600"}`}
         >{`Live Odds`}</h1>
       </nav>
 

@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 import AuthDialog from "./AuthDialog";
 import useAuth from "@/hooks/useAuth";
 import { toast } from "sonner";
+import ProfileDropdown from "./ProfileDropdown";
 
 const NavBar = () => {
   const { isAuthenticated, loading, logout } = useAuth();
@@ -48,13 +49,7 @@ const NavBar = () => {
             {loading ? (
               <span className="animate-pulse bg-blue-300 rounded-full w-[40px] h-[20px]"></span>
             ) : isAuthenticated ? (
-              <Button
-                className="text-white font-semibold tracking-tight"
-                onClick={handleLogout}
-                variant={"link"}
-              >
-                Log Out
-              </Button>
+              <ProfileDropdown />
             ) : (
               <AuthDialog />
             )}
