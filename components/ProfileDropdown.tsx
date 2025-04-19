@@ -101,7 +101,7 @@ const DepositMoneyForm = () => {
       }
       console.log(res);
       deposit(+values.amount);
-      toast.success(`Successfully deposited ${values.amount}!`);
+      toast.success(`Successfully deposited ${parseFloat(values.amount).toFixed(2)}!`);
     } else {
       const { detail } = await response.json();
       toast.error(detail);
