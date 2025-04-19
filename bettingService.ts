@@ -48,4 +48,13 @@ export const bettingService = {
     );
     return await response.json();
   },
+
+  async getTodaysOdds() {
+    const response = await fetch(`${API_BASE_URL}/games/today`);
+    if (!response.ok) {
+      console.log(response);
+      throw new Error("Failed to fetch todays odds");
+    }
+    return response.json();
+  },
 };

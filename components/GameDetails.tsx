@@ -26,7 +26,6 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       refreshWhenOffline: true,
     },
   );
-  console.log(boxscore);
   // update document title
   useEffect(() => {
     if (boxscore) {

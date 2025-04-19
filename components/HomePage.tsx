@@ -15,6 +15,7 @@ import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
 import useTopPerformersDate from "@/hooks/useTopPerformersDate";
 import { useState } from "react";
+import LiveOddsPage from "./LiveOddsPage";
 
 type SectionProps = {
   leaders: ReturnType<typeof useLeaders>["pointLeaders"];
@@ -128,7 +129,7 @@ export default function HomePage() {
           date={date}
         />
       ) : (
-        <>hi</>
+        <LiveOddsPage />
       )}
     </div>
   );

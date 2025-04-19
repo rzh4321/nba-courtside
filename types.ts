@@ -1000,17 +1000,7 @@ export type CurrentGameBettingInfo = {
   overOdds: null | number;
 };
 
-// type of data fetched for displaying current odds on home page
-export type CurrentGameBettingInfos = {
-  [date: string]: CurrentGameBettingInfo[];
-} & {
-  // This ensures at least one key exists
-  [K in string]: CurrentGameBettingInfo[];
-} extends { [date: string]: never }
-  ? never
-  : {
-      [key: string]: CurrentGameBettingInfo[];
-    };
+export type GameBettingInfos = [string, GameBettingInfo[]][];
 
 export type User = {
   username: string;
