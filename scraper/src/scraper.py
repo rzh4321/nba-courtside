@@ -18,7 +18,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 eastern = pytz.timezone("America/New_York")
-today = datetime.now(eastern).date()
 
 
 def should_scrape():
@@ -181,204 +180,209 @@ def scrape_odds():
             driver, html = scrape_with_retry(url)
             soup = BeautifulSoup(html, "html.parser")
 
-            # Find first div with class starting with "parlay-card-"
-            parlay_div = soup.find(
+            # Find first two game dates
+            # the combinations are today + tomorrow, today + future date, tomorrow + future + date,
+            # future date + another future date, just today, just tomorrow, just a future date, or 
+            # no game date found at all
+            parlay_divs = soup.find_all(
                 "div", class_=lambda x: x and x.startswith("parlay-card-")
-            )
+            )[:2]
+            logger.info(f'FOUND {len(parlay_divs)} DATES')
+            for parlay_div in parlay_divs:
+                # Get the tbody within this div
+                games = parlay_div.find("tbody")
 
-            # Get the tbody within this div
-            games = parlay_div.find("tbody")
+                # Get all tr elements
+                tr_elements = games.find_all("tr")
 
-            # Get all tr elements
-            tr_elements = games.find_all("tr")
+                # Get the thead element
+                thead = parlay_div.find("thead")
+                date_th = thead.find("tr").find("th").text.strip().lower()
+                today = datetime.now(eastern).date()
 
-            # Get the thead element
-            thead = parlay_div.find("thead")
-            date_th = thead.find("tr").find("th").text.strip().lower()
+                # Determine game date based on thead text
+                if date_th == "today":
+                    game_date = today
+                    logger.info(f"date is today. game_date is set to {game_date}")
+                elif date_th == "tomorrow":
+                    game_date = today + timedelta(days=1)
+                    logger.info(f"date is tomorrow. game_date is set to {game_date}")
+                else:
+                    # Extract month and day from format like 'WED DEC 25TH'
+                    date_parts = date_th.split()[1:]  # Skip the day of week
+                    month_day = " ".join(date_parts)  # 'DEC 25TH'
+                    # Remove 'TH', 'ST', 'ND', 'RD' from the day
+                    month_day = re.sub(r"(?:ST|ND|RD|TH|st|nd|rd|th)$", "", month_day)
+                    # Convert month to proper case (DEC -> Dec) for strptime
+                    month_day = month_day.title()
+                    logger.info(f"date is not today or tomorrow, its {month_day}")
 
-            # Determine game date based on thead text
-            if date_th == "today":
-                game_date = today
-                logger.info(f"date is today. game_date is set to {game_date}")
-            elif date_th == "tomorrow":
-                game_date = today + timedelta(days=1)
-                logger.info(f"date is tomorrow. game_date is set to {game_date}")
-            else:
-                # Extract month and day from format like 'WED DEC 25TH'
-                date_parts = date_th.split()[1:]  # Skip the day of week
-                month_day = " ".join(date_parts)  # 'DEC 25TH'
-                # Remove 'TH', 'ST', 'ND', 'RD' from the day
-                month_day = re.sub(r"(?:ST|ND|RD|TH|st|nd|rd|th)$", "", month_day)
-                # Convert month to proper case (DEC -> Dec) for strptime
-                month_day = month_day.title()
-                logger.info(f"date is not today or tomorrow, its {month_day}")
+                    try:
+                        # Parse the date string
+                        game_date = datetime.strptime(
+                            f"{month_day} {date.today().year}", "%b %d %Y"
+                        ).date()
 
-                try:
-                    # Parse the date string
-                    game_date = datetime.strptime(
-                        f"{month_day} {date.today().year}", "%b %d %Y"
-                    ).date()
+                        # If the date is in the past, check if it's due to year change or day change
+                        if game_date < today:
+                            # If we're in January and the game date is in December, it's from last year
+                            if today.month == 1 and game_date.month == 12:
+                                game_date = datetime.strptime(
+                                    f"{month_day} {today.year - 1}", "%b %d %Y"
+                                ).date()
+                            # If it's just the day that's behind (midnight transition), keep the same month/year
+                            else:
+                                game_date = game_date
+                        logger.info(f"game date is set to {game_date}")
 
-                    # If the date is in the past, check if it's due to year change or day change
-                    if game_date < today:
-                        # If we're in January and the game date is in December, it's from last year
-                        if today.month == 1 and game_date.month == 12:
-                            game_date = datetime.strptime(
-                                f"{month_day} {today.year - 1}", "%b %d %Y"
-                            ).date()
-                        # If it's just the day that's behind (midnight transition), keep the same month/year
-                        else:
-                            game_date = game_date
-                    logger.info(f"game date is set to {game_date}")
+                    except ValueError as e:
+                        logger.error(f"Error parsing date: {e}")
+                        logger.error(f"Input date string was: '{month_day} {date.today().year}'")
+                        raise
 
-                except ValueError as e:
-                    logger.error(f"Error parsing date: {e}")
-                    logger.error(f"Input date string was: '{month_day} {date.today().year}'")
-                    raise
+                logger.info(f"no of games for {game_date} is {len(games)/2}")
+                # Iterate through pairs of tr elements
+                for i in range(0, len(tr_elements), 2):
+                    try:
+                        # Process first tr (away team)
+                        away_team_row = tr_elements[i]
+                        away_team_name = utils.nba_teams_full[
+                            away_team_row.find("a")
+                            .find("div")
+                            .find_all("div", recursive=False)[1]
+                            .find("div")
+                            .text.strip()
+                            .split()[-1]
+                        ]
+                        # away_team_name = utils.nba_teams_full[away_team_row.find('a').text.strip().split()[-1]]
 
-            logger.info(f"no of games is {len(games)/2}")
-            # Iterate through pairs of tr elements
-            for i in range(0, len(tr_elements), 2):
-                try:
-                    # Process first tr (away team)
-                    away_team_row = tr_elements[i]
-                    away_team_name = utils.nba_teams_full[
-                        away_team_row.find("a")
-                        .find("div")
-                        .find_all("div", recursive=False)[1]
-                        .find("div")
-                        .text.strip()
-                        .split()[-1]
-                    ]
-                    # away_team_name = utils.nba_teams_full[away_team_row.find('a').text.strip().split()[-1]]
-
-                    # Get first td for away team (spread)
-                    away_spread_td = away_team_row.find("td")
-                    away_spread_divs = (
-                        away_spread_td.find("div").find("div").find("div")
-                    )
-                    if away_spread_divs is None:
-                        away_spread = None
-                        away_spread_odds = None
-                    else:
-                        away_spread_divs = away_spread_divs.find_all("div")
-                        away_spread = away_spread_divs[0].text.strip()
-                        away_spread_odds = away_spread_divs[1].text.strip()
-
-                    # Get second td for away team (over)
-                    over_td = away_team_row.find_all("td")[1]
-                    over_total_div = over_td.find("div").find("div").find("div")
-                    if over_total_div is None:
-                        over_under_number = None
-                        over_odds = None
-                    else:
-                        over_total_divs = over_total_div.find_all("div")
-                        over_under_number = (
-                            over_total_divs[0].find_all("span")[2].text.strip()
+                        # Get first td for away team (spread)
+                        away_spread_td = away_team_row.find("td")
+                        away_spread_divs = (
+                            away_spread_td.find("div").find("div").find("div")
                         )
-                        over_odds = over_total_divs[1].text.strip()
+                        if away_spread_divs is None:
+                            away_spread = None
+                            away_spread_odds = None
+                        else:
+                            away_spread_divs = away_spread_divs.find_all("div")
+                            away_spread = away_spread_divs[0].text.strip()
+                            away_spread_odds = away_spread_divs[1].text.strip()
 
-                    # Get third td for away team (moneyline)
-                    away_moneyline_td = away_team_row.find_all("td")[2]
-                    away_moneyline = away_moneyline_td.find("div").text.strip()
+                        # Get second td for away team (over)
+                        over_td = away_team_row.find_all("td")[1]
+                        over_total_div = over_td.find("div").find("div").find("div")
+                        if over_total_div is None:
+                            over_under_number = None
+                            over_odds = None
+                        else:
+                            over_total_divs = over_total_div.find_all("div")
+                            over_under_number = (
+                                over_total_divs[0].find_all("span")[2].text.strip()
+                            )
+                            over_odds = over_total_divs[1].text.strip()
 
-                    # Process second tr (home team)
-                    home_team_row = tr_elements[i + 1]
-                    home_team_name = utils.nba_teams_full[
-                        home_team_row.find("a")
-                        .find("div")
-                        .find_all("div", recursive=False)[1]
-                        .find("div")
-                        .text.strip()
-                        .split()[-1]
-                    ]
+                        # Get third td for away team (moneyline)
+                        away_moneyline_td = away_team_row.find_all("td")[2]
+                        away_moneyline = away_moneyline_td.find("div").text.strip()
 
-                    # Get first td for home team (spread)
-                    home_spread_td = home_team_row.find("td")
-                    home_spread_divs = (
-                        home_spread_td.find("div").find("div").find("div")
-                    )
-                    if home_spread_divs is None:
-                        home_spread = None
-                        home_spread_odds = None
-                    else:
-                        home_spread_divs = home_spread_divs.find_all("div")
-                        home_spread = home_spread_divs[0].text.strip()
-                        home_spread_odds = home_spread_divs[1].text.strip()
+                        # Process second tr (home team)
+                        home_team_row = tr_elements[i + 1]
+                        home_team_name = utils.nba_teams_full[
+                            home_team_row.find("a")
+                            .find("div")
+                            .find_all("div", recursive=False)[1]
+                            .find("div")
+                            .text.strip()
+                            .split()[-1]
+                        ]
 
-                    # Get second td for home team (under)
-                    under_td = home_team_row.find_all("td")[1]
-                    under_total_div = under_td.find("div").find("div").find("div")
-                    if under_total_div is None:
-                        under_odds = None
-                    else:
-                        under_total_divs = under_total_div.find_all("div")
-                        under_odds = under_total_divs[1].text.strip()
+                        # Get first td for home team (spread)
+                        home_spread_td = home_team_row.find("td")
+                        home_spread_divs = (
+                            home_spread_td.find("div").find("div").find("div")
+                        )
+                        if home_spread_divs is None:
+                            home_spread = None
+                            home_spread_odds = None
+                        else:
+                            home_spread_divs = home_spread_divs.find_all("div")
+                            home_spread = home_spread_divs[0].text.strip()
+                            home_spread_odds = home_spread_divs[1].text.strip()
 
-                    # Get third td for home team (moneyline)
-                    home_moneyline_td = home_team_row.find_all("td")[2]
-                    home_moneyline = home_moneyline_td.find("div").text.strip()
+                        # Get second td for home team (under)
+                        under_td = home_team_row.find_all("td")[1]
+                        under_total_div = under_td.find("div").find("div").find("div")
+                        if under_total_div is None:
+                            under_odds = None
+                        else:
+                            under_total_divs = under_total_div.find_all("div")
+                            under_odds = under_total_divs[1].text.strip()
 
-                    logger.info(f"Away: {away_team_name}")
-                    logger.info(f"Away Spread: {away_spread}")
-                    logger.info(f"Away Spread Odds: {away_spread_odds}")
-                    logger.info(f"Away Moneyline: {away_moneyline}")
-                    logger.info(f"Home: {home_team_name}")
-                    logger.info(f"Home Spread: {home_spread}")
-                    logger.info(f"Home Spread Odds: {home_spread_odds}")
-                    logger.info(f"Home Moneyline: {home_moneyline}")
-                    logger.info(f"Over/Under Number: {over_under_number}")
-                    logger.info(f"Over Odds: {over_odds}")
-                    logger.info(f"Under Odds: {under_odds}")
-                    logger.info("---\n")
+                        # Get third td for home team (moneyline)
+                        home_moneyline_td = home_team_row.find_all("td")[2]
+                        home_moneyline = home_moneyline_td.find("div").text.strip()
 
-                    home_spread_num = (
-                        utils.convert_spread(home_spread) if home_spread else None
-                    )
-                    away_spread_num = (
-                        utils.convert_spread(away_spread) if away_spread else None
-                    )
-                    home_spread_odds_num = (
-                        utils.convert_odds(home_spread_odds)
-                        if home_spread_odds
-                        else None
-                    )
-                    away_spread_odds_num = (
-                        utils.convert_odds(away_spread_odds)
-                        if away_spread_odds
-                        else None
-                    )
-                    home_moneyline_num = (
-                        utils.convert_odds(home_moneyline) if home_moneyline else None
-                    )
-                    away_moneyline_num = (
-                        utils.convert_odds(away_moneyline) if away_moneyline else None
-                    )
-                    over_under_num = (
-                        float(over_under_number) if over_under_number else None
-                    )
-                    over_odds_num = utils.convert_odds(over_odds) if over_odds else None
-                    under_odds_num = (
-                        utils.convert_odds(under_odds) if under_odds else None
-                    )
-                except Exception as e:
-                    logger.error(f"Error: {e}")
-                    continue  # Skip this game and continue with the next one
+                        logger.info(f"Away: {away_team_name}")
+                        logger.info(f"Away Spread: {away_spread}")
+                        logger.info(f"Away Spread Odds: {away_spread_odds}")
+                        logger.info(f"Away Moneyline: {away_moneyline}")
+                        logger.info(f"Home: {home_team_name}")
+                        logger.info(f"Home Spread: {home_spread}")
+                        logger.info(f"Home Spread Odds: {home_spread_odds}")
+                        logger.info(f"Home Moneyline: {home_moneyline}")
+                        logger.info(f"Over/Under Number: {over_under_number}")
+                        logger.info(f"Over Odds: {over_odds}")
+                        logger.info(f"Under Odds: {under_odds}")
+                        logger.info("---\n")
 
-                # Add or update game
-                add_game(
-                    home_team=home_team_name,
-                    away_team=away_team_name,
-                    home_spread_odds=home_spread_odds_num,
-                    away_spread_odds=away_spread_odds_num,
-                    home_spread=home_spread_num,
-                    home_moneyline=home_moneyline_num,
-                    away_moneyline=away_moneyline_num,
-                    over_under=over_under_num,
-                    over_odds=over_odds_num,
-                    under_odds=under_odds_num,
-                    game_date=game_date,
-                )
+                        home_spread_num = (
+                            utils.convert_spread(home_spread) if home_spread else None
+                        )
+                        away_spread_num = (
+                            utils.convert_spread(away_spread) if away_spread else None
+                        )
+                        home_spread_odds_num = (
+                            utils.convert_odds(home_spread_odds)
+                            if home_spread_odds
+                            else None
+                        )
+                        away_spread_odds_num = (
+                            utils.convert_odds(away_spread_odds)
+                            if away_spread_odds
+                            else None
+                        )
+                        home_moneyline_num = (
+                            utils.convert_odds(home_moneyline) if home_moneyline else None
+                        )
+                        away_moneyline_num = (
+                            utils.convert_odds(away_moneyline) if away_moneyline else None
+                        )
+                        over_under_num = (
+                            float(over_under_number) if over_under_number else None
+                        )
+                        over_odds_num = utils.convert_odds(over_odds) if over_odds else None
+                        under_odds_num = (
+                            utils.convert_odds(under_odds) if under_odds else None
+                        )
+                    except Exception as e:
+                        logger.error(f"Error: {e}")
+                        continue  # Skip this game and continue with the next one
+
+                    # Add or update game
+                    add_game(
+                        home_team=home_team_name,
+                        away_team=away_team_name,
+                        home_spread_odds=home_spread_odds_num,
+                        away_spread_odds=away_spread_odds_num,
+                        home_spread=home_spread_num,
+                        home_moneyline=home_moneyline_num,
+                        away_moneyline=away_moneyline_num,
+                        over_under=over_under_num,
+                        over_odds=over_odds_num,
+                        under_odds=under_odds_num,
+                        game_date=game_date,
+                    )
         except Exception as e:
             logger.error(f"Fatal error: {e}")
             sys.exit(1)

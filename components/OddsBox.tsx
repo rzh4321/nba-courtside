@@ -56,7 +56,7 @@ export default function OddsBox({
   const [payout, setPayout] = useState<undefined | string>();
   const [prevWager, setPrevWager] = useState<undefined | string>();
   const [wager, setWager] = useState<undefined | string>();
-  const { isAuthenticated, user, loading: authLoading } = useAuth();
+  const { isAuthenticated, user, loading: authLoading, subtractBalance } = useAuth();
   const token = localStorage.getItem("token");
   const betTypeToString = {
     SPREAD_HOME: {
@@ -145,6 +145,7 @@ export default function OddsBox({
       if (response.ok) {
         const res = await response.json();
         console.log(res);
+        subtractBalance(+values.wager);
         setPrevWager(values.wager);
         setPayout(res.totalPayout);
         setIsBetPlaced(true);

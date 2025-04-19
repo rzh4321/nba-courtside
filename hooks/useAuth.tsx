@@ -11,6 +11,7 @@ type AuthContextType = {
   verifyToken: () => Promise<void>;
   loading: boolean;
   deposit: (amount: number) => void;
+  subtractBalance: (amount: number) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     verifyToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = (token: string): void => {
@@ -82,6 +84,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
     });
   };
+
+  const subtractBalance = (amount: number) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        amount_placed: prev.amount_placed + amount,
+        bets_placed: prev.bets_placed + 1,
+        balance: prev.balance - amount,
+      };
+    });
+  };
   // TODO: add more functions for updating the state, like updating bets won
 
   const contextValue: AuthContextType = {
@@ -92,6 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     verifyToken,
     loading,
     deposit,
+    subtractBalance,
   };
 
   return (

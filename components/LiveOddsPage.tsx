@@ -13,7 +13,7 @@ export default function LiveOddsPage() {
           console.log("Date:", date, "Value:", games);
           return (
             <div key={date} className="flex flex-col gap-1">
-              <div className=" font-montserrat">{date.toUpperCase()}</div>
+              <div className=" font-montserrat font-bold sm:text-lg">{date.toUpperCase()}</div>
               <div className="flex flex-col gap-4">
                 {games.map((game: GameBettingInfo) => (
                   <div key={game.id} className="flex flex-col gap-1">
@@ -45,7 +45,7 @@ export default function LiveOddsPage() {
           ></div>
         ));
   return (
-    <div className="w-full max-w-[815px]">
+    <div className="w-full max-w-[600px] space-y-12">
       {!todaysOdds && error ? (
         <span>
           Try reloading the page or try again later. If the issue persists, live

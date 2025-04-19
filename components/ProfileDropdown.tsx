@@ -29,9 +29,6 @@ import DollarInput from "./DollarInput";
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 export default function ProfileDropdown() {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-
   const { logout, user } = useAuth();
 
   const handleLogout = () => {
@@ -42,7 +39,7 @@ export default function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="rounded-full">
+        <Button variant="outline" className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500">
           ${user?.balance}
         </Button>
       </DropdownMenuTrigger>
