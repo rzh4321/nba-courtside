@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
   // TODO: add more functions for updating the state, like updating bets won
+  // add web socket support. BetCrud.process_bet will send msg, use that to update user state
 
   const contextValue: AuthContextType = {
     isAuthenticated,

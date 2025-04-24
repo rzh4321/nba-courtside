@@ -79,7 +79,11 @@ export const ScheduleBar = () => {
               ) : data.length > 0 ? (
                 <div className="flex gap-8">
                   {data.map((game) => (
-                    <LiveGameCard key={game.gameId} game={game} />
+                    <LiveGameCard
+                      key={game.gameId}
+                      game={game}
+                      gameDate={calendarDate}
+                    />
                   ))}
                 </div>
               ) : (

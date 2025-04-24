@@ -6,7 +6,6 @@ import {
   AlertDialogHeader,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,6 +18,7 @@ import BetPlacedAlert from "./BetPlacedAlert";
 import { GAME_STATUS } from "@/constants";
 import { bettingService } from "@/bettingService";
 import DollarInput from "./DollarInput";
+import { Loader } from "lucide-react";
 
 const formSchema = z.object({
   wager: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
@@ -40,6 +40,7 @@ type Props = {
   gameId: string;
   teams: { home: string; away: string };
   gameEnded: boolean;
+  gameDate: string;
 };
 
 export default function OddsBox({
@@ -50,6 +51,7 @@ export default function OddsBox({
   gameId,
   teams,
   gameEnded,
+  gameDate,
 }: Props) {
   const [pending, setPending] = useState(false);
   const [isBetPlaced, setIsBetPlaced] = useState(false);
@@ -131,6 +133,9 @@ export default function OddsBox({
         betType: type,
         amountToPlace: +values.wager,
         odds: +odds!,
+        homeTeam: teams.home,
+        awayTeam: teams.away,
+        gameDate: gameDate,
         ...(bettingLine !== undefined && { bettingLine }),
       });
       const response = await fetch(`${API_URL}/bets`, {
@@ -144,6 +149,9 @@ export default function OddsBox({
           betType: type,
           amountToPlace: values.wager,
           odds: odds,
+          homeTeam: teams.home,
+          awayTeam: teams.away,
+          gameDate: gameDate,
           ...(bettingLine !== undefined && { bettingLine }),
         }),
       });
@@ -258,7 +266,9 @@ export default function OddsBox({
                       disabled={pending || wager === undefined || +wager <= 0}
                     >
                       {pending ? (
-                        <div className="animate-spin rounded-full h-8 border-b-2 border-gray-900 dark:border-white" />
+                        <div className="rounded-full h-8 border-b-2 border-gray-900 dark:border-white">
+                          <Loader className="animate-spin" />
+                        </div>
                       ) : !wager || +wager < 0 ? (
                         "Enter wager amount"
                       ) : (

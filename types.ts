@@ -983,6 +983,7 @@ export type GameBettingInfo = {
   overUnder: null | number;
   overOdds: null | number;
   hasEnded: boolean;
+  gameDate: string;
 };
 
 // type for the odds boxes on home page
@@ -1014,19 +1015,23 @@ export type User = {
   created_at: Date;
 };
 
-export type BetType = {
+export type UserBetWithGameInfo = {
   id: number;
   userId: number;
   gameId: number;
-  betType: "SPREAD_HOME"
-  | "SPREAD_AWAY"
-  | "MONEYLINE_HOME"
-  | "MONEYLINE_AWAY"
-  | "OVER"
-  | "UNDER";
+  betType:
+    | "SPREAD_HOME"
+    | "SPREAD_AWAY"
+    | "MONEYLINE_HOME"
+    | "MONEYLINE_AWAY"
+    | "OVER"
+    | "UNDER";
   odds: string;
   amountPlaced: string;
   totalPayout: string;
   placedAt: string; // datetime -> ISO string (e.g., "2025-04-19T15:30:00Z")
   status: string;
+  homeTeam: string;
+  awayTeam: string;
+  gameDate: string;
 };

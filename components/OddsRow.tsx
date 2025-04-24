@@ -88,6 +88,7 @@ export default function OddsRow({
             }
             gameEnded={gameBettingInfo.hasEnded}
             gameId={gameId}
+            gameDate={gameBettingInfo.gameDate}
             teams={teamNames}
           >
             <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
@@ -121,6 +122,7 @@ export default function OddsRow({
             odds={gameBettingInfo.overOdds}
             bettingLine={overUnder}
             gameId={gameId}
+            gameDate={gameBettingInfo.gameDate}
             teams={teamNames}
             gameEnded={gameBettingInfo.hasEnded}
           >
@@ -163,6 +165,7 @@ export default function OddsRow({
                   : gameBettingInfo.homeMoneyline
               }
               gameId={gameId}
+              gameDate={gameBettingInfo.gameDate}
               teams={teamNames}
               gameEnded={gameBettingInfo.hasEnded}
             >

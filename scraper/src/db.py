@@ -251,7 +251,7 @@ def mark_stale_games_as_ended():
                 session.query(Game)
                 .filter(
                     and_(
-                        # Game.game_date.in_([yesterday, now.date()]),
+                        # we need game_id to get game info, like the score
                         Game.game_id != None,
                         Game.has_ended == False,
                         Game.updated_at < now - timedelta(minutes=10),

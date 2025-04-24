@@ -4,9 +4,13 @@ import Link from "next/link";
 import type { ParsedGames } from "@/utils/mappers";
 import { GAME_STATUS } from "@/constants";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { bettingService } from "@/bettingService";
+import { fullNbaTeams } from "@/utils/getTeamNames";
 
 export type LiveGameCardProps = {
   game: ParsedGames[0];
+  gameDate: string;
 };
 
 function convertISODurationToMMSS(duration: string): string {
@@ -31,11 +35,23 @@ function convertISODurationToMMSS(duration: string): string {
   return `${minutes}:${paddedSeconds}`;
 }
 
-export const LiveGameCard = ({ game }: LiveGameCardProps) => {
+export const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
   const searchParams = useSearchParams();
-  const date = searchParams.get("date");
+  const scheduleBarDate = searchParams.get("date");
   const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED;
   const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
+
+  useEffect(() => {
+    if (game.gameId && gameDate) {
+      console.log("SETTING GAME ID IN DB...");
+      const homeTeam = fullNbaTeams[game.homeTeam.teamName];
+      const awayTeam = fullNbaTeams[game.awayTeam.teamName];
+      bettingService
+        .setGameId(homeTeam, awayTeam, gameDate, game.gameId)
+        .catch((error) => console.error("Error setting game ID:", error));
+    }
+  }, [game, gameDate]);
+
   const getGameStatusText = () => {
     if (
       game.gameStatus === 2 &&
@@ -65,9 +81,9 @@ export const LiveGameCard = ({ game }: LiveGameCardProps) => {
     <Link
       href={
         hasBoxscore
-          ? `/boxscore/${game.gameId}${date ? "?date=" + date : ""}`
-          : date
-            ? "?date=" + date
+          ? `/boxscore/${game.gameId}${scheduleBarDate ? "?date=" + scheduleBarDate : ""}`
+          : scheduleBarDate
+            ? "?date=" + scheduleBarDate
             : "#"
       }
     >
