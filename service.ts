@@ -20,8 +20,10 @@ export const getScoreboard = async () => {
 };
 
 export const getBoxscore = async (gameId: string) => {
+  console.log("in getboxscore");
   const res = await fetch(boxscoreUrl(gameId), { next: { revalidate: 20 } });
   const data = await res.json();
+  console.log("data is ", data);
   return data.game;
 };
 

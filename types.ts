@@ -1033,5 +1033,6 @@ export type UserBetWithGameInfo = {
   status: string;
   homeTeam: string;
   awayTeam: string;
+  bettingLine: string;
   gameDate: string;
 };

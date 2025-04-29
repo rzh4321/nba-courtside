@@ -6,6 +6,11 @@ export async function GET(
   req: NextRequest,
   context: { params: { gameId: string } },
 ) {
-  const data = await getBoxscore(context.params.gameId);
-  return NextResponse.json(data);
+  try {
+    const data = await getBoxscore(context.params.gameId);
+    return NextResponse.json(data);
+  } catch {
+    // game has not started yet
+    return NextResponse.json(false);
+  }
 }

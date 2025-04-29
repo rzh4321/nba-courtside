@@ -16,7 +16,7 @@ class OddsMonitor:
         self.scheduler.add_job(
             scrape_odds,
             "interval",
-            minutes=2,
+            minutes=0.8,
             id="check_odds",
             max_instances=1,
             coalesce=True,  # If multiple instances are missed, only run once
