@@ -1,8 +1,9 @@
 const host = "https://cdn.nba.com";
 const scheduleUrl = `${host}/static/json/staticData/scheduleLeagueV2_1.json`;
 const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
-const boxscoreUrl = (gameId: string) =>
-  `${host}/static/json/liveData/boxscore/boxscore_${gameId}.json`;
+const boxscoreUrl = (gameId: string) => {
+  return `${host}/static/json/liveData/boxscore/boxscore_${gameId}.json`;
+};
 import { API } from "./constants";
 import { parseGames } from "./utils/mappers";
 
@@ -20,10 +21,8 @@ export const getScoreboard = async () => {
 };
 
 export const getBoxscore = async (gameId: string) => {
-  console.log("in getboxscore");
   const res = await fetch(boxscoreUrl(gameId), { next: { revalidate: 20 } });
   const data = await res.json();
-  console.log("data is ", data);
   return data.game;
 };
 

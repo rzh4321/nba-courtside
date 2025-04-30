@@ -2,7 +2,7 @@
 
 import { format, parse, isToday } from "date-fns";
 import { useSchedule } from "@/hooks/useSchedule";
-import { LiveGameCard } from "./LiveGameCard";
+import LiveGameCard from "./LiveGameCard";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
 import getDays from "@/utils/getDays";

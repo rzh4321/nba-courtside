@@ -6,7 +6,7 @@ import { teamIds } from "@/constants";
 import useAuth from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import GameSummary from "@/components/GameSummary";
+import BetCardBoxscore from "@/components/BetCardBoxscore";
 import useSWR from "swr";
 
 export default function Page() {
@@ -51,7 +51,6 @@ function BetCard({ bet }: Props) {
       refreshWhenOffline: true,
     },
   );
-  console.log(boxscore);
 
   const displayBetType = (bet: UserBetWithGameInfo) => {
     const type = bet.betType;
@@ -190,28 +189,33 @@ function BetCard({ bet }: Props) {
           </span>
         </div>
         <div className="flex w-full">
-          <div className="w-4/5">
+          <div className="w-[90%]">
             {isLoading ? (
               <div className="w-full h-[60px] animate-pulse bg-white dark:bg-gray-700 rounded-md"></div>
             ) : boxscore ? (
-              <GameSummary game={boxscore} />
+              <BetCardBoxscore game={boxscore} />
             ) : (
               gameText
             )}
           </div>
-          <div className="w-1/5 relative">
+          <div className="w-[10%] flex flex-col items-center justify-center font-light text-sm text-gray-400">
             {boxscore ? (
-              boxscore.gameStatusText
+              <>
+                {boxscore.gameStatus === 2 && (
+                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                    LIVE
+                  </span>
+                )}
+                <span>{boxscore.gameStatusText}</span>
+              </>
             ) : (
-              <span className="text-gray-400 absolute right-0 font-light text-sm">
-                {getGameDate(bet.gameDate)}
-              </span>
+              getGameDate(bet.gameDate)
             )}
           </div>
         </div>
         <div>
           {boxscore ? (
-            <span className="text-blue-600 font-light text-sm">
+            <span className="dark:text-blue-500 font-light text-sm">
               Box Score <span className="ml-2">{">"}</span>
             </span>
           ) : (

@@ -35,7 +35,7 @@ function convertISODurationToMMSS(duration: string): string {
   return `${minutes}:${paddedSeconds}`;
 }
 
-export const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
+const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
   const searchParams = useSearchParams();
   const scheduleBarDate = searchParams.get("date");
   const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED;
@@ -50,7 +50,7 @@ export const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
         .setGameId(homeTeam, awayTeam, gameDate, game.gameId)
         .catch((error) => console.error("Error setting game ID:", error));
     }
-  }, [game, gameDate]);
+  }, [game.gameId, gameDate, game.awayTeam.teamName, game.homeTeam.teamName]);
 
   const getGameStatusText = () => {
     if (
@@ -167,3 +167,5 @@ export const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
     </Link>
   );
 };
+
+export default LiveGameCard;
