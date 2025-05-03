@@ -4,7 +4,7 @@ import { format, parse, isToday } from "date-fns";
 import { useSchedule } from "@/hooks/useSchedule";
 import LiveGameCard from "./LiveGameCard";
 import { useSearchParams, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect, ReactNode } from "react";
 import getDays from "@/utils/getDays";
 import { DATE_LINK_FORMAT } from "@/constants";
 import Link from "next/link";
@@ -77,15 +77,15 @@ export const ScheduleBar = () => {
               ) : error ? (
                 <p>There was an error when fetching today{"'"}s schedule</p>
               ) : data.length > 0 ? (
-                <div className="flex gap-8">
-                  {data.map((game) => (
-                    <LiveGameCard
-                      key={game.gameId}
-                      game={game}
-                      gameDate={calendarDate}
-                    />
-                  ))}
-                </div>
+                <CustomScrollbarContainer>
+    {data.map((game) => (
+      <LiveGameCard
+        key={game.gameId}
+        game={game}
+        gameDate={calendarDate}
+      />
+    ))}
+  </CustomScrollbarContainer>
               ) : (
                 <div className="w-full text-gray-500 font-semibold">
                   <p>
@@ -110,3 +110,75 @@ export const ScheduleBar = () => {
     </div>
   );
 };
+
+
+
+type Props = {
+  children: ReactNode;
+};
+
+function CustomScrollbarContainer({ children }: Props) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const [thumbLeft, setThumbLeft] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const updateThumb = () => {
+    const scroll = scrollRef.current;
+    if (!scroll || !thumbRef.current) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = scroll;
+    const ratio = scrollLeft / (scrollWidth - clientWidth);
+    const maxThumbPos = clientWidth - 24;
+    setThumbLeft(ratio * maxThumbPos);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    const scroll = scrollRef.current;
+    if (!scroll || !isDragging) return;
+
+    const { left } = scroll.getBoundingClientRect();
+    const x = e.clientX - left;
+    const ratio = Math.max(0, Math.min(1, (x - 12) / (scroll.clientWidth - 24)));
+    scroll.scrollLeft = ratio * (scroll.scrollWidth - scroll.clientWidth);
+  };
+
+  useEffect(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+
+    scroll.addEventListener('scroll', updateThumb);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', () => setIsDragging(false));
+
+    updateThumb();
+
+    return () => {
+      scroll.removeEventListener('scroll', updateThumb);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', () => setIsDragging(false));
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDragging]);
+
+  return (
+    <div className="w-full">
+      <div
+        ref={scrollRef}
+        className="relative w-full overflow-x-auto whitespace-nowrap scrollbar-hide"
+        style={{ scrollbarWidth: 'none' }}
+      >
+        <div className="flex gap-8 py-4 px-2">{children}</div>
+      </div>
+
+      <div className="relative w-full h-6 mt-1">
+        <div className="absolute top-1/2 left-0 w-full h-[0.5px] bg-gray-300 rounded-full transform -translate-y-1/2" />
+        <div
+          ref={thumbRef}
+          className="absolute top-1/2 w-6 h-6 rounded-full shadow-md cursor-pointer transform -translate-y-1/2 transition-colors duration-200 bg-no-repeat bg-center bg-contain hover:bg-blue-600"          style={{ left: `${thumbLeft}px`, backgroundImage: "url('/icon.ico')" }}
+          onMouseDown={() => setIsDragging(true)}
+        />
+      </div>
+    </div>
+  );
+}
