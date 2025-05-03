@@ -19,6 +19,12 @@ export default function BetCard({ bet }: Props) {
       return (type.includes("HOME") ? home : away) + " " + bettingLine;
     } else if (type.includes("MONEYLINE")) {
       return (type.includes("HOME") ? home : away) + " Moneyline";
+    } else {
+      return (
+        (type === "OVER" ? "OVER" : "UNDER") +
+        "  " +
+        bet.bettingLine.replace(/(\.\d*?[1-9])0+$/g, "$1").replace(/\.0+$/, "")
+      );
     }
     return "";
   };
@@ -77,13 +83,15 @@ export default function BetCard({ bet }: Props) {
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
           <div className="flex gap-1 items-center">
-            <Image
-              src={`https://cdn.nba.com/logos/nba/${bet.betType.includes("HOME") ? teamIds[bet.homeTeam as TeamName] : teamIds[bet.awayTeam as TeamName]}/primary/L/logo.svg`}
-              width={30}
-              height={30}
-              alt={"team logo"}
-              className="hidden sm:block w-[40px]"
-            />
+            {bet.betType !== "OVER" && bet.betType !== "UNDER" && (
+              <Image
+                src={`https://cdn.nba.com/logos/nba/${bet.betType.includes("HOME") ? teamIds[bet.homeTeam as TeamName] : teamIds[bet.awayTeam as TeamName]}/primary/L/logo.svg`}
+                width={30}
+                height={30}
+                alt={"team logo"}
+                className="hidden sm:block w-[40px]"
+              />
+            )}
             <div className="flex flex-col gap-0">
               <span className="text-blue-500 font-semibold">
                 {displayBetType(bet)}
@@ -113,7 +121,9 @@ export default function BetCard({ bet }: Props) {
                 $
                 {bet.status === "PENDING" || bet.status === "WON"
                   ? bet.totalPayout
-                  : "0.00"}
+                  : bet.status === "PUSH"
+                    ? bet.amountPlaced
+                    : "0.00"}
               </span>
               <span className="text-[11px] dark:text-gray-400 text-gray-500 tracking-wide">
                 {bet.status === "PENDING" ? "TOTAL PAYOUT" : "RETURNED"}

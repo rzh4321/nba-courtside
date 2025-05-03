@@ -3,6 +3,7 @@ import { memo } from "react";
 import useSWR from "swr";
 import Link from "next/link";
 import type { UserBetWithGameInfo, Period } from "@/types";
+import { GAME_STATUS } from "@/constants";
 
 type Props = {
   bet: UserBetWithGameInfo;
@@ -80,7 +81,7 @@ function BetCardBoxscore({ bet }: Props) {
         <div className="w-[90%]">
           {isLoading ? (
             <div className="w-full h-[60px] animate-pulse bg-white dark:bg-gray-700 rounded-md"></div>
-          ) : boxscore ? (
+          ) : boxscore && boxscore.gameStatus !== GAME_STATUS.NOT_STARTED ? (
             <div className="rounded-lg px-3 flex text-sm justify-between">
               <div className="flex flex-col gap-3 justify-center">
                 <span>{`${boxscore.awayTeam.teamCity} ${boxscore.awayTeam.teamName}`}</span>
@@ -120,7 +121,7 @@ function BetCardBoxscore({ bet }: Props) {
           )}
         </div>
         <div className="w-[10%] flex flex-col items-center justify-center font-light text-sm text-gray-800 dark:text-gray-400">
-          {boxscore ? (
+          {boxscore && boxscore.gameStatus === GAME_STATUS.IN_PROGRESS ? (
             <>
               {boxscore.gameStatus === 2 && (
                 <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">

@@ -23,8 +23,8 @@ export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
       </div>
       <TeamStatistic
         label="Field Goals"
-        leftLabel={`${boxscore.awayTeam.statistics.fieldGoalsMade}/${boxscore.awayTeam.statistics.fieldGoalsAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.fieldGoalsMade) / boxscore.awayTeam.statistics.fieldGoalsAttempted)}%)`}
-        rightLabel={`${boxscore.homeTeam.statistics.fieldGoalsMade}/${boxscore.homeTeam.statistics.fieldGoalsAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.fieldGoalsMade) / boxscore.homeTeam.statistics.fieldGoalsAttempted)}%)`}
+        leftLabel={`${boxscore.awayTeam.statistics.fieldGoalsMade}/${boxscore.awayTeam.statistics.fieldGoalsAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.fieldGoalsMade) / (boxscore.awayTeam.statistics.fieldGoalsAttempted || 1))}%)`}
+        rightLabel={`${boxscore.homeTeam.statistics.fieldGoalsMade}/${boxscore.homeTeam.statistics.fieldGoalsAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.fieldGoalsMade) / (boxscore.homeTeam.statistics.fieldGoalsAttempted || 1))}%)`}
         leftColor={
           colorsTooSimilar(
             boxscore.awayTeam.teamTricode,
@@ -44,8 +44,8 @@ export default function TeamStats({ boxscore }: { boxscore: Boxscore }) {
       />
       <TeamStatistic
         label="3 Pointers"
-        leftLabel={`${boxscore.awayTeam.statistics.threePointersMade}/${boxscore.awayTeam.statistics.threePointersAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.threePointersMade) / boxscore.awayTeam.statistics.threePointersAttempted)}%)`}
-        rightLabel={`${boxscore.homeTeam.statistics.threePointersMade}/${boxscore.homeTeam.statistics.threePointersAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.threePointersMade) / boxscore.homeTeam.statistics.threePointersAttempted)}%)`}
+        leftLabel={`${boxscore.awayTeam.statistics.threePointersMade}/${boxscore.awayTeam.statistics.threePointersAttempted} (${Math.round((100 * boxscore.awayTeam.statistics.threePointersMade) / (boxscore.awayTeam.statistics.threePointersAttempted || 1))}%)`}
+        rightLabel={`${boxscore.homeTeam.statistics.threePointersMade}/${boxscore.homeTeam.statistics.threePointersAttempted} (${Math.round((100 * boxscore.homeTeam.statistics.threePointersMade) / (boxscore.homeTeam.statistics.threePointersAttempted || 1))}%)`}
         leftColor={
           colorsTooSimilar(
             boxscore.awayTeam.teamTricode,

@@ -38,7 +38,6 @@ function convertISODurationToMMSS(duration: string): string {
 const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
   const searchParams = useSearchParams();
   const scheduleBarDate = searchParams.get("date");
-  const hasBoxscore = game.gameStatus !== GAME_STATUS.NOT_STARTED;
   const isLive = game.gameStatus === GAME_STATUS.IN_PROGRESS;
 
   useEffect(() => {
@@ -79,13 +78,7 @@ const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
 
   return (
     <Link
-      href={
-        hasBoxscore
-          ? `/boxscore/${game.gameId}${scheduleBarDate ? "?date=" + scheduleBarDate : ""}`
-          : scheduleBarDate
-            ? "?date=" + scheduleBarDate
-            : "#"
-      }
+      href={`/boxscore/${game.gameId}${scheduleBarDate ? "?date=" + scheduleBarDate : ""}`}
     >
       {/* Desktop version */}
       <div className="hidden sm:block">
