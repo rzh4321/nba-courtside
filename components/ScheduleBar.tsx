@@ -133,14 +133,26 @@ function CustomScrollbarContainer({ children }: Props) {
     setThumbLeft(ratio * maxThumbPos);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (clientX: number) => {
     const scroll = scrollRef.current;
     if (!scroll || !isDragging) return;
 
     const { left } = scroll.getBoundingClientRect();
-    const x = e.clientX - left;
+    const x = clientX - left;
     const ratio = Math.max(0, Math.min(1, (x - 12) / (scroll.clientWidth - 24)));
     scroll.scrollLeft = ratio * (scroll.scrollWidth - scroll.clientWidth);
+  };
+
+  // Mouse events
+  const handleMouseMoveEvent = (e: MouseEvent) => {
+    handleMouseMove(e.clientX);
+  };
+
+  // Touch events
+  const handleTouchMoveEvent = (e: TouchEvent) => {
+    if (e.touches.length > 0) {
+      handleMouseMove(e.touches[0].clientX);
+    }
   };
 
   useEffect(() => {
@@ -148,17 +160,22 @@ function CustomScrollbarContainer({ children }: Props) {
     if (!scroll) return;
 
     scroll.addEventListener('scroll', updateThumb);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMoveEvent);
     window.addEventListener('mouseup', () => setIsDragging(false));
+
+    window.addEventListener('touchmove', handleTouchMoveEvent);
+    window.addEventListener('touchend', () => setIsDragging(false));
 
     updateThumb();
 
     return () => {
       scroll.removeEventListener('scroll', updateThumb);
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseMoveEvent);
       window.removeEventListener('mouseup', () => setIsDragging(false));
+
+      window.removeEventListener('touchmove', handleTouchMoveEvent);
+      window.removeEventListener('touchend', () => setIsDragging(false));
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
   return (
@@ -175,8 +192,13 @@ function CustomScrollbarContainer({ children }: Props) {
         <div className="absolute top-1/2 left-0 w-full h-[0.5px] bg-gray-300 rounded-full transform -translate-y-1/2" />
         <div
           ref={thumbRef}
-          className="absolute top-1/2 w-6 h-6 rounded-full shadow-md cursor-pointer transform -translate-y-1/2 transition-colors duration-200 bg-no-repeat bg-center bg-contain hover:bg-blue-600"          style={{ left: `${thumbLeft}px`, backgroundImage: "url('/icon.ico')" }}
+          className="absolute top-1/2 w-6 h-6 rounded-full shadow-md cursor-pointer transform -translate-y-1/2 transition-colors duration-200 bg-no-repeat bg-center bg-contain hover:bg-blue-600"
+          style={{
+            left: `${thumbLeft}px`,
+            backgroundImage: "url('/icon.ico')",
+          }}
           onMouseDown={() => setIsDragging(true)}
+          onTouchStart={() => setIsDragging(true)}
         />
       </div>
     </div>
