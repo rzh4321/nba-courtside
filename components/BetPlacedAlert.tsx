@@ -129,7 +129,7 @@ export default function BetPlacedAlert({
       </div>
       {/* buttons */}
       <Separator />
-      <div className="p-3 flex gap-2 h-[70px]">
+      <div className="p-3 flex gap-2 items-center h-[70px]">
         <Button
           onClick={() => setIsBetPlaced(false)}
           className="flex-1 hover:bg-blue-500 hover:text-white h-full rounded-sm bg-transparent text-blue-500 border-2 border-blue-500"
@@ -139,7 +139,7 @@ export default function BetPlacedAlert({
         <AlertDialogCancel asChild>
           <Button
             onClick={() => setIsBetPlaced(false)}
-            className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 rounded-sm"
+            className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 rounded-sm mt-0"
           >
             Done
           </Button>

@@ -213,7 +213,7 @@ export default function OddsBox({
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-1"
+                className="flex flex-col gap-1 sm:mt-1 mt-3"
               >
                 <AlertDialogHeader>
                   <div className="flex justify-between mt-4">
