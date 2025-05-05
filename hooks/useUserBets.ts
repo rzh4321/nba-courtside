@@ -1,36 +1,42 @@
+import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "@/config";
-import { useState, useEffect } from "react";
 import type { UserBetWithGameInfo } from "@/types";
 
-// TODO: use usequery
+async function fetchUserBets(): Promise<UserBetWithGameInfo[]> {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("No token found");
+
+  const res = await fetch(`${API_URL}/bets`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user bets");
+  }
+
+  return res.json();
+}
+
 export default function useUserBets() {
-  const [activeBets, setActiveBets] = useState<UserBetWithGameInfo[]>([]);
-  const [settledBets, setSettledBets] = useState<UserBetWithGameInfo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: bets = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<UserBetWithGameInfo[], Error>({
+    queryKey: ["userBets"],
+    queryFn: fetchUserBets,
+  });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const getBets = async () => {
-      try {
-        const res = await fetch(`${API_URL}/bets`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const bets: UserBetWithGameInfo[] = await res.json();
-        console.log(bets);
-        const pendingBets = bets.filter((bet) => bet.status === "PENDING");
-        const settledBets = bets.filter((bet) => bet.status !== "PENDING");
-        setActiveBets(pendingBets);
-        setSettledBets(settledBets);
-      } catch (e) {
-        setError(e as any);
-      }
-      setLoading(false);
-    };
-    if (token) getBets();
-  }, []);
+  const activeBets = bets.filter((bet) => bet.status === "PENDING");
+  const settledBets = bets.filter((bet) => bet.status !== "PENDING");
 
-  return { loading, activeBets, settledBets, error };
+  return {
+    loading: isLoading,
+    error: isError ? error : null,
+    activeBets,
+    settledBets,
+  };
 }

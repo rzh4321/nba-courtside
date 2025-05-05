@@ -44,7 +44,7 @@ export default function DollarInput({
 
   return (
     <div
-      className="relative inline-block w-full"
+      className="relative inline-block w-full bg-white rounded-sm dark:bg-slate-900"
       onClick={handleContainerClick}
     >
       <div

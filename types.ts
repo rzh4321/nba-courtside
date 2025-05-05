@@ -1036,3 +1036,15 @@ export type UserBetWithGameInfo = {
   bettingLine: string;
   gameDate: string;
 };
+
+export type UserType = {
+  id: number;
+  username: string;
+  createdAt: string;
+  amountDeposited: string;
+  balance: string;
+  amountPlaced: string;
+  amountWon: string;
+  betsPlaced: number;
+  betsWon: number;
+};

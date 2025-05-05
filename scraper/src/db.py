@@ -246,7 +246,7 @@ def mark_stale_games_as_ended():
             now = datetime.now(eastern)
 
             # Find games that haven't ended
-            # and haven't been updated in last 10 minutes
+            # and haven't been updated in last 5 minutes
             stale_games = (
                 session.query(Game)
                 .filter(
@@ -254,7 +254,7 @@ def mark_stale_games_as_ended():
                         # we need game_id to get game info, like the score
                         Game.game_id != None,
                         Game.has_ended == False,
-                        Game.updated_at < now - timedelta(minutes=10),
+                        Game.updated_at < now - timedelta(minutes=5),
                     )
                 )
                 .all()

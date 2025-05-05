@@ -12,7 +12,7 @@ export default function ConferenceButton({
 }: ConferenceButtonProps) {
   return (
     <Button
-      className="px-4 py-2 font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+      className="px-4 py-2 my-2 w-20 font-semibold text-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       onClick={onClick}
     >
       {label}

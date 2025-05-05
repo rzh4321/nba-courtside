@@ -78,14 +78,14 @@ export const ScheduleBar = () => {
                 <p>There was an error when fetching today{"'"}s schedule</p>
               ) : data.length > 0 ? (
                 <CustomScrollbarContainer>
-    {data.map((game) => (
-      <LiveGameCard
-        key={game.gameId}
-        game={game}
-        gameDate={calendarDate}
-      />
-    ))}
-  </CustomScrollbarContainer>
+                  {data.map((game) => (
+                    <LiveGameCard
+                      key={game.gameId}
+                      game={game}
+                      gameDate={calendarDate}
+                    />
+                  ))}
+                </CustomScrollbarContainer>
               ) : (
                 <div className="w-full text-gray-500 font-semibold">
                   <p>
@@ -110,8 +110,6 @@ export const ScheduleBar = () => {
     </div>
   );
 };
-
-
 
 type Props = {
   children: ReactNode;
@@ -139,7 +137,10 @@ function CustomScrollbarContainer({ children }: Props) {
 
     const { left } = scroll.getBoundingClientRect();
     const x = clientX - left;
-    const ratio = Math.max(0, Math.min(1, (x - 12) / (scroll.clientWidth - 24)));
+    const ratio = Math.max(
+      0,
+      Math.min(1, (x - 12) / (scroll.clientWidth - 24)),
+    );
     scroll.scrollLeft = ratio * (scroll.scrollWidth - scroll.clientWidth);
   };
 
@@ -159,23 +160,24 @@ function CustomScrollbarContainer({ children }: Props) {
     const scroll = scrollRef.current;
     if (!scroll) return;
 
-    scroll.addEventListener('scroll', updateThumb);
-    window.addEventListener('mousemove', handleMouseMoveEvent);
-    window.addEventListener('mouseup', () => setIsDragging(false));
+    scroll.addEventListener("scroll", updateThumb);
+    window.addEventListener("mousemove", handleMouseMoveEvent);
+    window.addEventListener("mouseup", () => setIsDragging(false));
 
-    window.addEventListener('touchmove', handleTouchMoveEvent);
-    window.addEventListener('touchend', () => setIsDragging(false));
+    window.addEventListener("touchmove", handleTouchMoveEvent);
+    window.addEventListener("touchend", () => setIsDragging(false));
 
     updateThumb();
 
     return () => {
-      scroll.removeEventListener('scroll', updateThumb);
-      window.removeEventListener('mousemove', handleMouseMoveEvent);
-      window.removeEventListener('mouseup', () => setIsDragging(false));
+      scroll.removeEventListener("scroll", updateThumb);
+      window.removeEventListener("mousemove", handleMouseMoveEvent);
+      window.removeEventListener("mouseup", () => setIsDragging(false));
 
-      window.removeEventListener('touchmove', handleTouchMoveEvent);
-      window.removeEventListener('touchend', () => setIsDragging(false));
+      window.removeEventListener("touchmove", handleTouchMoveEvent);
+      window.removeEventListener("touchend", () => setIsDragging(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
   return (
@@ -183,7 +185,7 @@ function CustomScrollbarContainer({ children }: Props) {
       <div
         ref={scrollRef}
         className="relative w-full overflow-x-auto whitespace-nowrap scrollbar-hide"
-        style={{ scrollbarWidth: 'none' }}
+        style={{ scrollbarWidth: "none" }}
       >
         <div className="flex gap-8 py-4 px-2">{children}</div>
       </div>
