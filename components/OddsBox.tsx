@@ -65,6 +65,7 @@ export default function OddsBox({
     subtractBalance,
   } = useAuth();
   const token = localStorage.getItem("token");
+  const [betPlacedOdds, setBetPlacedOdds] = useState<undefined | number>();
   const betTypeToString = {
     SPREAD_HOME: {
       title: `${teams.home} ${bettingLine! > 0 ? "+" : ""}${bettingLine}`,
@@ -161,6 +162,7 @@ export default function OddsBox({
         subtractBalance(+values.wager);
         setPrevWager(values.wager);
         setPayout(res.totalPayout);
+        setBetPlacedOdds(+odds!);
         setIsBetPlaced(true);
       } else {
         const { detail } = await response.json();
@@ -200,7 +202,7 @@ export default function OddsBox({
             betTypeToString={betTypeToString}
             type={type}
             teams={teams}
-            odds={odds!}
+            odds={betPlacedOdds!}
             wager={wager!}
             payout={payout!}
             setIsBetPlaced={setIsBetPlaced}

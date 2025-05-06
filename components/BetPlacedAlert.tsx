@@ -98,7 +98,7 @@ export default function BetPlacedAlert({
         </div>
         <div className="font-semibold">
           {odds > 0 && "+"}
-          {odds!.toString().replace(/\.?0+$/, "")}
+          {odds!.toString()}
         </div>
       </div>
       {/* rows for wager, odds, to win, total payout */}
@@ -112,7 +112,7 @@ export default function BetPlacedAlert({
           <span className="font-semibold">Odds</span>
           <span>
             {odds > 0 && "+"}
-            {odds.toString().replace(/\.?0+$/, "")}
+            {odds.toString()}
           </span>
         </div>
         <Separator />
