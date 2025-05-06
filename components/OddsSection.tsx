@@ -28,7 +28,7 @@ export default function OddsSection({ boxscore, gameId }: OddsSectionProps) {
       </span>
       <div className="flex flex-col gap-2">
         {loading ? (
-          <Loader className="animate-spin" />
+          <div className="animate-pulse w-1/4 mt-2 h-[50px] bg-white dark:bg-gray-700 rounded-md"></div>
         ) : !gameBettingInfo && error ? (
           <span>
             Try reloading the page or try again later. If the issue persists,
