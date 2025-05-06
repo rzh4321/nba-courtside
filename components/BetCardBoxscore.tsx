@@ -32,10 +32,6 @@ function BetCardBoxscore({ bet }: Props) {
     ? boxscore.awayTeam.score.toString().length
     : null;
 
-  if (boxscore && boxscore.awayTeam.score === 115) {
-    console.log(homeScoreLength, awayScoreLength);
-  }
-
   function getGameDate(dateStr: string): string {
     const utcDate = new Date(dateStr);
 
@@ -78,7 +74,7 @@ function BetCardBoxscore({ bet }: Props) {
   return (
     <>
       <div className="flex w-full">
-        <div className="w-[90%]">
+        <div className="w-full sm:w-[90%]">
           {isLoading ? (
             <div className="w-full h-[60px] animate-pulse bg-white dark:bg-gray-700 rounded-md"></div>
           ) : boxscore && boxscore.gameStatus !== GAME_STATUS.NOT_STARTED ? (
@@ -88,7 +84,7 @@ function BetCardBoxscore({ bet }: Props) {
                 <span>{`${boxscore.homeTeam.teamCity} ${boxscore.homeTeam.teamName}`}</span>
               </div>
               <div className="flex flex-col gap-3">
-                <div className="flex gap-3 items-center self-end w-[130px]">
+                <div className="flex gap-3 items-center self-end">
                   <div className="flex gap-2">
                     {boxscore.awayTeam.periods.map((period: Period) => (
                       <span key={period.period}>{period.score}</span>
@@ -101,7 +97,7 @@ function BetCardBoxscore({ bet }: Props) {
                     {boxscore.awayTeam.score}
                   </span>
                 </div>
-                <div className="flex gap-3 items-center self-end w-[130px]">
+                <div className="flex gap-3 items-center self-end">
                   <div className="flex gap-2 text-right">
                     {boxscore.homeTeam.periods.map((period: Period) => (
                       <span key={period.period}>{period.score}</span>
@@ -120,7 +116,7 @@ function BetCardBoxscore({ bet }: Props) {
             gameText
           )}
         </div>
-        <div className="w-[10%] flex flex-col items-center justify-center font-light text-sm text-gray-800 dark:text-gray-400">
+        <div className="hidden w-[10%] sm:flex flex-col items-center justify-center font-light text-sm text-gray-800 dark:text-gray-400">
           {boxscore && boxscore.gameStatus === GAME_STATUS.IN_PROGRESS ? (
             <>
               {boxscore.gameStatus === 2 && (

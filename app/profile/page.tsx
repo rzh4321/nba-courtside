@@ -9,6 +9,8 @@ export default function Page() {
   const router = useRouter();
   if (!authLoading && !isAuthenticated) router.push("/");
 
+  if (!authLoading && !isAuthenticated) return;
+
   return (
     <div className="flex flex-col gap-1 mb-8">
       <div className="w-full p-4 mt-8 flex gap-4 items-center border-[0.5px] shadow-lg border-slate-800 dark:bg-gray-700 bg-white rounded-md">
@@ -31,9 +33,12 @@ export default function Page() {
           </span>
           <span className="font-light text-white">Playable balance</span>
         </div>
-        <div className="w-[200px]">
+        <div className="w-[200px] hidden sm:block">
           <DepositMoneyForm />
         </div>
+      </div>
+      <div className="sm:hidden w-[200px]">
+        <DepositMoneyForm />
       </div>
       <div className="flex flex-col gap-3">
         <span className="font-semibold text-xl">Career stats</span>

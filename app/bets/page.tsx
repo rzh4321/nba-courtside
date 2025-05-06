@@ -12,7 +12,6 @@ export default function Page() {
   const { loading, activeBets, settledBets, error } = useUserBets();
   const router = useRouter();
   if (!authLoading && !isAuthenticated) router.push("/");
-  console.log(activeBets);
 
   const betDivs = (showActiveBets ? activeBets : settledBets).map((bet) => (
     <BetCard key={bet.id} bet={bet} />
