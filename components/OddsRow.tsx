@@ -91,12 +91,12 @@ export default function OddsRow({
             gameDate={gameBettingInfo.gameDate}
             teams={teamNames}
           >
-            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
+            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[66px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
               {homeSpread === null ||
               (!gameBettingInfo.hasEnded && spreadOdds === null) ? (
                 <span className="my-auto">-</span>
               ) : (
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center text-[13px] sm:text-base">
                   <span>
                     {getSpread(homeSpread, isAwayTeam ? "away" : "home")}
                   </span>
@@ -126,13 +126,13 @@ export default function OddsRow({
             teams={teamNames}
             gameEnded={gameBettingInfo.hasEnded}
           >
-            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
+            <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[66px] text-sm sm:text-base tracking-normal sm:tracking-wide flex-col rounded-md p-2 items-center font-semibold justify-center">
               {overUnder === null ||
               (!gameBettingInfo.hasEnded &&
                 gameBettingInfo.overOdds === null) ? (
                 <span className="my-auto">-</span>
               ) : (
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center text-[12px] sm:text-base">
                   <span>
                     {overUnder && overUnderSymbol}{" "}
                     {overUnder.toString().replace(/\.?0+$/, "")}
@@ -169,8 +169,8 @@ export default function OddsRow({
               teams={teamNames}
               gameEnded={gameBettingInfo.hasEnded}
             >
-              <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[70px] text-sm sm:text-base tracking-normal sm:tracking-wide justify-center rounded-md p-2 items-center">
-                <span className="font-semibold tracking-wide">
+              <div className="bg-gray-200 cursor-pointer dark:bg-gray-700 flex sm:w-[81px] h-[68px] w-[66px] text-sm sm:text-base tracking-normal sm:tracking-wide justify-center rounded-md p-2 items-center">
+                <span className="font-semibold tracking-wide text-[12px] sm:text-base">
                   {getMoneyline(
                     isAwayTeam
                       ? gameBettingInfo.awayMoneyline

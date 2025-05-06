@@ -10,7 +10,6 @@ export default function LiveOddsPage() {
   const listOfGames =
     !loading && todaysOdds
       ? todaysOdds.map(([date, games]) => {
-          console.log("Date:", date, "Value:", games);
           return (
             <div key={date} className="flex flex-col gap-1">
               <div className=" font-montserrat font-bold sm:text-lg">
