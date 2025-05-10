@@ -6,11 +6,12 @@ import { ScoreDetails } from "./ScoreDetails";
 import { BoxscoreTable } from "./BoxscoreTable";
 import { useRouter } from "next/navigation";
 import { Undo2 } from "lucide-react";
-import getBoxScore from "@/actions/getBoxScore";
 import { GAME_STATUS } from "@/constants";
 import GameSummary from "./GameSummary";
 import TeamStats from "./TeamStats";
 import OddsSection from "./OddsSection";
+import Link from "next/link";
+import { MessageCircleWarning } from "lucide-react";
 
 export const GameDetails = ({ gameId }: { gameId: string }) => {
   const router = useRouter();
@@ -33,6 +34,7 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
       document.title = `${awayTeam.teamTricode} (${awayTeam.score}) vs ${homeTeam.teamTricode} (${homeTeam.score})`;
     }
   }, [boxscore]);
+
 
   return (
     <div className="flex flex-col gap-[50px] p-1x">
@@ -57,7 +59,12 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
               team={boxscore.homeTeam}
             />
           </div>
-        ) : null}
+        ) : (
+          <div className="flex flex-col sm:gap-1 gap-3">
+            <span className="font-bold flex sm:gap-1 gap-2 text-xl items-center"><MessageCircleWarning className="sm:w-8 sm:h-8 h-[50px] w-[50px]" />Game details are not yet available for this game.</span>
+            <span className="tracking-wide sm:tracking-normal">If this is an upcoming game, betting odds may be available on the <Link className="underline cursor-pointer font-semibold" href={'/'}>Home</Link> page under the Live Odds tab.</span>
+          </div>
+        )}
       </div>
       {boxscore && <OddsSection boxscore={boxscore} gameId={gameId} />}
       {boxscore && <TeamStats boxscore={boxscore} />}
