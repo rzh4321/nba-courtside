@@ -74,12 +74,12 @@ export default function BetPlacedAlert({
   return (
     <div>
       {/* straight bet placed div */}
-      <div className="flex items-center gap-2 bg-green-700 p-3 rounded-t-sm">
+      <div className="flex items-center gap-2 bg-green-700 p-3 rounded-t-md ">
         <CircleCheck />
         <span className=" font-semibold">Straight bet placed!</span>
       </div>
       {/* team name, bet type, odds, live, teams */}
-      <div className="flex justify-between bg-gray-800 p-3">
+      <div className="flex justify-between dark:bg-gray-800 p-3">
         <div className="flex flex-col gap-1">
           <div className="flex flex-col">
             <span>{betTypeToString[type].title}</span>
@@ -102,7 +102,7 @@ export default function BetPlacedAlert({
         </div>
       </div>
       {/* rows for wager, odds, to win, total payout */}
-      <div className="px-3 bg-slate-900">
+      <div className="px-3 dark:bg-slate-900">
         <div className="flex justify-between py-3">
           <span className="font-semibold">Wager</span>
           <span>${formatDollarAmount(wager)}</span>
@@ -139,7 +139,7 @@ export default function BetPlacedAlert({
         <AlertDialogCancel asChild>
           <Button
             onClick={() => setIsBetPlaced(false)}
-            className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 rounded-sm mt-0"
+            className="flex-1 bg-blue-500 text-white h-full hover:bg-blue-600 hover:text-white rounded-sm mt-0"
           >
             Done
           </Button>
