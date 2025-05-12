@@ -22,10 +22,19 @@ eastern = pytz.timezone("America/New_York")
 
 def should_scrape():
     current_time = datetime.now(eastern)
+    current_hour = current_time.hour
+    current_minute = current_time.minute
+
+    # Block the specific window from 11:58 PM to 12:01 AM (draftkings has incorrect dates)
+    if (current_hour == 23 and current_minute >= 58) or (current_hour == 0 and current_minute <= 1):
+        logger.error("It's between 11:58 PM and 12:01 AM, not running scraper")
+        return False
+
     # Check if it's during typical NBA game hours (e.g., 11 AM - 2 AM ET)
-    if current_time.hour >= 11 or current_time.hour < 2:
+    if current_hour >= 11 or current_hour < 2:
         return True
-    logger.error(f"its not beween 11 am and 2 am, not running scraper")
+
+    logger.error("It's not between 11 AM and 2 AM, not running scraper")
     return False
 
 
