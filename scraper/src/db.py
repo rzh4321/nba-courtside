@@ -151,16 +151,16 @@ def add_game(
     with Session() as session:
 
         try:
-            game_exists = (
-                session.query(Game)
-                .filter(
-                    and_(
-                        Game.home_team == home_team, 
-                        Game.away_team == away_team,
-                        Game.game_date == game_date
-                    )
-                )
-                .count() > 0)
+            # game_exists = (
+            #     session.query(Game)
+            #     .filter(
+            #         and_(
+            #             Game.home_team == home_team, 
+            #             Game.away_team == away_team,
+            #             Game.game_date == game_date
+            #         )
+            #     )
+            #     .count() > 0)
             # Check if game exists and update in one step
             result = (
                 session.query(Game)
@@ -182,6 +182,7 @@ def add_game(
                         Game.over_odds: over_odds,
                         Game.under_odds: under_odds,
                         Game.updated_at: func.now(),  # Force update to change updated_at
+                        Game.has_ended: False,  # should be false already, but just in case
                     },
                     synchronize_session=False,
                 )
