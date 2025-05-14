@@ -35,7 +35,6 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
     }
   }, [boxscore]);
 
-
   return (
     <div className="flex flex-col gap-[50px] p-1x">
       <div>
@@ -61,8 +60,20 @@ export const GameDetails = ({ gameId }: { gameId: string }) => {
           </div>
         ) : (
           <div className="flex flex-col sm:gap-1 gap-3">
-            <span className="font-bold flex sm:gap-1 gap-2 text-xl items-center"><MessageCircleWarning className="sm:w-8 sm:h-8 h-[50px] w-[50px]" />Game details are not yet available for this game.</span>
-            <span className="tracking-wide sm:tracking-normal">If this is an upcoming game, betting odds may be available on the <Link className="underline cursor-pointer font-semibold" href={'/'}>Home</Link> page under the Live Odds tab.</span>
+            <span className="font-bold flex sm:gap-1 gap-2 text-xl items-center">
+              <MessageCircleWarning className="sm:w-8 sm:h-8 h-[50px] w-[50px]" />
+              Game details are not yet available for this game.
+            </span>
+            <span className="tracking-wide sm:tracking-normal">
+              If this is an upcoming game, betting odds may be available on the{" "}
+              <Link
+                className="underline cursor-pointer font-semibold"
+                href={"/"}
+              >
+                Home
+              </Link>{" "}
+              page under the Live Odds tab.
+            </span>
           </div>
         )}
       </div>

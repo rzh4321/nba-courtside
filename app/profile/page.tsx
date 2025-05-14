@@ -49,7 +49,7 @@ export default function Page() {
             >
               {authLoading
                 ? ""
-                : `${(user!.amount_won - user!.amount_placed) < 0 ? '-' : ''}$${Math.abs(user!.amount_won - user!.amount_placed).toFixed(2)}`}
+                : `${user!.amount_won - user!.amount_placed < 0 ? "-" : ""}$${Math.abs(user!.amount_won - user!.amount_placed).toFixed(2)}`}
             </span>
             <span className="font-light dark:text-white">Net total</span>
           </div>

@@ -21,6 +21,7 @@ export async function GET(
   let gameIds;
   let games;
   if (formattedDate === today) {
+    // no param means it will call the endpoint for todays scoreboards
     games = await getScoreboards();
   } else {
     games = await getScoreboards(formattedDate);

@@ -40,7 +40,18 @@ export default function Page() {
         </h1>
       </nav>
       <div className="flex flex-col gap-5 mt-8">
-        {loading ? loadingSkeleton : error ? "error" : betDivs}
+        {loading ? (
+          loadingSkeleton
+        ) : error ? (
+          "Something went wrong. Try refreshing the page."
+        ) : betDivs.length > 0 ? (
+          betDivs
+        ) : (
+          <span className="mt-3 font-semibold font-montserrat">
+            Your {showActiveBets ? "open" : "settled"} bets will be displayed
+            here
+          </span>
+        )}
       </div>
     </div>
   );

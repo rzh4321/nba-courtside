@@ -10,7 +10,7 @@ import {
 } from "date-fns";
 import { PerformerCard } from "./PerformerCard";
 import startCase from "lodash/startCase";
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import useLeaders from "@/hooks/useLeaders";
 import type { PlayerStatistics } from "@/types";
 import useTopPerformersDate from "@/hooks/useTopPerformersDate";
@@ -65,23 +65,24 @@ const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
 export default function HomePage() {
   const { date, error } = useTopPerformersDate();
   const [showTopPerformers, setShowTopPerformers] = useState(true);
-  // get all the gameIds once date is available
+  // get all the gameIds once game date is available
   const {
     data,
-    isValidating: gameIdsLoading,
+    isLoading: gameIdsLoading,
     error: gameIdsError,
-  } = useSWR(
-    `/api/gameIds/${date}`,
-    async (url) => {
-      let res = await fetch(url);
-      return await res.json();
+  } = useQuery({
+    queryKey: ["gameIds", date],
+    queryFn: async () => {
+      const res = await fetch(`/api/gameIds/${date}`);
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return res.json();
     },
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    },
-  );
-  // get all leaders once date is available
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+  // get all leaders once the gameIds are available
   const {
     pointLeaders,
     assistLeaders,

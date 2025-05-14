@@ -78,7 +78,7 @@ export default function BetCard({ bet }: Props) {
   return (
     <div
       key={bet.id}
-      className="flex flex-col gap-10 border-[1px] p-3 rounded bg-slate-50 dark:bg-slate-800/50"
+      className={`flex flex-col gap-10 border-[1px] p-3 rounded bg-slate-50 dark:bg-slate-800/50`}
     >
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
@@ -117,7 +117,9 @@ export default function BetCard({ bet }: Props) {
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-end text-sm">
+              <span
+                className={`text-end text-sm ${bet.status === "WON" && "text-green-500 font-semibold"}`}
+              >
                 $
                 {bet.status === "PENDING" || bet.status === "WON"
                   ? bet.totalPayout
@@ -126,7 +128,11 @@ export default function BetCard({ bet }: Props) {
                     : "0.00"}
               </span>
               <span className="text-[11px] dark:text-gray-400 text-gray-500 tracking-wide">
-                {bet.status === "PENDING" ? "TOTAL PAYOUT" : "RETURNED"}
+                {bet.status === "PENDING"
+                  ? "TOTAL PAYOUT"
+                  : bet.status === "WON"
+                    ? "WON ON COURTSIDE"
+                    : "RETURNED"}
               </span>
             </div>
           </div>

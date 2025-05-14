@@ -5,6 +5,7 @@ import { DATE_LINK_FORMAT } from "@/constants";
 import { useSearchParams } from "next/navigation";
 import parse from "date-fns/parse";
 
+// gets the game date to render the top performers from that date
 export default function useTopPerformersDate() {
   const {
     date: lastDate,
