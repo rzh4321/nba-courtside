@@ -1,68 +1,16 @@
 "use client";
 
-import {
-  format,
-  isToday,
-  isYesterday,
-  parse,
-  isFuture,
-  endOfDay,
-} from "date-fns";
-import { PerformerCard } from "./PerformerCard";
-import startCase from "lodash/startCase";
+import { format, isToday, isYesterday, parse } from "date-fns";
+
 import { useQuery } from "@tanstack/react-query";
 import useLeaders from "@/hooks/useLeaders";
-import type { PlayerStatistics } from "@/types";
 import useTopPerformersDate from "@/hooks/useTopPerformersDate";
 import { useState } from "react";
 import LiveOddsPage from "./LiveOddsPage";
-
-type SectionProps = {
-  leaders: ReturnType<typeof useLeaders>["pointLeaders"];
-  category: keyof PlayerStatistics;
-  isLoading: boolean;
-  date: string | null | undefined;
-};
-
-// display a category and its leaders
-const Section = ({ leaders, category, isLoading, date }: SectionProps) => {
-  return (
-    <div className="w-full flex flex-col items-start gap-4">
-      <h2 className="text-2xl text-gray-700 dark:text-gray-400 font-normal">
-        {/* startCase turns string into words starting with uppercase, like hello world to Hello World */}
-        {startCase(category).split(" ")[0]}
-      </h2>
-      <div className="w-full flex flex-wrap gap-8 justify-center sm:justify-start">
-        {/* display leaders for this category */}
-        {isLoading ? (
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
-        ) : leaders.length > 0 ? (
-          leaders.map((leader) => (
-            <PerformerCard
-              key={`${leader.personId}-${category}`}
-              player={leader}
-              category={category}
-            />
-          ))
-        ) : date && isFuture(parse(date, "MM-dd-yyyy", new Date())) ? (
-          <div>
-            Top performers will be displayed here after any games are played
-          </div>
-        ) : (
-          <div>
-            No games{" "}
-            {date && isToday(parse(date, "MM-dd-yyyy", new Date()))
-              ? "are"
-              : "were"}{" "}
-            scheduled for this date
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+import PerformerSection from "./PerformerSection";
 
 export default function HomePage() {
+  // get the last date that had games played, excluding today if no games have started yet
   const { date, error } = useTopPerformersDate();
   const [showTopPerformers, setShowTopPerformers] = useState(true);
   // get all the gameIds once game date is available
@@ -147,7 +95,7 @@ type TopPerformersProps = {
   date: string | null | undefined;
 };
 
-function TopPerformers({
+export function TopPerformers({
   pointLeaders,
   assistLeaders,
   reboundLeaders,
@@ -159,31 +107,31 @@ function TopPerformers({
 }: TopPerformersProps) {
   return (
     <>
-      <Section
+      <PerformerSection
         leaders={pointLeaders}
         category={"points"}
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-      <Section
+      <PerformerSection
         leaders={assistLeaders}
         category={"assists"}
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-      <Section
+      <PerformerSection
         leaders={reboundLeaders}
         category={"reboundsTotal"}
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-      <Section
+      <PerformerSection
         leaders={stealLeaders}
         category={"steals"}
         isLoading={gameIdsLoading || useLeadersLoading}
         date={date}
       />
-      <Section
+      <PerformerSection
         leaders={blockLeaders}
         category={"blocks"}
         isLoading={gameIdsLoading || useLeadersLoading}

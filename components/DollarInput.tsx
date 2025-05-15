@@ -71,6 +71,7 @@ export default function DollarInput({
             onFocus={handleFocus}
             onBlur={handleBlur}
             ref={inputRef}
+            data-testid="wager"
             id="wager"
             type="number"
             name="wager"
