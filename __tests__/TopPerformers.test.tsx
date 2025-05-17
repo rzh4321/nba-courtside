@@ -1,6 +1,6 @@
 import { expect, test, describe, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { TopPerformers } from "@/components/HomePage";
+import TopPerformers from "@/components/TopPerformers";
 
 vi.mock("@/components/PerformerSection", () => ({
   default: ({ category }: any) => <div data-testid="section">{category}</div>,

@@ -5,7 +5,6 @@ import type { GameBettingInfo } from "@/types";
 
 export default function LiveOddsPage() {
   const { todaysOdds, loading, error, isConnected } = useTodaysOdds();
-  console.log(todaysOdds);
 
   const listOfGames =
     !loading && todaysOdds
@@ -42,17 +41,18 @@ export default function LiveOddsPage() {
       : Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
+            data-testid="loading"
             className="animate-pulse rounded-lg h-2 w-full bg-[var(--background-color)]"
           ></div>
         ));
   return (
     <div className="w-full max-w-[600px] space-y-12">
-      {!todaysOdds && error ? (
+      {error ? (
         <span>
           Try reloading the page or try again later. If the issue persists, live
           odds may be temporarily unavailable.
         </span>
-      ) : !loading && !todaysOdds ? (
+      ) : !loading && todaysOdds.length == 0 ? (
         <div>There are no scheduled games today.</div>
       ) : (
         <>
