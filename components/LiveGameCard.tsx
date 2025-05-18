@@ -66,13 +66,7 @@ const LiveGameCard = ({ game, gameDate }: LiveGameCardProps) => {
       }
       return `Q${game.period} ${convertISODurationToMMSS(game.gameClock)}`;
     }
-    // if (
-    //   game.gameStatusText.trim().includes("OT") ||
-    //   game.gameStatusText.trim().includes("vertime")
-    // ) {
-    //   console.log(game.gameStatusText)
-    //   return `${game.gameStatusText} ${convertISODurationToMMSS(game.gameClock)}`;
-    // }
+
     return game.gameStatusText;
   };
 

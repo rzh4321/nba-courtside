@@ -167,7 +167,9 @@ export default function OddsBox({
       } else {
         const { detail } = await response.json();
         if (detail.includes("credentials")) {
-          toast.error("Your session has expired. Please refresh the page to log back in.")
+          toast.error(
+            "Your session has expired. Please refresh the page to log back in.",
+          );
         } else {
           toast.error(detail);
         }
