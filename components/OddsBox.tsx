@@ -166,7 +166,11 @@ export default function OddsBox({
         setIsBetPlaced(true);
       } else {
         const { detail } = await response.json();
-        toast.error(detail);
+        if (detail.includes("credentials")) {
+          toast.error("Your session has expired. Please refresh the page to log back in.")
+        } else {
+          toast.error(detail);
+        }
       }
     } else if (user) {
       toast.error(
