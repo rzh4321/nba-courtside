@@ -1,0 +1,26 @@
+name: Update Scraper on EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scraper/**'
+
+jobs:
+  deploy-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: SSH into EC2 and update scraper
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ec2-user/nba-courtside
+            git pull origin main
+            sudo systemctl restart odds-monitor
+          EOF
