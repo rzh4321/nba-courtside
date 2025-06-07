@@ -16,10 +16,6 @@ const NavBar = () => {
   const { isAuthenticated, loading, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
-  const handleLogout = () => {
-    toast.success("Successfully logged out");
-    logout();
-  };
 
   return (
     <div className="w-full sticky top-0 left-0 z-50 shadow-md">

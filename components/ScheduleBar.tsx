@@ -87,7 +87,7 @@ export const ScheduleBar = () => {
                   ))}
                 </CustomScrollbarContainer>
               ) : (
-                <div className="w-full text-gray-500 font-semibold">
+                <div className="w-full dark:text-gray-500 font-semibold">
                   <p>
                     No games scheduled for{" "}
                     {isToday(parse(dateWithDashes, "yyyy-MM-dd", new Date()))
