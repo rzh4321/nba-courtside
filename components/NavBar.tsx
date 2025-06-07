@@ -16,7 +16,6 @@ const NavBar = () => {
   const { isAuthenticated, loading, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
-
   return (
     <div className="w-full sticky top-0 left-0 z-50 shadow-md">
       <div className="bg-blue-500 dark:bg-gray-900 h-[65px] px-4 py-2">

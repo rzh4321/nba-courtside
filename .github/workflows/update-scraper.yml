@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'scraper/**'
+      - "scraper/**"
 
 jobs:
   deploy-scraper:
