@@ -1,11 +1,12 @@
 const host = "https://cdn.nba.com";
-const scheduleUrl = `${host}/static/json/staticData/scheduleLeagueV2_1.json`;
+export const scheduleUrl = `${host}/static/json/staticData/scheduleLeagueV2_1.json`;
 const scoreboardUrl = `${host}/static/json/liveData/scoreboard/todaysScoreboard_00.json`;
 const boxscoreUrl = (gameId: string) => {
   return `${host}/static/json/liveData/boxscore/boxscore_${gameId}.json`;
 };
 import { API } from "./constants";
 import { parseGames } from "./utils/mappers";
+import { LeagueScheduleResponse } from "./types";
 
 // revalidate api fetches every 20 seconds
 export const getLeagueSchedule = async () => {
@@ -26,20 +27,25 @@ export const getBoxscore = async (gameId: string) => {
   return data.game;
 };
 
+export const getGamesFromLeagueSchedule = (leagueSchedule: LeagueScheduleResponse, date: string) => {
+  const allGames = leagueSchedule.leagueSchedule.gameDates;
+  for (let gameDate of allGames) {
+    const extractedDate = gameDate.gameDate.split(" ")[0]
+    const isoDate = (([m, d, y]) => `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`)(extractedDate.split("/"));
+    gameDate.games.forEach((game) => {
+      game.gameTimeUTC = game.gameDateTimeUTC;  // fix the gameTimeUTC (for some reason its set to 1900)
+    });
+    if (isoDate === date) {
+      return parseGames(gameDate.games);
+    }
+}};
+
 export const getScoreboards = async (date?: string) => {
   if (date) {
-    console.log(
-      `url: ${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`,
-    );
-    const res = await fetch(
-      `${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`,
-      {
-        cache: "no-store",
-      },
-    );
-
+    // fetch from league schedule API for historical dates
+    const res = await getLeagueSchedule();
     const data = await res.json();
-    return parseGames(data);
+    return getGamesFromLeagueSchedule(data, date);
   } else {
     console.log("getting todays scoreboard....");
     const res = await fetch(
@@ -50,6 +56,6 @@ export const getScoreboards = async (date?: string) => {
     );
 
     const data = await res.json();
-    return parseGames(data);
+    return parseGames(data.scoreboard.games);
   }
 };

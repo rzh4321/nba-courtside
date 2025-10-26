@@ -3,10 +3,12 @@ import type { ScheduleGame } from "@/types";
 import { isYesterday, parse } from "date-fns";
 
 export function useSchedule(date: string | null) {
+  console.log('useSchedule date:', date);
   let wasYesterday = false;
   if (date) {
     const dateInUserTimezone = parse(date, "yyyy-MM-dd", new Date());
     wasYesterday = isYesterday(dateInUserTimezone);
+    console.log('wasYesterday:', wasYesterday);
   }
   // if date is null, always use todays scoreboard API. Else use the specific date API
   const todaysDate = new Date().toLocaleDateString("en-CA");

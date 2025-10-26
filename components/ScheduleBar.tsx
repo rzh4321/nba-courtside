@@ -51,7 +51,7 @@ export const ScheduleBar = () => {
             <div className="w-full flex">
               {data && (
                 <p className="text-white font-semibold">
-                  Games for{" "}
+                  Games on{" "}
                   {format(
                     parse(calendarDate, "yyyy-MM-dd", new Date()),
                     "EEEE, MMMM do",

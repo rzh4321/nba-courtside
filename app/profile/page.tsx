@@ -78,7 +78,7 @@ export default function Page() {
               <span
                 className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
-                {authLoading ? "" : `$${user!.amount_placed}`}
+                {authLoading ? "" : `$${user!.amount_placed.toFixed(2)}`}
               </span>
             </div>
             <div className="flex justify-between font-bold">
@@ -86,7 +86,7 @@ export default function Page() {
               <span
                 className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
-                {authLoading ? "" : `$${user!.amount_deposited}`}
+                {authLoading ? "" : `$${user!.amount_deposited.toFixed(2)}`}
               </span>
             </div>
             <div className="flex justify-between font-bold">

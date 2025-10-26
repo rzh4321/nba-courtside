@@ -14,7 +14,7 @@ export function getDateFromGameDate(
   return parse(gameDate.gameDate, "MM/dd/yyyy 00:00:00", new Date());
 }
 
-function useFullSchedule() {
+function useFullSchedule(needLiveData = true) {
   const [data, setData] = useState<LeagueScheduleResponse>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<any>();
@@ -22,7 +22,7 @@ function useFullSchedule() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await fetch("/api/schedule/year", { cache: "no-store" });
+        const result = await fetch("/api/schedule/year", { cache: needLiveData ? "no-store" : "force-cache" });
         const d = await result.json();
         setData(d);
       } catch (err) {
@@ -30,7 +30,7 @@ function useFullSchedule() {
       }
     };
     getData();
-  }, []);
+  }, [needLiveData]);
 
   useEffect(() => {
     if (data) setIsLoading(false);
@@ -44,6 +44,7 @@ function useFullSchedule() {
 }
 
 export function useLastPlayedGameDate() {
+  // get the full schedule JSON and parse out the last date that had games played
   const { data, isLoading: fullScheduleLoading, error } = useFullSchedule();
   const { date, dateLoading } = useMemo(() => {
     if (fullScheduleLoading || !data) {

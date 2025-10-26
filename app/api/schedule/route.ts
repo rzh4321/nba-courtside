@@ -1,11 +1,13 @@
 import getBoxScore from "@/actions/getBoxScore";
 import { API } from "@/constants";
 import { parseGames } from "@/utils/mappers";
+import { getGamesFromLeagueSchedule, scheduleUrl } from "@/service";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const date = url.searchParams.get("date") || "today";
-  const cache = url.searchParams.get("cache") === "true" ? true : false;
+  // cant cache because JSON size is over Nextjs's limit
+  // const cache = url.searchParams.get("cache") === "true" ? true : false;
   if (date === "today") {
     const apiUrl = `${API.DETAILS_URL}/scoreboard/todaysScoreboard_00.json`;
     try {
@@ -19,7 +21,7 @@ export async function GET(request: Request) {
       }
 
       const data = await res.json();
-      const parsedGames = parseGames(data);
+      const parsedGames = parseGames(data.scoreboard.games);
       // Use Promise.all to parallelize the updates
       await Promise.all(
         parsedGames.map(async (game) => {
@@ -82,29 +84,21 @@ export async function GET(request: Request) {
       );
     }
   } else {
+    const apiUrl = scheduleUrl;
     console.log("REQUESTED DATE: ", date);
-    const apiUrl = `${API.BASE_URL}/scoreboardv3&GameDate=${date}&LeagueID=00`;
+
 
     try {
-      let res;
-      if (cache) {
-        res = await fetch(apiUrl, {
-          next: { revalidate: 86400 }, // 24 hours
-        });
-      } else {
-        // either the requested date was today or yesterday
-        res = await fetch(apiUrl, {
-          cache: "no-store",
-        });
-      }
+
+      const res = await fetch(apiUrl);
+      
 
       if (!res.ok) {
         throw new Error(`NBA API responded with status: ${res.status}`);
       }
-
       const data = await res.json();
-      const parsedGames = parseGames(data);
-      return Response.json(parsedGames);
+      const parsedGames = getGamesFromLeagueSchedule(data, date);
+      return new Response(JSON.stringify(parsedGames));
     } catch (error) {
       console.error("Error fetching historical NBA data:", error);
       return Response.json(

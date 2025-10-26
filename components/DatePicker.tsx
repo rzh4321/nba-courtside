@@ -22,6 +22,7 @@ export default function DatePicker({ day }: { day: string }) {
   useEffect(() => {
     setDate(parseISO(day));
   }, [day]);
+  
 
   const handleDateChange = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;

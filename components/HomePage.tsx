@@ -65,6 +65,9 @@ export default function HomePage() {
           className={`-mb-4 text-3xl font-normal cursor-pointer ${!showTopPerformers ? "" : "dark:text-gray-300 dark:hover:text-white hover:text-gray-600"}`}
         >{`Live Odds`}</h1>
       </nav>
+       <h1
+          className={`-mb-4 text-3xl font-normal  dark:text-white text-gray-600`}
+        >{`Live Odds`}</h1>
 
       {showTopPerformers ? (
         <TopPerformers
