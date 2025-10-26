@@ -126,6 +126,10 @@
   font-family: "Akshar", sans-serif;
 }
 
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+
 /* Hide arrows in Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

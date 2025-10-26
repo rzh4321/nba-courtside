@@ -186,12 +186,7 @@ export default function OddsBox({
     const decimalOdds = odds > 0 ? odds / 100 + 1 : 100 / Math.abs(odds) + 1;
 
     const totalPayout = wager * decimalOdds;
-    return Number(
-      totalPayout.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-    );
+    return totalPayout;
   }
 
   return (
@@ -239,7 +234,14 @@ export default function OddsBox({
                       </span>
                     </div>
                     <span className="text-sm tracking-tight font-thin">
-                      $10 wins ${calculateOddsAndPayout(10, odds!)}
+                      $10 wins $
+                      {calculateOddsAndPayout(10, odds!).toLocaleString(
+                        "en-US",
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        },
+                      )}
                     </span>
                   </div>
                 </AlertDialogHeader>
@@ -311,8 +313,8 @@ export default function OddsBox({
                               TO WIN:
                             </span>{" "}
                             $
-                            {Number(
-                              calculateOddsAndPayout(+wager, odds!) - +wager,
+                            {(
+                              calculateOddsAndPayout(+wager, odds!) - +wager
                             ).toLocaleString("en-US", {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,

@@ -27,7 +27,7 @@ export default function Page() {
       <div className="w-full p-4 my-8 flex justify-between bg-gradient-to-r from-blue-500 dark:from-blue-600 to-blue-800 dark:to-blue-800 rounded-md">
         <div className="flex flex-col gap-1">
           <span
-            className={`text-3xl text-white font-bold ${authLoading && "animate-pulse w-[138px] h-[36px] rounded-md bg-white dark:bg-blue-500"}`}
+            className={`text-3xl font-montserrat tracking-wider text-white font-bold ${authLoading && "animate-pulse w-[138px] h-[36px] rounded-md bg-white dark:bg-blue-500"}`}
           >
             {authLoading
               ? ""
@@ -50,7 +50,7 @@ export default function Page() {
         <div className="w-full p-4 flex flex-col gap-4 items-center border-[0.5px] border-slate-800 dark:bg-gray-700 bg-white rounded-md">
           <div className="w-full flex flex-col gap-1 dark:bg-gray-700 bg-white rounded-md">
             <span
-              className={`text-3xl dark:text-white font-bold ${authLoading && "animate-pulse w-[138px] h-[36px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+              className={`text-3xl font-montserrat tracking-wider dark:text-white font-bold ${authLoading && "animate-pulse w-[138px] h-[36px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
             >
               {authLoading
                 ? ""
@@ -78,7 +78,7 @@ export default function Page() {
             <div className="flex justify-between">
               <span className="font-bold">Winnings</span>
               <span
-                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`font-montserrat tracking-wider ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `$${user!.amount_won}`}
               </span>
@@ -86,7 +86,7 @@ export default function Page() {
             <div className="flex justify-between">
               <span className="font-bold">Bets</span>
               <span
-                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`font-montserrat tracking-wider ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading
                   ? ""
@@ -99,7 +99,7 @@ export default function Page() {
             <div className="flex justify-between">
               <span className="font-bold">Deposited</span>
               <span
-                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`font-montserrat tracking-wider ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading
                   ? ""
@@ -112,7 +112,7 @@ export default function Page() {
             <div className="flex justify-between">
               <span className="font-bold">Bets Won</span>
               <span
-                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`font-montserrat tracking-wider ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `${user!.bets_won}`}
               </span>
@@ -120,7 +120,7 @@ export default function Page() {
             <div className="flex justify-between">
               <span className="font-bold">Bets Placed</span>
               <span
-                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`font-montserrat tracking-wider ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `${user!.bets_placed}`}
               </span>

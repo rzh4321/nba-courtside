@@ -26,7 +26,7 @@ export default function ProfileDropdown() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500"
+          className="rounded-full font-montserrat tracking-wider font-bold dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500"
         >
           $
           {user?.balance.toLocaleString("en-US", {
