@@ -53,22 +53,9 @@ export default function BetPlacedAlert({
   payout,
   setIsBetPlaced,
 }: Props) {
-  function formatDollarAmount(amountString: string) {
-    // If there's no decimal point, add .00
-    if (!amountString.includes(".")) {
-      return amountString + ".00";
-    }
-
-    // Split the string at the decimal point
-    const [dollars, cents] = amountString.split(".");
-
-    // Pad or truncate cents to exactly 2 digits
-    const formattedCents =
-      cents.length < 2
-        ? cents.padEnd(2, "0") // Pad with zeros if less than 2 digits
-        : cents.substring(0, 2); // Truncate if more than 2 digits
-
-    return Number(`${dollars}.${formattedCents}`).toLocaleString("en-US", {
+  
+  function formatDollarAmount(dollars: string) {
+    return Number(dollars).toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -77,18 +64,18 @@ export default function BetPlacedAlert({
   return (
     <div>
       {/* straight bet placed div */}
-      <div className="flex relative items-center gap-2 dark:bg-green-700 dark:text-black bg-green-600 text-white p-3 rounded-t-md">
+      <div className="flex relative items-center gap-[6px] dark:bg-green-700 bg-green-600 text-white p-3 rounded-t-md">
         <CircleCheck />
-        <span className=" font-semibold">Straight bet placed!</span>
+        <span className="font-semibold">Straight bet placed!</span>
       </div>
       {/* team name, bet type, odds, live, teams */}
       <div className="flex justify-between dark:bg-gray-800 p-3">
         <div className="flex flex-col gap-1">
           <div className="flex flex-col">
-            <span className="font-semibold tracking-tight">
+            <span className="font-semibold tracking-tight text-[17px]">
               {betTypeToString[type].title}
             </span>
-            <span className="text-sm dark:text-gray-400 text-gray-500 tracking-[1px] font-[350] font-skinny">
+            <span className="text-sm dark:text-gray-400 text-gray-500 tracking-[1.2px] font-[350] font-skinny">
               {betTypeToString[type].desc}
             </span>
           </div>
@@ -96,47 +83,47 @@ export default function BetPlacedAlert({
             <span className="p-[2px] tracking-wider text-[11px] rounded-sm bg-red-900 text-white">
               LIVE
             </span>
-            <div className="text-xs dark:text-gray-400 text-gray-500 tracking-tight font-montserrat">
+            <div className="text-xs dark:text-gray-300 text-gray-500 tracking-tight">
               {teams.away}{" "}
               <span className="text-[9px] relative bottom-[1.2px]">@</span>{" "}
               {teams.home}
             </div>
           </div>
         </div>
-        <div className="font-[500] tracking-tighter font-poppins">
+        <div className="font-semibold tracking-[0.2px] text-[17px]">
           {odds > 0 && "+"}
           {odds!.toString()}
         </div>
       </div>
       {/* rows for wager, odds, to win, total payout */}
       <div className="px-3 dark:bg-slate-900">
-        <div className="flex justify-between py-4 text-sm">
+        <div className="flex justify-between py-4 text-[17px]">
           <span className="font-[500]">Wager</span>
-          <span className=" tracking-wide font-poppins">
+          <span className="tracking-[0.2px]">
             ${formatDollarAmount(wager)}
           </span>
         </div>
         <Separator />
-        <div className="flex justify-between py-4 text-sm">
+        <div className="flex justify-between py-4 text-[17px]">
           <span className="font-[500]">Odds</span>
-          <span className="font-poppins tracking-tighter">
+          <span className="tracking-[0.2px]">
             {odds > 0 && "+"}
             {odds.toString()}
           </span>
         </div>
         <Separator />
 
-        <div className="flex justify-between py-4 text-sm">
+        <div className="flex justify-between py-4 text-[17px]">
           <span className="font-[500]">To win</span>
-          <span className="tracking-wide font-poppins">
+          <span className="tracking-[0.2px]">
             ${formatDollarAmount((+payout - +wager).toString())}
           </span>
         </div>
         <Separator />
-        <div className="flex justify-between py-4 text-sm">
+        <div className="flex justify-between py-4 text-[17px]">
           <span className="font-[500]">Total payout</span>
-          <span className="tracking-wide font-poppins">
-            ${formatDollarAmount(payout!.toString())}
+          <span className="tracking-[0.2px]">
+            ${formatDollarAmount(payout!)}
           </span>
         </div>
       </div>
