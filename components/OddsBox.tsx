@@ -285,7 +285,7 @@ export default function OddsBox({
                             Accept and place bet
                           </span>
                           <span className="tracking-tight text-xs font-light">
-                            TO WIN: ${calculateOddsAndPayout(+wager, odds!)}
+                            TO WIN: ${calculateOddsAndPayout(+wager, odds!)-+wager}
                           </span>
                         </div>
                       )}

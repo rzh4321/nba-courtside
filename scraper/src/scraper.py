@@ -235,7 +235,7 @@ def scrape_odds():
             driver, html = scrape_with_retry(url)
             soup = BeautifulSoup(html, "html.parser")
            
-            parlay_divs = soup.select(".cms-market-selector-static__event-wrapper > div")[:1]
+            parlay_divs = soup.select(".cms-market-selector-static__event-wrapper > div")[:2]
 
             # parlay div has class cb-static-parlay__wrapper
             for parlay_div in parlay_divs:
