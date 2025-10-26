@@ -186,7 +186,12 @@ export default function OddsBox({
     const decimalOdds = odds > 0 ? odds / 100 + 1 : 100 / Math.abs(odds) + 1;
 
     const totalPayout = wager * decimalOdds;
-    return Number(totalPayout.toFixed(2));
+    return Number(
+      totalPayout.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    );
   }
 
   return (
@@ -306,9 +311,12 @@ export default function OddsBox({
                               TO WIN:
                             </span>{" "}
                             $
-                            {(
-                              calculateOddsAndPayout(+wager, odds!) - +wager
-                            ).toFixed(2)}
+                            {Number(
+                              calculateOddsAndPayout(+wager, odds!) - +wager,
+                            ).toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
                           </span>
                         </div>
                       )}

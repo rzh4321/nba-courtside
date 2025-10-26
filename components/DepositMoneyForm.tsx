@@ -51,7 +51,13 @@ const DepositMoneyForm = () => {
       console.log(res);
       deposit(+values.amount);
       toast.success(
-        `Successfully deposited $${parseFloat(values.amount).toFixed(2)}!`,
+        `Successfully deposited $${parseFloat(values.amount).toLocaleString(
+          "en-US",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          },
+        )}!`,
       );
     } else {
       const { detail } = await response.json();

@@ -68,7 +68,10 @@ export default function BetPlacedAlert({
         ? cents.padEnd(2, "0") // Pad with zeros if less than 2 digits
         : cents.substring(0, 2); // Truncate if more than 2 digits
 
-    return `${dollars}.${formattedCents}`;
+    return Number(`${dollars}.${formattedCents}`).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   }
 
   return (
@@ -122,10 +125,8 @@ export default function BetPlacedAlert({
           <span>${formatDollarAmount((+payout - +wager).toString())}</span>
         </div>
         <Separator />
-        <div className="flex justify-between py-4">
-          <span className="font-semibold tracking-tight text-sm">
-            Total payout
-          </span>
+        <div className="flex justify-between py-4 text-sm">
+          <span className="font-semibold tracking-tight">Total payout</span>
           <span>${formatDollarAmount(payout!.toString())}</span>
         </div>
       </div>

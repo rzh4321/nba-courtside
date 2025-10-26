@@ -28,7 +28,11 @@ export default function ProfileDropdown() {
           variant="outline"
           className="rounded-full font-bold tracking-wide dark:bg-green-600 dark:border-green-700 dark:hover:bg-green-700 bg-green-400 border-green-500 hover:bg-green-500"
         >
-          ${user?.balance.toFixed(2)}
+          $
+          {user?.balance.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

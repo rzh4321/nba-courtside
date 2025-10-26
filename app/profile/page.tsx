@@ -29,7 +29,12 @@ export default function Page() {
           <span
             className={`text-3xl text-white font-bold ${authLoading && "animate-pulse w-[138px] h-[36px] rounded-md bg-white dark:bg-blue-500"}`}
           >
-            {authLoading ? "" : `$${user?.balance}`}
+            {authLoading
+              ? ""
+              : `$${user?.balance.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`}
           </span>
           <span className="font-light text-white">Playable balance</span>
         </div>
@@ -49,7 +54,12 @@ export default function Page() {
             >
               {authLoading
                 ? ""
-                : `${user!.amount_won - user!.amount_placed < 0 ? "-" : ""}$${Math.abs(user!.amount_won - user!.amount_placed).toFixed(2)}`}
+                : `${user!.amount_won - user!.amount_placed < 0 ? "-" : ""}$${Math.abs(
+                    user!.amount_won - user!.amount_placed,
+                  ).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
             </span>
             <span className="font-light dark:text-white">Net total</span>
           </div>
@@ -65,42 +75,52 @@ export default function Page() {
                     }).format(new Date(user!.created_at))
               }`}
             </span>
-            <div className="flex justify-between font-bold">
-              <span>Winnings</span>
+            <div className="flex justify-between">
+              <span className="font-bold">Winnings</span>
               <span
-                className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `$${user!.amount_won}`}
               </span>
             </div>
-            <div className="flex justify-between font-bold">
-              <span>Bets</span>
+            <div className="flex justify-between">
+              <span className="font-bold">Bets</span>
               <span
-                className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
-                {authLoading ? "" : `$${user!.amount_placed.toFixed(2)}`}
+                {authLoading
+                  ? ""
+                  : `$${user!.amount_placed.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`}
               </span>
             </div>
-            <div className="flex justify-between font-bold">
-              <span>Deposited</span>
+            <div className="flex justify-between">
+              <span className="font-bold">Deposited</span>
               <span
-                className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
-                {authLoading ? "" : `$${user!.amount_deposited.toFixed(2)}`}
+                {authLoading
+                  ? ""
+                  : `$${user!.amount_deposited.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`}
               </span>
             </div>
-            <div className="flex justify-between font-bold">
-              <span>Bets Won</span>
+            <div className="flex justify-between">
+              <span className="font-bold">Bets Won</span>
               <span
-                className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `${user!.bets_won}`}
               </span>
             </div>
-            <div className="flex justify-between font-bold">
-              <span>Bets Placed</span>
+            <div className="flex justify-between">
+              <span className="font-bold">Bets Placed</span>
               <span
-                className={`${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
+                className={`tracking-wide ${authLoading && "animate-pulse w-[73px] h-[24px] rounded-md bg-gray-200 dark:bg-gray-600"}`}
               >
                 {authLoading ? "" : `${user!.bets_placed}`}
               </span>
