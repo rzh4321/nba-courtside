@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup  # type: ignore
 import time
 from . import utils
 from .db import add_game, mark_stale_games_as_ended
-import re
 from datetime import date, timedelta, datetime
 import pytz  # type: ignore
 import sys
@@ -38,98 +37,146 @@ def should_scrape():
     return False
 
 
-def setup_driver(max_attempts=3):
-    for attempt in range(max_attempts):
-        try:
-            chrome_options = Options()
-            # Add timezone-specific arguments
-            chrome_options.add_argument('--timezone="America/New_York"')
-            chrome_options.add_experimental_option(
-                "prefs",
-                {
-                    "profile.default_content_setting_values.timezone": 1,
-                    "profile.managed_default_content_settings.timezone": 1,
-                    "profile.default_content_settings.timezone": 1,
-                    "intl.accept_languages": "en-US,en",
-                    "profile.content_settings.exceptions.timezone": {
-                        "[*.]draftkings.com": {"setting": 1}
-                    },
-                },
-            )
-            chrome_options.add_argument("--headless=new")  # Use new headless mode
-            chrome_options.add_argument("--no-sandbox")
-            chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.add_argument("--disable-gpu")
-            chrome_options.add_argument("--disable-extensions")
-            chrome_options.add_argument("--disable-infobars")
-            chrome_options.add_argument("--remote-debugging-port=9222")
-            chrome_options.add_argument("--window-size=1920,1080")
-            chrome_options.add_argument("--start-maximized")
-            chrome_options.add_argument("--single-process")  # Add this
-            chrome_options.add_argument(
-                "--disable-features=site-per-process"
-            )  # Add this
-            chrome_options.add_argument("--ignore-certificate-errors")
-            chrome_options.add_argument("--disable-web-security")  # Add this
-            chrome_options.add_argument(
-                "--disable-features=IsolateOrigins,site-per-process"
-            )  # Add this
 
-            # Set shared memory /dev/shm size
-            chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.add_argument("--shm-size=2gb")
+def setup_driver():
+    """
+    Create and return a configured Selenium Chrome WebDriver.
 
-            # Add performance options
-            chrome_options.add_argument("--aggressive-cache-discard")
-            chrome_options.add_argument("--disable-cache")
-            chrome_options.add_argument("--disable-application-cache")
-            chrome_options.add_argument("--disable-offline-load-stale-cache")
-            chrome_options.add_argument("--disk-cache-size=0")
+    Design choices:
+    - We prefer running non-headless to reduce bot signals. If you must run headless, set
+      RUN_HEADLESS = True and use the minimal set of flags.
+    - Keep flags to a minimum to avoid automation fingerprints.
+    - Use a consistent user-agent that matches your Chrome build.
+    - Set a page load timeout to avoid hanging indefinitely on navigation.
+    """
+    chrome_options = Options()
+    RUN_HEADLESS = True
+    if RUN_HEADLESS:
+        # Use legacy headless for better compatibility:
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--window-size=1920,1080")
 
-            # Memory management
-            chrome_options.add_argument("--disable-backing-store-limit")
-            chrome_options.add_argument("--disable-background-networking")
-            chrome_options.add_argument(
-                "--disable-component-extensions-with-background-pages"
-            )
-            chrome_options.add_argument("--disable-default-apps")
+    else:
+        chrome_options.add_argument("--window-size=1920,1080")
 
-            driver = webdriver.Chrome(
-                options=chrome_options,
-            )
-            driver.execute_cdp_cmd(
-                "Emulation.setTimezoneOverride", {"timezoneId": "America/New_York"}
-            )
-            # Increase timeouts
-            driver.set_page_load_timeout(60)
-            driver.implicitly_wait(20)
+    # If running as root (e.g., in a container), Chrome requires --no-sandbox.
+    # If you are not root, you can remove this.
+    chrome_options.add_argument("--no-sandbox")
 
-            # Test the driver
-            driver.execute_script("return document.readyState")
-            return driver
+    # If your container has very small /dev/shm (common on Docker), Chrome can crash. Prefer to
+    # increase /dev/shm size (e.g., docker run --shm-size=2g). If not possible, enable this:
+    # chrome_options.add_argument("--disable-dev-shm-usage")
 
-        except Exception as e:
-            logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
-            if "driver" in locals():
-                try:
-                    driver.quit()
-                except:
-                    pass
+    chrome_options.add_argument(
+        "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+    )
 
-            # Kill chrome processes and clean up
-            try:
-                os.system("pkill -f chrome")
-                os.system("pkill -f chromedriver")
-                time.sleep(2)
-            except:
-                pass
 
-            if attempt == max_attempts - 1:
-                raise Exception(
-                    f"Failed to create driver after {max_attempts} attempts: {str(e)}"
-                )
 
-            time.sleep(5 * (attempt + 1))
+    driver = webdriver.Chrome(options=chrome_options)
+
+    # Set a global navigation timeout for get() and associated loads.
+    driver.set_page_load_timeout(30)
+
+    return driver
+
+# def setup_driver(max_attempts=3):
+#     for attempt in range(max_attempts):
+#         try:
+#             chrome_options = Options()
+#             # Add timezone-specific arguments
+#             chrome_options.add_argument('--timezone="America/New_York"')
+#             # chrome_options.add_experimental_option(
+#             #     "prefs",
+#             #     {
+#             #         "profile.default_content_setting_values.timezone": 1,
+#             #         "profile.managed_default_content_settings.timezone": 1,
+#             #         "profile.default_content_settings.timezone": 1,
+#             #         "intl.accept_languages": "en-US,en",
+#             #         "profile.content_settings.exceptions.timezone": {
+#             #             "[*.]draftkings.com": {"setting": 1}
+#             #         },
+#             #     },
+#             # )
+#             chrome_options.add_argument("--headless")  # Use new headless mode
+#             chrome_options.add_argument("--no-sandbox")
+#             # chrome_options.add_argument("--disable-dev-shm-usage")
+#             # chrome_options.add_argument("--disable-gpu")
+#             # chrome_options.add_argument("--disable-extensions")
+#             # chrome_options.add_argument("--disable-infobars")
+#             # chrome_options.add_argument("--remote-debugging-port=9222")
+#             chrome_options.add_argument("--window-size=1920,1080")
+#             chrome_options.add_argument(
+#         "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+#         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+#     )
+#             # chrome_options.add_argument("--start-maximized")
+#             # chrome_options.add_argument("--single-process")  # Add this
+#             # chrome_options.add_argument(
+#             #     "--disable-features=site-per-process"
+#             # )  # Add this
+#             # chrome_options.add_argument("--ignore-certificate-errors")
+#             # chrome_options.add_argument("--disable-web-security")  # Add this
+#             # chrome_options.add_argument(
+#             #     "--disable-features=IsolateOrigins,site-per-process"
+#             # )  # Add this
+
+#             # # Set shared memory /dev/shm size
+#             # chrome_options.add_argument("--disable-dev-shm-usage")
+#             # chrome_options.add_argument("--shm-size=2gb")
+
+#             # # Add performance options
+#             # chrome_options.add_argument("--aggressive-cache-discard")
+#             # chrome_options.add_argument("--disable-cache")
+#             # chrome_options.add_argument("--disable-application-cache")
+#             # chrome_options.add_argument("--disable-offline-load-stale-cache")
+#             # chrome_options.add_argument("--disk-cache-size=0")
+
+#             # # Memory management
+#             # chrome_options.add_argument("--disable-backing-store-limit")
+#             # chrome_options.add_argument("--disable-background-networking")
+#             # chrome_options.add_argument(
+#             #     "--disable-component-extensions-with-background-pages"
+#             # )
+#             # chrome_options.add_argument("--disable-default-apps")
+
+#             driver = webdriver.Chrome(
+#                 options=chrome_options,
+#             )
+#             driver.execute_cdp_cmd(
+#                 "Emulation.setTimezoneOverride", {"timezoneId": "America/New_York"}
+#             )
+#             # Increase timeouts
+#             driver.set_page_load_timeout(60)
+#             driver.implicitly_wait(20)
+
+#             # Test the driver
+#             driver.execute_script("return document.readyState")
+#             return driver
+
+#         except Exception as e:
+#             logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
+#             if "driver" in locals():
+#                 try:
+#                     driver.quit()
+#                 except:
+#                     pass
+
+#             # Kill chrome processes and clean up
+#             try:
+#                 os.system("pkill -f chrome")
+#                 os.system("pkill -f chromedriver")
+#                 time.sleep(2)
+#             except:
+#                 pass
+
+#             if attempt == max_attempts - 1:
+#                 raise Exception(
+#                     f"Failed to create driver after {max_attempts} attempts: {str(e)}"
+#                 )
+
+#             time.sleep(5 * (attempt + 1))
 
 
 def scrape_with_retry(url, max_retries=3):
@@ -137,7 +184,6 @@ def scrape_with_retry(url, max_retries=3):
         driver = None
         try:
             driver = setup_driver()
-
             # Clear cookies and cache before loading page
             driver.execute_cdp_cmd("Network.clearBrowserCache", {})
             driver.execute_cdp_cmd("Network.clearBrowserCookies", {})
@@ -146,7 +192,7 @@ def scrape_with_retry(url, max_retries=3):
 
             wait = WebDriverWait(driver, 30)
             wait.until(
-                EC.presence_of_element_located((By.CLASS_NAME, "sportsbook-table"))
+                EC.presence_of_element_located((By.CLASS_NAME, "cms-zone"))
             )
 
             # Add additional wait for dynamic content
@@ -188,25 +234,14 @@ def scrape_odds():
             url = "https://sportsbook.draftkings.com/leagues/basketball/nba"
             driver, html = scrape_with_retry(url)
             soup = BeautifulSoup(html, "html.parser")
+           
+            parlay_divs = soup.select(".cms-market-selector-static__event-wrapper > div")[:1]
 
-            # Find first two game dates
-            # the combinations are today + tomorrow, today + future date, tomorrow + future + date,
-            # future date + another future date, just today, just tomorrow, just a future date, or 
-            # no game date found at all
-            parlay_divs = soup.find_all(
-                "div", class_=lambda x: x and x.startswith("parlay-card-")
-            )[:2]
-            logger.info(f'FOUND {len(parlay_divs)} DATES')
+            # parlay div has class cb-static-parlay__wrapper
             for parlay_div in parlay_divs:
-                # Get the tbody within this div
-                games = parlay_div.find("tbody")
-
-                # Get all tr elements
-                tr_elements = games.find_all("tr")
-
-                # Get the thead element
-                thead = parlay_div.find("thead")
-                date_th = thead.find("tr").find("th").text.strip().lower()
+                # parlay_div has class cb-static-parlay__wrapper
+                # get the date
+                date_th = parlay_div.select_one(".cb-title__wrapper--parlay").text.strip().lower()
                 today = datetime.now(eastern).date()
 
                 # Determine game date based on thead text
@@ -248,150 +283,89 @@ def scrape_odds():
                         logger.error(f"Error parsing date: {e}")
                         logger.error(f"Input date string was: '{month_day} {date.today().year}'")
                         raise
+                
+                # game_list_container has class cb-static-parlay__event-wrapper
+                game_list_container = parlay_div.select_one(".cb-static-parlay__event-wrapper")
 
-                logger.info(f"no of games for {game_date} is {len(games)/2}")
-                # Iterate through pairs of tr elements
-                for i in range(0, len(tr_elements), 2):
+                game_divs = game_list_container.select(".cb-market__template--2-columns")
+
+                # game_div hass class cb-market__template cb-market__template--2-columns
+                for game_div in game_divs:
                     try:
-                        # Process first tr (away team)
-                        away_team_row = tr_elements[i]
-                        away_team_name = utils.nba_teams_full[
-                            away_team_row.find("a")
-                            .find("div")
-                            .find_all("div", recursive=False)[1]
-                            .find("div")
-                            .text.strip()
-                            .split()[-1]
-                        ]
-                        # away_team_name = utils.nba_teams_full[away_team_row.find('a').text.strip().split()[-1]]
+                        # team_div has cb-side-column__left
+                        team_div = game_div.select_one(":nth-child(1)")
+                        # prcoess team names
+                        import re
+                        away_team_name = utils.nba_teams_full[re.sub(r'\d+$', '', team_div.select_one(":nth-child(1)").text.split()[-1].strip())]
+                        home_team_name = utils.nba_teams_full[re.sub(r'\d+$', '', team_div.select_one(":nth-child(3)").text.split()[-1].strip())]
 
-                        # Get first td for away team (spread)
-                        away_spread_td = away_team_row.find("td")
-                        away_spread_divs = (
-                            away_spread_td.find("div").find("div").find("div")
-                        )
-                        if away_spread_divs is None:
-                            away_spread = None
-                            away_spread_odds = None
-                        else:
-                            away_spread_divs = away_spread_divs.find_all("div")
-                            away_spread = away_spread_divs[0].text.strip()
-                            away_spread_odds = away_spread_divs[1].text.strip()
+                        logger.info(f"Away team: {away_team_name}, Home team: {home_team_name}")
 
-                        # Get second td for away team (over)
-                        over_td = away_team_row.find_all("td")[1]
-                        over_total_div = over_td.find("div").find("div").find("div")
-                        if over_total_div is None:
-                            over_under_number = None
-                            over_odds = None
-                        else:
-                            over_total_divs = over_total_div.find_all("div")
-                            over_under_number = (
-                                over_total_divs[0].find_all("span")[2].text.strip()
-                            )
-                            over_odds = over_total_divs[1].text.strip()
-
-                        # Get third td for away team (moneyline)
-                        away_moneyline_td = away_team_row.find_all("td")[2]
-                        away_moneyline = away_moneyline_td.find("div").text.strip()
-
-                        # Process second tr (home team)
-                        home_team_row = tr_elements[i + 1]
-                        home_team_name = utils.nba_teams_full[
-                            home_team_row.find("a")
-                            .find("div")
-                            .find_all("div", recursive=False)[1]
-                            .find("div")
-                            .text.strip()
-                            .split()[-1]
-                        ]
-
-                        # Get first td for home team (spread)
-                        home_spread_td = home_team_row.find("td")
-                        home_spread_divs = (
-                            home_spread_td.find("div").find("div").find("div")
-                        )
-                        if home_spread_divs is None:
-                            home_spread = None
-                            home_spread_odds = None
-                        else:
-                            home_spread_divs = home_spread_divs.find_all("div")
-                            home_spread = home_spread_divs[0].text.strip()
-                            home_spread_odds = home_spread_divs[1].text.strip()
-
-                        # Get second td for home team (under)
-                        under_td = home_team_row.find_all("td")[1]
-                        under_total_div = under_td.find("div").find("div").find("div")
-                        if under_total_div is None:
-                            under_odds = None
-                        else:
-                            under_total_divs = under_total_div.find_all("div")
-                            under_odds = under_total_divs[1].text.strip()
-
-                        # Get third td for home team (moneyline)
-                        home_moneyline_td = home_team_row.find_all("td")[2]
-                        home_moneyline = home_moneyline_td.find("div").text.strip()
-
+                        betting_divs = game_div.select_one(".cb-side-column__right")
+                        betting_options = betting_divs.select(".cb-market__button")
+                        # process spreads, moneylines, over/under
+                        betting_info = {}
+                        index_to_bet = {
+                            0: {"betting_number": "away_spread", "betting_odds": "away_spread_odds"},
+                            1: {"betting_number": "over_under", "betting_odds": "over_odds"},
+                            2: {"betting_number": None, "betting_odds": "away_moneyline"},
+                            3: {"betting_number": "home_spread", "betting_odds": "home_spread_odds"},
+                            4: {"betting_number": "over_under", "betting_odds": "under_odds"},
+                            5: {"betting_number": None, "betting_odds": "home_moneyline"}
+                        }
+                        for i, betting_option in enumerate(betting_options):
+                            try:
+                                if betting_option.select_one(":nth-child(2)") is None or betting_option.select_one(":nth-child(3)") is None:
+                                    # bets are locked
+                                    if index_to_bet[i]["betting_odds"] is not None:
+                                        index_to_bet[i]["betting_odds"] = None
+                                    if index_to_bet[i]["betting_number"] is not None:   
+                                        index_to_bet[i]["betting_number"] = None 
+                                        # im high rn is the code good
+                                    continue
+                                betting_number = betting_option.select_one(":nth-child(2)").text.strip()
+                                betting_odds = betting_option.select_one(":nth-child(3)").text.strip()
+                                # logger.info(f"i is {i}, betting number: {betting_number}, betting odds: {betting_odds}")
+                                formatted_betting_number, formatted_betting_odds = utils.process_betting_option(i, betting_number, betting_odds)
+                                if index_to_bet[i]["betting_number"] is not None:
+                                    betting_info[index_to_bet[i]["betting_number"]] = formatted_betting_number
+                                if index_to_bet[i]["betting_odds"] is not None:
+                                    betting_info[index_to_bet[i]["betting_odds"]] = formatted_betting_odds
+                            except Exception as e:
+                                logger.error(f"\n\nError parsing betting option: {betting_option}\n\n")
+                                # move on to next bet type
+                                continue
+                                    
                         logger.info(f"Away: {away_team_name}")
-                        logger.info(f"Away Spread: {away_spread}")
-                        logger.info(f"Away Spread Odds: {away_spread_odds}")
-                        logger.info(f"Away Moneyline: {away_moneyline}")
+                        logger.info(f"Away Spread: {betting_info.get('away_spread')}")
+                        logger.info(f"Away Spread Odds: {betting_info.get('away_spread_odds')}")
+                        logger.info(f"Away Moneyline: {betting_info.get('away_moneyline')}")
                         logger.info(f"Home: {home_team_name}")
-                        logger.info(f"Home Spread: {home_spread}")
-                        logger.info(f"Home Spread Odds: {home_spread_odds}")
-                        logger.info(f"Home Moneyline: {home_moneyline}")
-                        logger.info(f"Over/Under Number: {over_under_number}")
-                        logger.info(f"Over Odds: {over_odds}")
-                        logger.info(f"Under Odds: {under_odds}")
+                        logger.info(f"Home Spread: {betting_info.get('home_spread')}")
+                        logger.info(f"Home Spread Odds: {betting_info.get('home_spread_odds')}")
+                        logger.info(f"Home Moneyline: {betting_info.get('home_moneyline')}")
+                        logger.info(f"Over/Under Number: {betting_info.get('over_under')}")
+                        logger.info(f"Over Odds: {betting_info.get('over_odds')}")
+                        logger.info(f"Under Odds: {betting_info.get('under_odds')}")
                         logger.info("---\n")
-
-                        home_spread_num = (
-                            utils.convert_spread(home_spread) if home_spread else None
-                        )
-                        away_spread_num = (
-                            utils.convert_spread(away_spread) if away_spread else None
-                        )
-                        home_spread_odds_num = (
-                            utils.convert_odds(home_spread_odds)
-                            if home_spread_odds
-                            else None
-                        )
-                        away_spread_odds_num = (
-                            utils.convert_odds(away_spread_odds)
-                            if away_spread_odds
-                            else None
-                        )
-                        home_moneyline_num = (
-                            utils.convert_odds(home_moneyline) if home_moneyline else None
-                        )
-                        away_moneyline_num = (
-                            utils.convert_odds(away_moneyline) if away_moneyline else None
-                        )
-                        over_under_num = (
-                            float(over_under_number) if over_under_number else None
-                        )
-                        over_odds_num = utils.convert_odds(over_odds) if over_odds else None
-                        under_odds_num = (
-                            utils.convert_odds(under_odds) if under_odds else None
+                        # Add or update game
+                        add_game(
+                            home_team=home_team_name,
+                            away_team=away_team_name,
+                            home_spread_odds=betting_info.get("home_spread_odds"),
+                            away_spread_odds=betting_info.get("away_spread_odds"),
+                            home_spread=betting_info.get("home_spread"),
+                            home_moneyline=betting_info.get("home_moneyline"),
+                            away_moneyline=betting_info.get("away_moneyline"),
+                            over_under=betting_info.get("over_under"),
+                            over_odds=betting_info.get("over_odds"),
+                            under_odds=betting_info.get("under_odds"),
+                            game_date=game_date,
                         )
                     except Exception as e:
                         logger.error(f"Error: {e}")
                         continue  # Skip this game and continue with the next one
 
-                    # Add or update game
-                    add_game(
-                        home_team=home_team_name,
-                        away_team=away_team_name,
-                        home_spread_odds=home_spread_odds_num,
-                        away_spread_odds=away_spread_odds_num,
-                        home_spread=home_spread_num,
-                        home_moneyline=home_moneyline_num,
-                        away_moneyline=away_moneyline_num,
-                        over_under=over_under_num,
-                        over_odds=over_odds_num,
-                        under_odds=under_odds_num,
-                        game_date=game_date,
-                    )
         except Exception as e:
             logger.error(f"Fatal error: {e}")
             sys.exit(1)
