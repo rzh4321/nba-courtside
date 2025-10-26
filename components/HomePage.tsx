@@ -63,9 +63,11 @@ export default function HomePage() {
         <h1
           onClick={() => setShowTopPerformers(false)}
           className={`-mb-4 text-3xl flex gap-2 items-center font-normal cursor-pointer ${!showTopPerformers ? "" : "dark:text-gray-300 dark:hover:text-white hover:text-gray-600"}`}
-        >{`Live Odds`}<div className="size-4 hidden sm:block relative top-[2px] rounded-full bg-red-600 animate-pulse"></div></h1>
+        >
+          {`Live Odds`}
+          <div className="size-4 hidden sm:block relative top-[2px] rounded-full bg-red-600 animate-pulse"></div>
+        </h1>
       </nav>
-       
 
       {showTopPerformers ? (
         <TopPerformers

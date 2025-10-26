@@ -227,8 +227,8 @@ export default function OddsBox({
                   <div className="flex justify-between mt-4">
                     <div className="flex gap-1 items-center">
                       <div className="flex items-center justify-center size-[22px] rounded-full bg-sky-500 dark:text-black text-white text-[14px] font-semibold">
-  1
-</div>
+                        1
+                      </div>
                       <span className="font-semibold text-sky-500 tracking-tight">
                         Betslip
                       </span>
@@ -254,15 +254,18 @@ export default function OddsBox({
                         {odds && odds > 0
                           ? `+${odds!.toString().replace(/\.?0+$/, "")}`
                           : odds && odds.toString().replace(/\.?0+$/, "")}
-
                       </div>
                       <span className="px-[4px] py-[0px] text-sm tracking-[1px] font-[350] rounded-[3px] dark:bg-slate-300 dark:text-black bg-green-600/80 text-white font-skinny">
-              CASH OUT
-            </span>
+                        CASH OUT
+                      </span>
                     </div>
                   </div>
                   <div className="text-xs dark:text-gray-400 text-gray-500 tracking-tight font-montserrat">
-                    {teams.away} <span className="text-[9px] relative bottom-[1.2px]">@</span> {teams.home}
+                    {teams.away}{" "}
+                    <span className="text-[9px] relative bottom-[1.2px]">
+                      @
+                    </span>{" "}
+                    {teams.home}
                   </div>
                   <div className="flex items-center gap-2 w-full">
                     <FormField
@@ -295,11 +298,17 @@ export default function OddsBox({
                         "Enter wager amount"
                       ) : (
                         <div className="flex flex-col items-center justify-center">
-                          <span className="text-sm font-[400]">
+                          <span className="text-sm font-[400] font-montserrat">
                             Accept and place bet
                           </span>
                           <span className="tracking-tight text-xs font-light">
-                            TO WIN: ${(calculateOddsAndPayout(+wager, odds!)-+wager).toFixed(2)}
+                            <span className="tracking-[1px] font-[350] font-skinny">
+                              TO WIN:
+                            </span>{" "}
+                            $
+                            {(
+                              calculateOddsAndPayout(+wager, odds!) - +wager
+                            ).toFixed(2)}
                           </span>
                         </div>
                       )}

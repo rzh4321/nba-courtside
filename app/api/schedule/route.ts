@@ -87,11 +87,8 @@ export async function GET(request: Request) {
     const apiUrl = scheduleUrl;
     console.log("REQUESTED DATE: ", date);
 
-
     try {
-
       const res = await fetch(apiUrl);
-      
 
       if (!res.ok) {
         throw new Error(`NBA API responded with status: ${res.status}`);

@@ -537,8 +537,10 @@ export type LeagueScheduleResponse = {
 export type LeagueScheduleResponseGame =
   LeagueScheduleResponse["leagueSchedule"]["gameDates"][number]["games"][number];
 
-  export type LeagueScheduleResponseTeam =
-  LeagueScheduleResponse["leagueSchedule"]["gameDates"][number]["games"][number]['homeTeam' | 'awayTeam'];
+export type LeagueScheduleResponseTeam =
+  LeagueScheduleResponse["leagueSchedule"]["gameDates"][number]["games"][number][
+    | "homeTeam"
+    | "awayTeam"];
 
 // =============================================================================
 export type NBATeamAcronyms = {

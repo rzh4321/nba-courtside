@@ -22,7 +22,9 @@ function useFullSchedule(needLiveData = true) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await fetch("/api/schedule/year", { cache: needLiveData ? "no-store" : "force-cache" });
+        const result = await fetch("/api/schedule/year", {
+          cache: needLiveData ? "no-store" : "force-cache",
+        });
         const d = await result.json();
         setData(d);
       } catch (err) {

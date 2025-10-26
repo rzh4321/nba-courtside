@@ -1,4 +1,10 @@
-import { Team, Game, NBATeamAcronyms, LeagueScheduleResponseGame, LeagueScheduleResponseTeam } from "@/types";
+import {
+  Team,
+  Game,
+  NBATeamAcronyms,
+  LeagueScheduleResponseGame,
+  LeagueScheduleResponseTeam,
+} from "@/types";
 import { PRIORITY } from "@/constants";
 
 export const orderByStatus = (
@@ -10,8 +16,9 @@ export const orderByStatus = (
 
 export type ParsedGames = ReturnType<typeof parseGames>;
 
-export const parseGames = (games: Game[] | LeagueScheduleResponseGame[]) : any[] => {
-
+export const parseGames = (
+  games: Game[] | LeagueScheduleResponseGame[],
+): any[] => {
   const getTeamData = (team: Team | LeagueScheduleResponseTeam) => {
     return {
       teamId: team.teamId,
@@ -37,9 +44,9 @@ export const parseGames = (games: Game[] | LeagueScheduleResponseGame[]) : any[]
       gameId,
       gameStatus,
       gameStatusText,
-      period: (game as any)['period'] ?? 0, // if data was from league schedule, period doesnt exist but thats ok
-      gameClock: (game as any)['gameClock'] ?? "", // if data was from league schedule, gameClock doesnt exist but thats ok
-      gameTimeUTC, 
+      period: (game as any)["period"] ?? 0, // if data was from league schedule, period doesnt exist but thats ok
+      gameClock: (game as any)["gameClock"] ?? "", // if data was from league schedule, gameClock doesnt exist but thats ok
+      gameTimeUTC,
       homeTeam: getTeamData(homeTeam),
       awayTeam: getTeamData(awayTeam),
     };

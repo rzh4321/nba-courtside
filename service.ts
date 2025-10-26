@@ -27,19 +27,25 @@ export const getBoxscore = async (gameId: string) => {
   return data.game;
 };
 
-export const getGamesFromLeagueSchedule = (leagueSchedule: LeagueScheduleResponse, date: string) => {
+export const getGamesFromLeagueSchedule = (
+  leagueSchedule: LeagueScheduleResponse,
+  date: string,
+) => {
   const allGames = leagueSchedule.leagueSchedule.gameDates;
   for (let gameDate of allGames) {
-    const extractedDate = gameDate.gameDate.split(" ")[0]
-    const isoDate = (([m, d, y]) => `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`)(extractedDate.split("/"));
+    const extractedDate = gameDate.gameDate.split(" ")[0];
+    const isoDate = (([m, d, y]) =>
+      `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`)(
+      extractedDate.split("/"),
+    );
     gameDate.games.forEach((game) => {
-      game.gameTimeUTC = game.gameDateTimeUTC;  // fix the gameTimeUTC (for some reason its set to 1900)
+      game.gameTimeUTC = game.gameDateTimeUTC; // fix the gameTimeUTC (for some reason its set to 1900)
     });
     if (isoDate === date) {
       return parseGames(gameDate.games);
     }
-}
-return [];
+  }
+  return [];
 };
 
 export const getScoreboards = async (date?: string) => {

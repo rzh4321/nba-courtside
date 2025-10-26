@@ -123,7 +123,9 @@ export default function BetPlacedAlert({
         </div>
         <Separator />
         <div className="flex justify-between py-4">
-          <span className="font-semibold tracking-tight text-sm">Total payout</span>
+          <span className="font-semibold tracking-tight text-sm">
+            Total payout
+          </span>
           <span>${formatDollarAmount(payout!.toString())}</span>
         </div>
       </div>
