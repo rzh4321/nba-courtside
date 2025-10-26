@@ -74,7 +74,7 @@ export default function BetPlacedAlert({
   return (
     <div>
       {/* straight bet placed div */}
-      <div className="flex items-center gap-2 bg-green-700 p-3 rounded-t-md ">
+      <div className="flex relative items-center gap-2 bg-green-700 p-3 rounded-t-md">
         <CircleCheck />
         <span className=" font-semibold">Straight bet placed!</span>
       </div>
@@ -103,13 +103,13 @@ export default function BetPlacedAlert({
       </div>
       {/* rows for wager, odds, to win, total payout */}
       <div className="px-3 dark:bg-slate-900">
-        <div className="flex justify-between py-3">
-          <span className="font-semibold">Wager</span>
+        <div className="flex justify-between py-4 text-sm">
+          <span className="font-semibold tracking-tight">Wager</span>
           <span>${formatDollarAmount(wager)}</span>
         </div>
         <Separator />
-        <div className="flex justify-between py-3">
-          <span className="font-semibold">Odds</span>
+        <div className="flex justify-between py-4 text-sm">
+          <span className="font-semibold tracking-tight">Odds</span>
           <span>
             {odds > 0 && "+"}
             {odds.toString()}
@@ -117,13 +117,13 @@ export default function BetPlacedAlert({
         </div>
         <Separator />
 
-        <div className="flex justify-between py-3">
-          <span className="font-semibold">To win</span>
+        <div className="flex justify-between py-4 text-sm">
+          <span className="font-semibold tracking-tight">To win</span>
           <span>${formatDollarAmount((+payout - +wager).toString())}</span>
         </div>
         <Separator />
-        <div className="flex justify-between py-3">
-          <span className="font-semibold">Total payout</span>
+        <div className="flex justify-between py-4">
+          <span className="font-semibold tracking-tight text-sm">Total payout</span>
           <span>${formatDollarAmount(payout!.toString())}</span>
         </div>
       </div>

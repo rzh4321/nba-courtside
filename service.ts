@@ -43,8 +43,7 @@ export const getGamesFromLeagueSchedule = (leagueSchedule: LeagueScheduleRespons
 export const getScoreboards = async (date?: string) => {
   if (date) {
     // fetch from league schedule API for historical dates
-    const res = await getLeagueSchedule();
-    const data = await res.json();
+    const data = await getLeagueSchedule();
     return getGamesFromLeagueSchedule(data, date);
   } else {
     console.log("getting todays scoreboard....");
