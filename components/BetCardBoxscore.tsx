@@ -16,7 +16,7 @@ function BetCardBoxscore({ bet }: Props) {
   const { data: boxscore, isLoading } = useSWR(
     `/api/boxscore/${bet.gameId}`,
     async (url) => {
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: "no-cache" });
       return await res.json();
     },
     {

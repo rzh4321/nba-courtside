@@ -38,7 +38,9 @@ export const getGamesFromLeagueSchedule = (leagueSchedule: LeagueScheduleRespons
     if (isoDate === date) {
       return parseGames(gameDate.games);
     }
-}};
+}
+return [];
+};
 
 export const getScoreboards = async (date?: string) => {
   if (date) {

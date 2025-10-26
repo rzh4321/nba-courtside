@@ -19,7 +19,7 @@ export async function GET(
   );
   const today = format(new Date(), DATE_LINK_FORMAT);
   let gameIds;
-  let games;
+  let games: any[] = [];
   if (formattedDate === today) {
     // no param means it will call the endpoint for todays scoreboards
     games = await getScoreboards();

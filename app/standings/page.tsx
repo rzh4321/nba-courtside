@@ -33,7 +33,8 @@ async function getData() {
 }
 
 export default async function Page() {
-  const { east, west } = await getData();
+  // const { east, west } = await getData();
 
-  return <Conferences east={east} west={west} />;
+  // return <Conferences east={east} west={west} />;
+  return <div>Standings are currently unavailable.</div>;
 }
